@@ -1,0 +1,2 @@
+class GroupStage < ApplicationRecord
+end

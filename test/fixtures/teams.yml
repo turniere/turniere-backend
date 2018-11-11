@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  name: MyString
+  group_score: 1
+  group_points_scored: 1
+  group_points_recieved: 1
+
+two:
+  id: 1
+  name: MyString
+  group_score: 1
+  group_points_scored: 1
+  group_points_recieved: 1
