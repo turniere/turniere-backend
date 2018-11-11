@@ -1,8 +1,45 @@
 # frozen_string_literal: true
 
-class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[5.2]
+class CreateSchema < ActiveRecord::Migration[5.2]
   def change
-    create_table(:users) do |t|
+    create_table :groups do |t|
+      t.string :name
+
+      t.timestamps
+    end
+
+    create_table :group_stages do |t|
+      t.integer :playoff_size
+
+      t.timestamps
+    end
+
+    create_table :matches do |t|
+      t.integer :score_team_1
+      t.integer :score_team_2
+      t.integer :state
+      t.integer :position
+      t.boolean :is_group_match
+
+      t.timestamps
+    end
+
+    create_table :playoff_stages do |t|
+      t.integer :level
+
+      t.timestamps
+    end
+
+    create_table :teams do |t|
+      t.string :name
+      t.integer :group_score
+      t.integer :group_points_scored
+      t.integer :group_points_recieved
+
+      t.timestamps
+    end
+
+    create_table :users do |t|
       ## Required
       t.string :provider, null: false, default: 'email'
       t.string :uid, null: false, default: ''
