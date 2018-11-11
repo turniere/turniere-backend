@@ -39,6 +39,15 @@ class CreateSchema < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
+    create_table :tournaments do |t|
+      t.string :name
+      t.string :code
+      t.string :description
+      t.boolean :public, default: true
+
+      t.timestamps
+    end
+
     create_table :users do |t|
       ## Required
       t.string :provider, null: false, default: 'email'
