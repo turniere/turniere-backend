@@ -48,6 +48,8 @@ class CreateSchema < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
+    add_index :tournaments, :code, unique: true
+
     create_table :users do |t|
       ## Required
       t.string :provider, null: false, default: 'email'
