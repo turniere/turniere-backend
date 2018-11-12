@@ -1,24 +1,15 @@
-# README
+# turniere-backend
+Ruby on Rails application serving as backend for turnie.re
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Installation
+```
+# install dependencies
+$ bundle install
+# run migrations
+$ rails db:migrate
+```
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Generate diagrams
+```
+rails diagram:all_with_engines
+```
