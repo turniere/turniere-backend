@@ -40,10 +40,13 @@ class CreateSchema < ActiveRecord::Migration[5.2]
     end
 
     create_table :tournaments do |t|
-      t.string :name
-      t.string :code
+      t.string :name, null: false
+      t.string :code, null: false
       t.string :description
       t.boolean :public, default: true
+
+      # relation to owner
+      t.belongs_to :user, index: true, foreign_key: true, null: false
 
       t.timestamps
     end
