@@ -4,18 +4,18 @@ module Turniere
       if teams.size == 1
         return #TODO error with only one team
       end
-      neededGames = 0
+      needed_games = 0
       if (Turniere::Utils.po2?(teams.size()) 
-          neededGames = teams.size() / 2
+          needed_games = teams.size() / 2
       else 
-          neededGames = teams.size() - Turniere::Utils.previous_power_of_two(teams.size()) / 2
+          needed_games = teams.size() - Turniere::Utils.previous_power_of_two(teams.size()) / 2
       end
 
       lastPos = 0
       matches = []
       i = 0
 
-      while i < neededGames
+      while i < needed_games
         match = Match(teams[2 * i], teams[( 2 * i ) + 1], 0, 0, :not_startet, i, false)
         matches.insert match
         i++
