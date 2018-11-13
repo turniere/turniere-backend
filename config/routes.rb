@@ -1,15 +1,12 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  resources :controllers
   mount_devise_token_auth_for 'User', at: 'users'
 
-  post '/tournaments', to: 'tournament#post'
-  get '/tournaments/:code', to: 'tournament#get'
-  put '/tournaments/:code', to: 'tournament#put'
+  resources :tournaments
 
-  get '/matches/:id', to: 'match#get'
-  put '/matches/:id', to: 'match#put'
+  resources :matches
 
-  get '/teams/:id', to: 'team#get'
-  put '/teams/:id', to: 'team#put'
+  resources :teams
 end
