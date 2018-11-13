@@ -9,6 +9,12 @@ $ bundle install
 $ rails db:migrate
 ```
 
+# Running
+Development (without mail confirmation and separate database):
+```
+$ RAILS_ENV=development rails server
+```
+
 # Generate diagrams
 ```
 rails diagram:all_with_engines
