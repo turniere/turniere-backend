@@ -36,6 +36,8 @@ class CreateSchema < ActiveRecord::Migration[5.2]
       t.integer :group_points_scored
       t.integer :group_points_recieved
 
+      t.belongs_to :tournament, index: true, null: false, foreign_key: { on_delete: :cascade }
+
       t.timestamps
     end
 
