@@ -17,10 +17,10 @@ RSpec.describe Tournament, type: :model do
 
   describe 'initialization' do
     it 'should have a code' do
-      assert_equal @tournament.code.length, 6
+      expect(@tournament.code.length).to be(6)
     end
     it 'should be public' do
-      assert_equal @tournament.public, true
+      expect(@tournament.public).to be(true)
     end
   end
 
