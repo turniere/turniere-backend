@@ -25,3 +25,6 @@
 
 # IDEA
 .idea/
+
+# database schema
+db/schema.rb
