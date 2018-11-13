@@ -46,7 +46,7 @@ class CreateSchema < ActiveRecord::Migration[5.2]
       t.boolean :public, default: true
 
       # relation to owner
-      t.belongs_to :user, index: true, null: false, foreign_key: { on_delete: cascade }
+      t.belongs_to :user, index: true, null: false, foreign_key: { on_delete: :cascade }
 
       t.timestamps
     end
