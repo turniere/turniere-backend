@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class TeamsControllerTest < ActionDispatch::IntegrationTest
@@ -5,30 +7,30 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     @team = teams(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get teams_url, as: :json
     assert_response :success
   end
 
-  test "should create team" do
+  test 'should create team' do
     assert_difference('Team.count') do
-      post teams_url, params: { team: {  } }, as: :json
+      post teams_url, params: { team: {} }, as: :json
     end
 
     assert_response 201
   end
 
-  test "should show team" do
+  test 'should show team' do
     get team_url(@team), as: :json
     assert_response :success
   end
 
-  test "should update team" do
-    patch team_url(@team), params: { team: {  } }, as: :json
+  test 'should update team' do
+    patch team_url(@team), params: { team: {} }, as: :json
     assert_response 200
   end
 
-  test "should destroy team" do
+  test 'should destroy team' do
     assert_difference('Team.count', -1) do
       delete team_url(@team), as: :json
     end

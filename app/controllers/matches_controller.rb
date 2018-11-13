@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class MatchesController < ApplicationController
-  before_action :set_match, only: [:show, :update, :destroy]
+  before_action :set_match, only: %i[show update destroy]
 
   # GET /matches
   def index
@@ -39,13 +41,14 @@ class MatchesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_match
-      @match = Match.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def match_params
-      params.fetch(:match, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_match
+    @match = Match.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def match_params
+    params.fetch(:match, {})
+  end
 end

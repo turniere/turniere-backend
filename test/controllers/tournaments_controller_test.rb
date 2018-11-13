@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class TournamentsControllerTest < ActionDispatch::IntegrationTest
@@ -5,30 +7,30 @@ class TournamentsControllerTest < ActionDispatch::IntegrationTest
     @tournament = tournaments(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get tournaments_url, as: :json
     assert_response :success
   end
 
-  test "should create tournament" do
+  test 'should create tournament' do
     assert_difference('Tournament.count') do
-      post tournaments_url, params: { tournament: {  } }, as: :json
+      post tournaments_url, params: { tournament: {} }, as: :json
     end
 
     assert_response 201
   end
 
-  test "should show tournament" do
+  test 'should show tournament' do
     get tournament_url(@tournament), as: :json
     assert_response :success
   end
 
-  test "should update tournament" do
-    patch tournament_url(@tournament), params: { tournament: {  } }, as: :json
+  test 'should update tournament' do
+    patch tournament_url(@tournament), params: { tournament: {} }, as: :json
     assert_response 200
   end
 
-  test "should destroy tournament" do
+  test 'should destroy tournament' do
     assert_difference('Tournament.count', -1) do
       delete tournament_url(@tournament), as: :json
     end
