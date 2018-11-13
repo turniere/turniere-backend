@@ -9,6 +9,8 @@ class Tournament < ApplicationRecord
   has_many :teams, dependent: :destroy
   belongs_to :user
 
+  alias_attribute :owner, :user
+
   after_initialize do |tournament|
     tournament.code ||= SecureRandom.hex 3
   end
