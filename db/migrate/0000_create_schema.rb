@@ -30,11 +30,18 @@ class CreateSchema < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
+    create_table :group_scores do |t|
+      t.integer :score, default: 0
+      t.integer :points_scored, default: 0
+      t.integer :points_received, default: 0
+
+      t.belongs_to :team, index: { unique: true }, foreign_key: { on_delete: :cascade }, null: false
+
+      t.timestamps
+    end
+
     create_table :teams do |t|
       t.string :name
-      t.integer :group_score
-      t.integer :group_points_scored
-      t.integer :group_points_recieved
 
       t.belongs_to :tournament, index: true, null: false, foreign_key: { on_delete: :cascade }
 
