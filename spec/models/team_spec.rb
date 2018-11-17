@@ -9,6 +9,8 @@ RSpec.describe Team, type: :model do
 
   describe 'association' do
     it { should belong_to :tournament }
-    it { should have_one :group_score }
+    it { should have_many :group_score }
+    it { should have_many :scores }
+
   end
 end
