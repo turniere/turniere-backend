@@ -11,6 +11,9 @@ RSpec.describe Team, type: :model do
     it { should belong_to :tournament }
     it { should have_many :group_score }
     it { should have_many :scores }
+  end
 
+  it 'has a valid factory' do
+    expect(build(:team)).to be_valid
   end
 end

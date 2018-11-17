@@ -29,4 +29,8 @@ RSpec.describe Tournament, type: :model do
     it { should have_many :teams }
     it { should have_many :stages }
   end
+
+  it 'has valid factory' do
+    expect(build(:tournament)).to be_valid
+  end
 end
