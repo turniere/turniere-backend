@@ -2,6 +2,6 @@
 
 class Team < ApplicationRecord
   belongs_to :tournament
-
-  has_one :group_score, dependent: :destroy
+  has_many :group_scores, dependent: :destroy
+  has_many :scores, dependent: :destroy
 end
