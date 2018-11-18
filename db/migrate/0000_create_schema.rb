@@ -4,7 +4,7 @@ class CreateSchema < ActiveRecord::Migration[5.2]
   def change
     create_table :users do |t|
       ## Required
-      t.string :provider, null: false, default: 'email', index: { unique: true }
+      t.string :provider, null: false, default: 'email', index: true
       t.string :uid, null: false, default: '', index: { unique: true }
 
       ## Database authenticatable
