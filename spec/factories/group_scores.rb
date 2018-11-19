@@ -2,5 +2,7 @@
 
 FactoryBot.define do
   factory :group_score do
+    team
+    group
   end
 end

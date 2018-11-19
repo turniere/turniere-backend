@@ -3,6 +3,6 @@
 FactoryBot.define do
   factory :team do
     name { Faker::Dog.name }
-    group_score
+    tournament
   end
 end

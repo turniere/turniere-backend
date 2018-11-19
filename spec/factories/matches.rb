@@ -2,5 +2,7 @@
 
 FactoryBot.define do
   factory :match do
+    stage
+    group
   end
 end

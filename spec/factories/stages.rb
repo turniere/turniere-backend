@@ -2,5 +2,6 @@
 
 FactoryBot.define do
   factory :stage do
+    tournament
   end
 end

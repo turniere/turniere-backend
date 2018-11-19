@@ -3,5 +3,7 @@
 FactoryBot.define do
   factory :score do
     score { 0 }
+    match
+    team
   end
 end

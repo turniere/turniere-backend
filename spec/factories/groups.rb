@@ -3,5 +3,6 @@
 FactoryBot.define do
   factory :group do
     number { 0 }
+    stage
   end
 end
