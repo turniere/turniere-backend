@@ -2,5 +2,5 @@ language: ruby
 env:
   - RAILS_ENV=test
 script:
-  - rails db:migrate
-  - rails spec
+  - bundle exec rails db:migrate
+  - bundle exec rails spec
