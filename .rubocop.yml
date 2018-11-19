@@ -30,3 +30,16 @@ Metrics/AbcSize:
   Exclude:
     - "db/migrate/*"
   Max: 20
+
+Metrics/BlockLength:
+  ExcludedMethods:
+    - "namespace"
+    - "create_table"
+  Exclude:
+    - "config/**/*.rb"
+    - "spec/**/*.rb"
+
+# Disable documentation checks for now
+# should be done with yard instead
+Style/Documentation:
+  Enabled: false

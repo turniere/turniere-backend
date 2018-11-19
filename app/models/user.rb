@@ -7,4 +7,6 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
 
   validates :username, presence: true, uniqueness: true
+
+  has_many :tournaments, dependent: :destroy
 end
