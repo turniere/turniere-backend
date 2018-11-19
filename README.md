@@ -1,4 +1,4 @@
-# turniere-backend
+# turniere-backend [![Build Status](https://travis-ci.org/turniere/turniere-backend.svg?branch=master)](https://travis-ci.org/turniere/turniere-backend) [![Coverage Status](https://coveralls.io/repos/github/turniere/turniere-backend/badge.svg)](https://coveralls.io/github/turniere/turniere-backend)
 Ruby on Rails application serving as backend for turnie.re
 
 # Installation
