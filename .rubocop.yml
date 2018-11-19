@@ -38,3 +38,8 @@ Metrics/BlockLength:
   Exclude:
     - "config/**/*.rb"
     - "spec/**/*.rb"
+
+# Disable documentation checks for now
+# should be done with yard instead
+Style/Documentation:
+  Enabled: false
