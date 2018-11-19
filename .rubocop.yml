@@ -30,3 +30,11 @@ Metrics/AbcSize:
   Exclude:
     - "db/migrate/*"
   Max: 20
+
+Metrics/BlockLength:
+  ExcludedMethods:
+    - "namespace"
+    - "create_table"
+  Exclude:
+    - "config/**/*.rb"
+    - "spec/**/*.rb"
