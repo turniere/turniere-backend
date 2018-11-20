@@ -9,6 +9,23 @@ RSpec.describe Match, type: :model do
     it { should belong_to :group }
   end
 
+  context '#new' do
+    it 'needs only a group' do
+      match = Match.new group: build(:group)
+      expect(match).to be_valid
+    end
+
+    it 'needs only a stage' do
+      match = Match.new stage: build(:stage)
+      expect(match).to be_valid
+    end
+
+    it 'can\'t have a group and a stage' do
+      match = Match.new group: build(:group), stage: build(:stage)
+      expect(match).to be_invalid
+    end
+  end
+
   context 'scores' do
     before do
       @match = create(:match)
