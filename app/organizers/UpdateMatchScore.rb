@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class UpdateMatchScore
+class UpdateMatch
   include Interactor::Organizer
 
-  organize ChangeMatchScore, UpdateMatchScore
+  organize ChangeMatchScore
 end
