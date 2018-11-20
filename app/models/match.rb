@@ -15,7 +15,7 @@ class Match < ApplicationRecord
     elsif score_team2 < score_team1
       :team1_won
     else
-      group_match? ? :undecided : :in_progress 
+      group_match? ? :undecided : :in_progress
     end
   end
 

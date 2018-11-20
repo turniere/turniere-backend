@@ -32,7 +32,6 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
 gem 'devise_token_auth'
 
-
 gem 'rack-cors'
 
 # Interactors
