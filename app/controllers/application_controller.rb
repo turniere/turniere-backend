@@ -13,7 +13,7 @@ class ApplicationController < ActionController::API
 
   private
 
-  def require_owner! owner
+  def require_owner!(owner)
     render_forbidden_error if owner != current_user
   end
 
