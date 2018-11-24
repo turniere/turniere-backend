@@ -16,7 +16,7 @@ RSpec.describe TeamsController, type: :controller do
 
     it 'should return the correct team' do
       get :show, params: { id: @team.to_param }
-      body = ActiveModelSerializers::Deserialization.jsonapi_parse(JSON.parse(response.body))
+      body = deserialize_response response
       expect(body[:name]).to eq(@team.name)
     end
   end
@@ -49,7 +49,7 @@ RSpec.describe TeamsController, type: :controller do
       it 'renders a response with the updated team' do
         put :update, params: { id: @team.to_param }.merge(valid_update)
         expect(response).to be_successful
-        body = ActiveModelSerializers::Deserialization.jsonapi_parse(JSON.parse(response.body))
+        body = deserialize_response response
         expect(body[:name]).to eq(valid_update[:data][:attributes][:name])
       end
     end
