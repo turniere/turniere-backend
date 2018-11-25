@@ -4,3 +4,5 @@ env:
 script:
   - bundle exec rails db:migrate
   - bundle exec rails spec
+notifications:
+  slack: turnieredhbw:nmZvCQ8l8YVY2e03sD1JoJht
