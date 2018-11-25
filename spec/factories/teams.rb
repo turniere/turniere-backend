@@ -5,4 +5,8 @@ FactoryBot.define do
     name { Faker::Dog.name }
     tournament
   end
+
+  factory :detached_team, class: Team do
+    name { Faker::Dog.name }
+  end
 end

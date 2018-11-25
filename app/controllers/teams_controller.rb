@@ -26,6 +26,6 @@ class TeamsController < ApplicationController
   end
 
   def team_params
-    ActiveModelSerializers::Deserialization.jsonapi_parse(params, only: [:name])
+    deserialize_params only: %i[name]
   end
 end
