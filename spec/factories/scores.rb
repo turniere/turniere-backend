@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :score do
-    score { 0 }
+    score { rand(0..10) }
     match
     team
   end

@@ -17,7 +17,7 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Exclude:
     - "db/migrate/*"
-  Max: 20
+  Max: 50
 
 # The guiding principle of classes is SRP, SRP can't be accurately measured by LoC
 Metrics/ClassLength:
@@ -29,7 +29,7 @@ Metrics/ModuleLength:
 Metrics/AbcSize:
   Exclude:
     - "db/migrate/*"
-  Max: 20
+  Max: 50
 
 Metrics/BlockLength:
   ExcludedMethods:

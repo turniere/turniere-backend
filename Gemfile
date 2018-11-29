@@ -34,6 +34,10 @@ gem 'devise_token_auth'
 
 gem 'rack-cors'
 
+# Interactors
+gem 'interactor'
+gem 'interactor-rails'
+
 gem 'active_model_serializers'
 
 group :development, :test do

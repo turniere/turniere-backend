@@ -76,6 +76,7 @@ class CreateSchema < ActiveRecord::Migration[5.2]
 
     create_table :matches do |t|
       t.integer :state, default: 0
+      t.integer :position
 
       t.belongs_to :stage, index: true, foreign_key: { on_delete: :cascade }
       t.belongs_to :group, index: true, foreign_key: { on_delete: :cascade }
