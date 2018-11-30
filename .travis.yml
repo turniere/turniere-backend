@@ -5,4 +5,5 @@ script:
   - bundle exec rails db:migrate
   - bundle exec rails spec
 notifications:
-  slack: turnieredhbw:nmZvCQ8l8YVY2e03sD1JoJht
+  slack:
+    secure: EDlQKAXSltE2d4vdOtwVdFhPScjFU2rsSSgAGSqV24br4Jb/KihpjracavZW5wnmloiWe0ulj19j7LOtJSCNJOGqeAnct+axNyBRTI+9ctpeBDMHHtiOH9IX2EBsnEBpHdL4gMgOrPFfMoyn+sqbZ7EJgOFU41f/c7X0XUf1QeJ02Gh/uY1+m8Qo0eT9x4u8W+wnCFYCQeTWOB9/4aemkgbELOEDCbLYr5n+HCGK1vi+glmYoyldVr2yQBnbfME2fcNSOb7ytPDzjBI00cdGVhj8e/AMsF84W+Q+U3RIF0zjestQeFp3lPtTcHDt/MRH39MV1fjRaZB4A8+QYrjuECJ6wjzvzXJbGWUjE++6OmbRmszPlkFxXDiiiAe/Vs1NzUr4i7c2aWZhq8Q/6HDwYXx+/OUJY3THpCHjel/PC49s+KZqMrmq53nd6NWSCtZSPCXN/1uqb3m/zUq7i4wSNFirN+9E8reYkEq6GrpG1VwZkpKp9SkjWnd88cgM0JQEpC/dxRrmeI3o+uPRSIXV+RIaGCXIAdWO7eWBIJdpVQNrA4GDjWc+zj0X02qgbn6d6iByFCDtXzB+ognZwmKUnpJ4tF3oh5xv7j6cFw/GNirgThTLwEoXMfC/Q9OmhlYByOsZ+PBApsj0hfs74YXfN753eCglmtOKGqkpRT6kwG8=
