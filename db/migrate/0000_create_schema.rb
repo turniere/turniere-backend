@@ -102,9 +102,9 @@ class CreateSchema < ActiveRecord::Migration[5.2]
     end
 
     create_table :group_scores do |t|
-      t.integer :score, default: 0
-      t.integer :points_scored, default: 0
-      t.integer :points_received, default: 0
+      t.integer :group_points, default: 0
+      t.integer :scored_points, default: 0
+      t.integer :recieved_points, default: 0
 
       t.belongs_to :team, index: true, foreign_key: { on_delete: :cascade }, null: false
       t.belongs_to :group, index: true, foreign_key: { on_delete: :cascade }, null: false
