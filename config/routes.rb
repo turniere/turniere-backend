@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   resources :matches, only: %i[show]
   resources :teams, only: %i[show update]
   resources :tournaments
-  resources :scores, only: %i[show update]
+  resources :match_scores, only: %i[show update]
 end
