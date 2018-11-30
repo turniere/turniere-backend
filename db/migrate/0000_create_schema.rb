@@ -92,8 +92,8 @@ class CreateSchema < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    create_table :scores do |t|
-      t.integer :score, default: 0
+    create_table :match_scores do |t|
+      t.integer :points, default: 0
 
       t.belongs_to :match, index: true, null: false, foreign_key: { on_delete: :cascade }
       t.belongs_to :team, index: true, null: false, foreign_key: { on_delete: :cascade }
@@ -102,9 +102,9 @@ class CreateSchema < ActiveRecord::Migration[5.2]
     end
 
     create_table :group_scores do |t|
-      t.integer :score, default: 0
-      t.integer :points_scored, default: 0
-      t.integer :points_received, default: 0
+      t.integer :group_points, default: 0
+      t.integer :scored_points, default: 0
+      t.integer :recieved_points, default: 0
 
       t.belongs_to :team, index: true, foreign_key: { on_delete: :cascade }, null: false
       t.belongs_to :group, index: true, foreign_key: { on_delete: :cascade }, null: false

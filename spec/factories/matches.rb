@@ -5,10 +5,10 @@ FactoryBot.define do
     stage
     factory :running_playoff_match do
       transient do
-        scores_count { 2 }
+        match_scores_count { 2 }
       end
       after(:create) do |match, evaluator|
-        match.scores = create_list(:score, evaluator.scores_count)
+        match.match_scores = create_list(:match_score, evaluator.match_scores_count)
       end
       state { 3 }
     end

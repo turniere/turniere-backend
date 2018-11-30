@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe MatchesController, type: :controller do
   before do
     @match = create(:match)
-    @match.scores = create_pair(:score)
+    @match.match_scores = create_pair(:match_score)
   end
 
   describe 'GET #show' do
@@ -19,7 +19,7 @@ RSpec.describe MatchesController, type: :controller do
       get :show, params: { id: @match.to_param }
       body = ActiveModelSerializers::Deserialization.jsonapi_parse(JSON.parse(response.body))
       expect(body[:state]).to eq(@match.state)
-      expect(body[:score_ids]).to eq(@match.scores.map { |score| score.id.to_s })
+      expect(body[:match_score_ids]).to eq(@match.match_scores.map { |match_score| match_score.id.to_s })
     end
   end
 end

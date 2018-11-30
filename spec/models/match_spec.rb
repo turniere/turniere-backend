@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Match, type: :model do
   context 'association' do
-    it { should have_many :scores }
+    it { should have_many :match_scores }
     it { should belong_to :stage }
     it { should belong_to :group }
   end
@@ -26,20 +26,20 @@ RSpec.describe Match, type: :model do
     end
   end
 
-  context 'scores' do
+  context 'match_scores' do
     before do
       @match = create(:match)
-      @match.scores << build_pair(:score)
+      @match.match_scores << build_pair(:match_score)
     end
 
-    it 'can only have two scores' do
-      @match.scores << build(:score)
+    it 'can only have two match_scores' do
+      @match.match_scores << build(:match_score)
       expect(@match).to be_invalid
     end
 
-    it 'can access its scores' do
-      @match.scores[0].score = 0
-      @match.scores[1].score = 0
+    it 'can access its match_scores' do
+      @match.match_scores[0].points = 0
+      @match.match_scores[1].points = 0
     end
   end
 

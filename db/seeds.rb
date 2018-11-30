@@ -8,5 +8,5 @@ team1 = tournament.teams.create name: Faker::Dog.name
 team2 = tournament.teams.create name: Faker::Dog.name
 stage = tournament.stages.create!
 match = stage.matches.create!
-match.scores.create! team: team1, score: 0
-match.scores.create! team: team2, score: 1
+match.match_scores.create! team: team1, points: 0
+match.match_scores.create! team: team2, points: 1

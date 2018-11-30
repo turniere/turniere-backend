@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe Score, type: :model do
+RSpec.describe MatchScore, type: :model do
   describe 'association' do
     it { should belong_to :match }
     it { should belong_to :team }
   end
 
   it 'has a valid factory' do
-    expect(build(:score)).to be_valid
+    expect(build(:match_score)).to be_valid
   end
 end

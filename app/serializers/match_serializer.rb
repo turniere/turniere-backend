@@ -3,5 +3,5 @@
 class MatchSerializer < ApplicationSerializer
   attributes :state
 
-  has_many :scores
+  has_many :match_scores
 end
