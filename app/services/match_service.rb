@@ -20,16 +20,16 @@ class MatchService
       i = matches.size
       match = Match.new state: :not_started,
                         position: i,
-                        scores: [
-                          Score.create(team: teams[2 * i]),
-                          Score.create(team: teams[(2 * i) + 1])
+                        match_scores: [
+                          MatchScore.create(team: teams[2 * i]),
+                          MatchScore.create(team: teams[(2 * i) + 1])
                         ]
       matches << match
     end
 
     until matches.size >= needed_games
       i = matches.size
-      match = Match.new state: :single_team, position: i, scores: [Score.create(team: teams[i])]
+      match = Match.new state: :single_team, position: i, match_scores: [MatchScore.create(team: teams[i])]
       matches << match
     end
     matches

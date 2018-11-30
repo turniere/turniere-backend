@@ -59,8 +59,8 @@ RSpec.describe MatchService do
         generated_matches = MatchService.generate_matches teams
         generated_matches.each_index do |index|
           match = generated_matches[index]
-          first_team = match.scores.first.team.name
-          second_team = match.scores.second.team.name
+          first_team = match.match_scores.first.team.name
+          second_team = match.match_scores.second.team.name
           expect(first_team).to eq(teams[2 * index].name)
           expect(second_team).to eq(teams[2 * index + 1].name)
         end

@@ -10,7 +10,7 @@ RSpec.describe Team, type: :model do
   describe 'association' do
     it { should belong_to :tournament }
     it { should have_many :group_scores }
-    it { should have_many :scores }
+    it { should have_many :match_scores }
   end
 
   it 'has a valid factory' do
