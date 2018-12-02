@@ -10,7 +10,10 @@ RSpec.describe Tournament, type: :model do
   describe 'validation' do
     it { should validate_presence_of :name }
     it { should validate_presence_of :code }
-    it { should validate_uniqueness_of :code }
+    it do
+      tournament = create(:tournament, code: Faker::Dog.name)
+      expect(tournament).to validate_uniqueness_of :code
+    end
     it { should_not validate_presence_of :description }
     it { should_not validate_presence_of :public }
   end
