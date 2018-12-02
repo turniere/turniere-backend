@@ -12,7 +12,16 @@ class Tournament < ApplicationRecord
 
   alias_attribute :owner, :user
 
-  after_initialize do |tournament|
-    tournament.code ||= SecureRandom.hex 3
+  after_initialize :generate_code
+
+  private
+
+  def generate_code
+    return unless code.nil?
+
+    loop do
+      self.code = SecureRandom.hex(3)
+      break if errors['code'].blank?
+    end
   end
 end
