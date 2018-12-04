@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe Tournament, type: :model do
-  before do
-    @tournament = create(:tournament)
-  end
-
   describe 'validation' do
     it { should validate_presence_of :name }
     it { should validate_presence_of :code }
@@ -19,11 +15,13 @@ RSpec.describe Tournament, type: :model do
   end
 
   describe 'initialization' do
+    subject { create(:tournament) }
+
     it 'should have a code' do
-      expect(@tournament.code.length).to be(6)
+      expect(subject.code.length).to be(6)
     end
     it 'should be public' do
-      expect(@tournament.public).to be(true)
+      expect(subject.public).to be(true)
     end
   end
 
