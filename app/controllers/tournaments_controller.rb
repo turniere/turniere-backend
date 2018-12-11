@@ -13,7 +13,7 @@ class TournamentsController < ApplicationController
 
   # GET /tournaments/1
   def show
-    render json: @tournament
+    render json: @tournament, include: '**'
   end
 
   # POST /tournaments
