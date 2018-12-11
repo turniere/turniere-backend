@@ -24,8 +24,4 @@ class ApplicationController < ActionController::API
       ]
     }, status: :forbidden
   end
-
-  def deserialize_params(opts)
-    ActiveModelSerializers::Deserialization.jsonapi_parse(params, opts)
-  end
 end

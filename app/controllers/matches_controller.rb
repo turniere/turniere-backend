@@ -3,6 +3,6 @@
 class MatchesController < ApplicationController
   # GET /matches/1
   def show
-    render json: Match.find(params[:id]), include: ['match_scores.points', 'match_scores.team'], status: status
+    render json: Match.find(params[:id]), include: ['match_scores.points', 'match_scores.team']
   end
 end

@@ -48,6 +48,6 @@ class TournamentsController < ApplicationController
   end
 
   def tournament_params
-    deserialize_params only: %i[name description public teams]
+    params.require(:tournament).permit(:name, :description, :public, :teams)
   end
 end
