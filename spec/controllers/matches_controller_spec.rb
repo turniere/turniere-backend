@@ -17,9 +17,9 @@ RSpec.describe MatchesController, type: :controller do
 
     it 'should return the correct state' do
       get :show, params: { id: @match.to_param }
-      body = ActiveModelSerializers::Deserialization.jsonapi_parse(JSON.parse(response.body))
+      body = deserialize_response response
       expect(body[:state]).to eq(@match.state)
-      expect(body[:match_score_ids]).to eq(@match.match_scores.map { |match_score| match_score.id.to_s })
+      expect(body[:match_scores].map { |ms| ms[:id] }).to eq(@match.match_scores.map(&:id))
     end
   end
 end

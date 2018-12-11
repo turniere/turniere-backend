@@ -3,6 +3,5 @@
 class MatchScoreSerializer < ApplicationSerializer
   attributes :points
 
-  has_one :team
-  has_one :match
+  belongs_to :team
 end

@@ -26,6 +26,6 @@ class TeamsController < ApplicationController
   end
 
   def team_params
-    deserialize_params only: %i[name]
+    params.require(:team).permit(:name)
   end
 end

@@ -28,6 +28,6 @@ class MatchScoresController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def match_score_params
-    deserialize_params only: %i[points]
+    params.require(:match_score).permit(:points)
   end
 end

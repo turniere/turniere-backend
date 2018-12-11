@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class TournamentSerializer < SimpleTournamentSerializer
-  has_many :teams
+  attributes :description
   has_many :stages
+  has_many :teams
+
+  attribute :owner_username do
+    object.owner.username
+  end
 end
