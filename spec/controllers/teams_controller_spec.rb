@@ -24,7 +24,7 @@ RSpec.describe TeamsController, type: :controller do
   describe 'PUT #update' do
     let(:valid_update) do
       {
-        name: Faker::Dog.name
+        name: Faker::Creature::Dog.name
       }
     end
 
