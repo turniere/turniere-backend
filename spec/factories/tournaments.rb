@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :tournament do
-    name { Faker::Dog.name }
+    name { Faker::Creature::Dog.name }
     description { Faker::Lorem.sentence }
     user
     transient do

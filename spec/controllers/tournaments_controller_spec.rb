@@ -62,7 +62,7 @@ RSpec.describe TournamentsController, type: :controller do
   describe 'POST #create', skip: true do
     let(:create_data) do
       {
-        name: Faker::Dog.name,
+        name: Faker::Creature::Dog.name,
         description: Faker::Lorem.sentence,
         public: false,
         teams: {
@@ -109,7 +109,7 @@ RSpec.describe TournamentsController, type: :controller do
   describe 'PUT #update' do
     let(:valid_update) do
       {
-        name: Faker::Dog.name
+        name: Faker::Creature::Dog.name
       }
     end
 

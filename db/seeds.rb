@@ -3,7 +3,7 @@
 require 'faker'
 
 user = User.create! username: Faker::Internet.username, email: Faker::Internet.email, password: Faker::Internet.password
-tournament = user.tournaments.create! name: Faker::Dog.name
+tournament = user.tournaments.create! name: Faker::Creature::Dog.name
 
 @teams = []
 16.times do

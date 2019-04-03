@@ -7,7 +7,7 @@ RSpec.describe Tournament, type: :model do
     it { should validate_presence_of :name }
     it { should validate_presence_of :code }
     it do
-      tournament = create(:tournament, code: Faker::Dog.name)
+      tournament = create(:tournament, code: Faker::Creature::Dog.name)
       expect(tournament).to validate_uniqueness_of :code
     end
     it { should_not validate_presence_of :description }
