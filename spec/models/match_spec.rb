@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe Match, type: :model do
   context 'association' do
     it { should have_many :match_scores }
-    it { should belong_to :stage }
-    it { should belong_to :group }
+    it { should belong_to(:stage).optional }
+    it { should belong_to(:group).optional }
   end
 
   context '#new' do
