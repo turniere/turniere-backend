@@ -116,7 +116,7 @@ RSpec.describe TournamentsController, type: :controller do
     context 'with valid params' do
       context 'without authentication headers' do
         it 'renders a unauthorized error response' do
-          put :update, params: { id: @tournament.to_param, tournament: valid_update }
+          put :update, params: { id: @tournament.to_param }.merge(valid_update)
           expect(response).to have_http_status(:unauthorized)
         end
       end
@@ -127,13 +127,13 @@ RSpec.describe TournamentsController, type: :controller do
         end
 
         it 'updates the requested tournament' do
-          put :update, params: { id: @tournament.to_param, tournament: valid_update }
+          put :update, params: { id: @tournament.to_param }.merge(valid_update)
           @tournament.reload
           expect(@tournament.name).to eq(valid_update[:name])
         end
 
         it 'renders a JSON response with the tournament' do
-          put :update, params: { id: @tournament.to_param, tournament: valid_update }
+          put :update, params: { id: @tournament.to_param }.merge(valid_update)
           expect(response).to have_http_status(:ok)
           expect(response.content_type).to eq('application/json')
         end
@@ -145,7 +145,7 @@ RSpec.describe TournamentsController, type: :controller do
         end
 
         it 'renders a forbidden error response' do
-          put :update, params: { id: @tournament.to_param, tournament: valid_update }
+          put :update, params: { id: @tournament.to_param }.merge(valid_update)
           expect(response).to have_http_status(:forbidden)
         end
       end
