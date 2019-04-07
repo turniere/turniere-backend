@@ -18,12 +18,21 @@ class TournamentsController < ApplicationController
 
   # POST /tournaments
   def create
-    tournament = current_user.tournaments.new tournament_params
-
-    if tournament.save
-      render json: tournament, status: :created, location: tournament
-    else
+    params = tournament_params
+    teams = params.delete 'teams'
+    tournament = current_user.tournaments.new params
+    tournament.teams = Team.find(teams.map { |t| t[:id] })
+    unless tournament.valid?
       render json: tournament.errors, status: :unprocessable_entity
+      return
+    end
+    # add playoff stage to tournament
+    result = AddPlayoffsToTournamentAndSaveTournamentToDatabase.call(tournament: tournament)
+    # return appropriate result
+    if result.success?
+      render json: result.tournament, status: :created, location: result.tournament
+    else
+      render json: { error: 'Tournament generation failed' }, status: :unprocessable_entity
     end
   end
 
