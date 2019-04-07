@@ -26,6 +26,6 @@ class TeamsController < ApplicationController
   end
 
   def team_params
-    params.permit(:name)
+    params.slice(:name).permit!
   end
 end

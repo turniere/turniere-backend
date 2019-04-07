@@ -28,6 +28,6 @@ class MatchScoresController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def match_score_params
-    params.permit(:points)
+    params.slice(:points).permit!
   end
 end
