@@ -3,9 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe TournamentsController, type: :controller do
-  def tournament_ids(response)
-    deserialize_response(response).map { |t| t[:id].to_i }
-  end
   before do
     @tournament = create(:tournament)
     @user = @tournament.owner
@@ -24,7 +21,7 @@ RSpec.describe TournamentsController, type: :controller do
       get :index
       tournaments = deserialize_response response
       public_tournaments = tournaments.select { |t| t[:public] }
-      expect(public_tournaments.size).to eq((Tournament.where public: true).size)
+      expect(public_tournaments.map { |t| t[:id] }).to match_array(Tournament.where(public: true).map { |t| t[:id] })
     end
 
     it 'returns no private tournaments for unauthenticated users' do
@@ -35,15 +32,17 @@ RSpec.describe TournamentsController, type: :controller do
     end
 
     it 'returns private tournaments owned by the authenticated user' do
-      apply_authentication_headers_for @another_user
+      apply_authentication_headers_for @user
       get :index
-      expect(tournament_ids(response)).to include(@private_tournament.id)
+      tournaments = deserialize_response response
+      expect(tournaments.filter { |t| !t[:public] }).to match_array(Tournament.where(owner: @owner, public: false))
     end
 
     it 'returns no private tournaments owned by another user' do
       apply_authentication_headers_for @user
       get :index
-      expect(tournament_ids(response)).not_to include(@private_tournament.id)
+      tournaments = deserialize_response response
+      expect(tournaments.map { |t| t[:id] }).not_to include(@private_tournament.id)
     end
   end
 
