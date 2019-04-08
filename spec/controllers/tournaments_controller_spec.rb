@@ -3,9 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe TournamentsController, type: :controller do
-  def tournament_ids(response)
-    deserialize_response(response).map { |t| t[:id].to_i }
-  end
   before do
     @tournament = create(:tournament)
     @user = @tournament.owner
@@ -24,7 +21,7 @@ RSpec.describe TournamentsController, type: :controller do
       get :index
       tournaments = deserialize_response response
       public_tournaments = tournaments.select { |t| t[:public] }
-      expect(public_tournaments.size).to eq((Tournament.where public: true).size)
+      expect(public_tournaments.map { |t| t[:id] }).to match_array(Tournament.where(public: true).map { |t| t[:id] })
     end
 
     it 'returns no private tournaments for unauthenticated users' do
@@ -35,15 +32,17 @@ RSpec.describe TournamentsController, type: :controller do
     end
 
     it 'returns private tournaments owned by the authenticated user' do
-      apply_authentication_headers_for @another_user
+      apply_authentication_headers_for @user
       get :index
-      expect(tournament_ids(response)).to include(@private_tournament.id)
+      tournaments = deserialize_response response
+      expect(tournaments.filter { |t| !t[:public] }).to match_array(Tournament.where(owner: @owner, public: false))
     end
 
     it 'returns no private tournaments owned by another user' do
       apply_authentication_headers_for @user
       get :index
-      expect(tournament_ids(response)).not_to include(@private_tournament.id)
+      tournaments = deserialize_response response
+      expect(tournaments.map { |t| t[:id] }).not_to include(@private_tournament.id)
     end
   end
 
@@ -59,49 +58,74 @@ RSpec.describe TournamentsController, type: :controller do
     end
   end
 
-  describe 'POST #create', skip: true do
+  describe 'POST #create' do
     let(:create_data) do
       {
         name: Faker::Creature::Dog.name,
         description: Faker::Lorem.sentence,
         public: false,
-        teams: {
-          data: @teams.map { |team| { type: 'teams', id: team.id } }
-        }
+        teams: @teams.map { |team| { id: team.id } }
       }
     end
 
-    before(:each) do
-      apply_authentication_headers_for @user
+    context 'without authentication headers' do
+      it 'renders an unauthorized error response' do
+        put :create, params: create_data
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
 
-    context 'with valid params' do
-      it 'creates a new Tournament' do
-        expect do
+    context 'with authentication headers' do
+      before(:each) do
+        apply_authentication_headers_for @user
+      end
+
+      context 'with existing teams' do
+        it 'creates a new Tournament' do
+          expect do
+            post :create, params: create_data
+          end.to change(Tournament, :count).by(1)
+        end
+
+        it 'associates the new tournament with the authenticated user' do
+          expect do
+            post :create, params: create_data
+          end.to change(@user.tournaments, :count).by(1)
+        end
+
+        it 'associates the given teams with the created tournament' do
           post :create, params: create_data
-        end.to change(Tournament, :count).by(1)
-      end
+          body = deserialize_response response
+          tournament = Tournament.find(body[:id])
+          expect(tournament.teams).to match_array(@teams)
+        end
 
-      it 'associates the new tournament with the authenticated user' do
-        expect do
+        it 'renders a JSON response with the new tournament' do
           post :create, params: create_data
-        end.to change(@user.tournaments, :size).by(1)
+          expect(response).to have_http_status(:created)
+          expect(response.content_type).to eq('application/json')
+          expect(response.location).to eq(tournament_url(Tournament.last))
+        end
       end
 
-      it 'associates the given teams with the created tournament' do
-        new_teams = create_list(:detached_team, 4)
-        new_teams_create_data = create_data
-        new_teams_create_data[:data][:relationships][:teams][:data] = \
-          new_teams.map { |team| { type: 'teams', id: team.id } }
-        post :create, params: new_teams_create_data
-        expect(Tournament.last.teams).to match_array(new_teams)
+      context 'with missing teams' do
+        it 'returns an error response' do
+          data = create_data
+          data[:teams] << { id: Team.last.id + 1 }
+          post :create, params: data
+          expect(response).to have_http_status(:not_found)
+        end
       end
 
-      it 'renders a JSON response with the new tournament' do
-        post :create, params: create_data
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(tournament_url(Tournament.last))
+      context 'with team names' do
+        it 'creates teams for given names' do
+          data = create_data
+          data.delete :teams
+          data[:teams] = (1..12).collect { { name: Faker::Creature::Dog.name } }
+          expect do
+            post :create, params: data
+          end.to change(Team, :count).by(data[:teams].count)
+        end
       end
     end
   end

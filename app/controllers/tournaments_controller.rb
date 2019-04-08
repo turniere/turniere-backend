@@ -4,6 +4,7 @@ class TournamentsController < ApplicationController
   before_action :set_tournament, only: %i[show update destroy]
   before_action :authenticate_user!, only: %i[create update destroy]
   before_action -> { require_owner! @tournament.owner }, only: %i[update destroy]
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_error
 
   # GET /tournaments
   def index
@@ -18,12 +19,32 @@ class TournamentsController < ApplicationController
 
   # POST /tournaments
   def create
-    tournament = current_user.tournaments.new tournament_params
-
-    if tournament.save
-      render json: tournament, status: :created, location: tournament
-    else
+    params = tournament_params
+    params.require(:teams)
+    # convert teams parameter into Team objects
+    teams = params.delete('teams').map do |team|
+      if team[:id]
+        Team.find team[:id]
+      elsif team[:name]
+        Team.create name: team[:name]
+      end
+    end
+    # create tournament
+    tournament = current_user.tournaments.new params
+    # associate provided teams with tournament
+    tournament.teams = teams
+    # validate tournament
+    unless tournament.valid?
       render json: tournament.errors, status: :unprocessable_entity
+      return
+    end
+    # add playoff stage to tournament
+    result = AddPlayoffsToTournamentAndSaveTournamentToDatabase.call(tournament: tournament)
+    # return appropriate result
+    if result.success?
+      render json: result.tournament, status: :created, location: result.tournament
+    else
+      render json: { error: 'Tournament generation failed' }, status: :unprocessable_entity
     end
   end
 
