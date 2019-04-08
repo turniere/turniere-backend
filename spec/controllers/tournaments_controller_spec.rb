@@ -80,7 +80,7 @@ RSpec.describe TournamentsController, type: :controller do
         apply_authentication_headers_for @user
       end
 
-      context 'with valid params' do
+      context 'with existing teams' do
         it 'creates a new Tournament' do
           expect do
             post :create, params: create_data
@@ -105,6 +105,26 @@ RSpec.describe TournamentsController, type: :controller do
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq('application/json')
           expect(response.location).to eq(tournament_url(Tournament.last))
+        end
+      end
+
+      context 'with missing teams' do
+        it 'returns an error response' do
+          data = create_data
+          data[:teams] << { id: Team.last.id + 1 }
+          post :create, params: data
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context 'with team names' do
+        it 'creates teams for given names' do
+          data = create_data
+          data.delete :teams
+          data[:teams] = (1..12).collect { { name: Faker::Creature::Dog.name } }
+          expect do
+            post :create, params: data
+          end.to change(Team, :count).by(data[:teams].count)
         end
       end
     end
