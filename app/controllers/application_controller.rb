@@ -24,4 +24,8 @@ class ApplicationController < ActionController::API
       ]
     }, status: :forbidden
   end
+
+  def render_not_found_error(exception)
+    render json: { error: exception.to_s }, status: :not_found
+  end
 end
