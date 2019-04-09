@@ -100,6 +100,21 @@ RSpec.describe TournamentsController, type: :controller do
           expect(tournament.teams).to match_array(@teams)
         end
 
+        it 'generates a playoff stage' do
+          post :create, params: create_data
+          body = deserialize_response response
+          tournament = Tournament.find(body[:id])
+          expect(tournament.stages.first).to be_a(Stage)
+        end
+
+        it 'generates a playoff stage with all given teams' do
+          post :create, params: create_data
+          body = deserialize_response response
+          tournament = Tournament.find(body[:id])
+          included_teams = tournament.stages.first.matches.map { |m| m.match_scores.map(&:team) }.flatten.uniq
+          expect(included_teams).to match_array(@teams)
+        end
+
         it 'renders a JSON response with the new tournament' do
           post :create, params: create_data
           expect(response).to have_http_status(:created)
