@@ -23,9 +23,9 @@ class TournamentsController < ApplicationController
     params.require(:teams)
     # convert teams parameter into Team objects
     teams = params.delete('teams').map do |team|
-      if team[:id]
+      if team.key? 'id'
         Team.find team[:id]
-      elsif team[:name]
+      elsif team.key? 'name'
         Team.create name: team[:name]
       end
     end
