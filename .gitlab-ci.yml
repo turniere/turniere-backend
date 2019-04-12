@@ -1,0 +1,6 @@
+image: ruby:2.6.2
+
+test:
+  script:
+    - bundle exec rails db:migrate RAILS_ENV=test
+    - bundle exec rails spec RAILS_ENV=test
