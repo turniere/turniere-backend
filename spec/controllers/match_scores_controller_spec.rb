@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe MatchScoresController, type: :controller do
   before do
-    @match_score = create(:match_score)
+    @match_score = create(:running_playoff_match).match_scores.first
     @owner = @match_score.owner
   end
 
