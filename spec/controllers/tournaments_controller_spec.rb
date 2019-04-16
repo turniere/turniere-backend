@@ -142,6 +142,13 @@ RSpec.describe TournamentsController, type: :controller do
           end.to change(Team, :count).by(data[:teams].count)
         end
       end
+
+      context 'with invalid parameters' do
+        it 'renders an unprocessable entity response' do
+          put :create, params: { teams: [1, 2, 3] }
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
     end
   end
 
