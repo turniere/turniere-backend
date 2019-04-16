@@ -12,7 +12,8 @@ class MatchScoresController < ApplicationController
 
   # PATCH/PUT /scores/1
   def update
-    if @match_score.update(match_score_params)
+    result = UpdateMatchScore.call(match_score: @match_score, match_score_params: match_score_params)
+    if result.success?
       render json: @match_score
     else
       render json: @match_score.errors, status: :unprocessable_entity
