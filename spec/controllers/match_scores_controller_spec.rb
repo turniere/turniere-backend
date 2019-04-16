@@ -41,6 +41,12 @@ RSpec.describe MatchScoresController, type: :controller do
           expect(@match_score.points).to eq(valid_update[:points])
         end
 
+        it 'updates the matches state' do
+          put :update, params: { id: @match_score.to_param }.merge(valid_update)
+          @match_score.reload
+          expect(@match_score.match.state).to eq('in_progress')
+        end
+
         it 'renders a response with the updated team' do
           put :update, params: { id: @match_score.to_param }.merge(valid_update)
           expect(response).to be_successful
