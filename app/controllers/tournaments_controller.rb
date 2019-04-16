@@ -4,6 +4,7 @@ class TournamentsController < ApplicationController
   before_action :set_tournament, only: %i[show update destroy]
   before_action :authenticate_user!, only: %i[create update destroy]
   before_action -> { require_owner! @tournament.owner }, only: %i[update destroy]
+  before_action :validate_create_params, only: %i[create]
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_error
 
   # GET /tournaments
@@ -70,5 +71,12 @@ class TournamentsController < ApplicationController
 
   def tournament_params
     params.slice(:name, :description, :public, :teams).permit!
+  end
+
+  def validate_create_params
+    teams = params['teams']
+    return if teams.is_a?(Array) && teams.reject { |t| t.is_a? ActionController::Parameters }.count.zero?
+
+    render json: { error: 'Invalid teams array' }, status: :unprocessable_entity
   end
 end
