@@ -8,7 +8,8 @@ class PlayoffStageService
   def self.generate_playoff_stages(teams)
     playoffs = []
     stage_count = calculate_required_stage_count(teams.size)
-    # initial_matches are the matches in the first stage; this is the only stage filled with teams from the start on
+    # initial_matches are the matches in the first stage;
+    # this is the only stage filled with teams from the start of the playoff stage
     initial_matches = MatchService.generate_matches(teams)
     initial_stage = Stage.new level: stage_count - 1, matches: initial_matches
     playoffs << initial_stage
@@ -65,6 +66,7 @@ class PlayoffStageService
       0
     else
       # black voodoo magic
+      # h
       stage_count = Math.log(Utils.previous_power_of_two(number_of_teams)) / Math.log(2)
       stage_count.to_int
     end
