@@ -54,7 +54,7 @@ RSpec.describe MatchService do
       { team_size: 256 }
 
     ].each do |parameters|
-      it "matches the right teams for powers of 2 (#{parameters[:team_size]})" do
+      it "the right matchups for powers of 2 (#{parameters[:team_size]})" do
         teams = build_list(:team, parameters[:team_size], tournament: create(:tournament))
         generated_matches = MatchService.generate_matches teams
         generated_matches.each_index do |index|
@@ -77,7 +77,7 @@ RSpec.describe MatchService do
         { team_size: 111 }
 
     ].each do |parameters|
-      it "matches the right teams for team numbers that are not powers of 2 (#{parameters[:team_size]})" ,focus: true do
+      it "the right matchups for team numbers that are not powers of 2 (#{parameters[:team_size]})" do
         team_size = parameters[:team_size]
         teams = build_list(:team, team_size, tournament: create(:tournament))
         generated_matches = MatchService.generate_matches teams
