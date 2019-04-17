@@ -1,1 +1,11 @@
 .git
+test/**
+spec/**
+tmp/**
+.gitignore
+.hound.yml
+.rspec
+.rubocop.yml
+.travis-yml
+docker-compose.yml
+README.md
