@@ -11,18 +11,6 @@ class Match < ApplicationRecord
 
   validate :stage_xor_group
 
-  def evaluate_match_result
-    if match_scores.first == match_scores.second
-      if group_match?
-        :undecided
-      else
-        :in_progress
-      end
-    else
-      :finished
-    end
-  end
-
   private
 
   def stage_xor_group
