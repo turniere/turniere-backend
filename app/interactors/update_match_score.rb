@@ -7,7 +7,6 @@ class UpdateMatchScore
     match_score = context.match_score
     match_score_params = context.match_score_params
     if match_score.update(match_score_params)
-      match_score.match.state = 'in_progress'
       context.fail! unless match_score.save
     else
       context.fail!
