@@ -37,9 +37,11 @@ class MatchService
       matches << match
     end
 
+    # the start point is to compensate for all the teams that are already within a "normal" match
+    startpoint = matches.size
     until matches.size >= needed_games
       # while we do not have enough matches in general we need to fill the array with "single team" matches
-      i = matches.size
+      i = matches.size + startpoint
       match = Match.new state: :single_team, position: i, match_scores: [MatchScore.create(team: teams[i])]
       matches << match
     end
