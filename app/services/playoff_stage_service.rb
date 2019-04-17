@@ -65,7 +65,8 @@ class PlayoffStageService
       0
     else
       # black voodoo magic
-      stage_count = Math.log(Utils.previous_power_of_two(number_of_teams)) / Math.log(2)
+      stage_count = Math.log(Utils.next_power_of_two(number_of_teams)) / Math.log(2)
+      stage_count -= 1 if Utils.po2?(number_of_teams)
       stage_count.to_int
     end
   end
