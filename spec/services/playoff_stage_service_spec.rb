@@ -53,6 +53,9 @@ RSpec.describe PlayoffStageService do
 
   describe 'generates playoff stages for' do
     [
+      { team_size: 1, expected_amount_of_playoff_stages: 1 },
+      { team_size: 2, expected_amount_of_playoff_stages: 1 },
+      { team_size: 3, expected_amount_of_playoff_stages: 2 },
       { team_size: 4, expected_amount_of_playoff_stages: 2 },
       { team_size: 8, expected_amount_of_playoff_stages: 3 },
       { team_size: 9, expected_amount_of_playoff_stages: 4 },
