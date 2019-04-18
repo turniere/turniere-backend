@@ -68,13 +68,14 @@ RSpec.describe MatchService do
     end
 
     [
-        { team_size: 3 },
-        { team_size: 5 },
-        { team_size: 7 },
-        { team_size: 19 },
-        { team_size: 41 },
-        { team_size: 52 },
-        { team_size: 111 }
+      { team_size: 3 },
+      { team_size: 5 },
+      { team_size: 7 },
+      { team_size: 9 },
+      { team_size: 19 },
+      { team_size: 41 },
+      { team_size: 52 },
+      { team_size: 111 }
 
     ].each do |parameters|
       it "the right matchups for team numbers that are not powers of 2 (#{parameters[:team_size]})" do
