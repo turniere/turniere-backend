@@ -12,37 +12,39 @@ RSpec.describe TournamentsController, type: :controller do
   end
 
   describe 'GET #index' do
-    it 'returns a success response' do
-      get :index
-      expect(response).to be_successful
-    end
+    context 'without parameters' do
+      it 'returns a success response' do
+        get :index
+        expect(response).to be_successful
+      end
 
-    it 'returns all public tournaments' do
-      get :index
-      tournaments = deserialize_response response
-      public_tournaments = tournaments.select { |t| t[:public] }
-      expect(public_tournaments.map { |t| t[:id] }).to match_array(Tournament.where(public: true).map { |t| t[:id] })
-    end
+      it 'returns all public tournaments' do
+        get :index
+        tournaments = deserialize_response response
+        public_tournaments = tournaments.select { |t| t[:public] }
+        expect(public_tournaments.map { |t| t[:id] }).to match_array(Tournament.where(public: true).map { |t| t[:id] })
+      end
 
-    it 'returns no private tournaments for unauthenticated users' do
-      get :index
-      tournaments = deserialize_response response
-      private_tournaments = tournaments.reject { |t| t[:public] }
-      expect(private_tournaments.size).to eq(0)
-    end
+      it 'returns no private tournaments for unauthenticated users' do
+        get :index
+        tournaments = deserialize_response response
+        private_tournaments = tournaments.reject { |t| t[:public] }
+        expect(private_tournaments.size).to eq(0)
+      end
 
-    it 'returns private tournaments owned by the authenticated user' do
-      apply_authentication_headers_for @user
-      get :index
-      tournaments = deserialize_response response
-      expect(tournaments.filter { |t| !t[:public] }).to match_array(Tournament.where(owner: @owner, public: false))
-    end
+      it 'returns private tournaments owned by the authenticated user' do
+        apply_authentication_headers_for @user
+        get :index
+        tournaments = deserialize_response response
+        expect(tournaments.filter { |t| !t[:public] }).to match_array(Tournament.where(owner: @owner, public: false))
+      end
 
-    it 'returns no private tournaments owned by another user' do
-      apply_authentication_headers_for @user
-      get :index
-      tournaments = deserialize_response response
-      expect(tournaments.map { |t| t[:id] }).not_to include(@private_tournament.id)
+      it 'returns no private tournaments owned by another user' do
+        apply_authentication_headers_for @user
+        get :index
+        tournaments = deserialize_response response
+        expect(tournaments.map { |t| t[:id] }).not_to include(@private_tournament.id)
+      end
     end
   end
 
