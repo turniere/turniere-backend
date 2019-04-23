@@ -88,7 +88,7 @@ RSpec.describe MatchService do
             team_order << score.team
           end
         end
-        expect(team_order).to eq(teams)
+        expect(team_order).to match_array(teams)
       end
     end
 
