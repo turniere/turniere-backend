@@ -4,11 +4,11 @@ class User < ApplicationRecord
   extend Devise::Models
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable
+         :recoverable, :rememberable, :trackable, :validatable
 
   include DeviseTokenAuth::Concerns::User
 
-  validates :username, presence: true, uniqueness: true
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
 
   has_many :tournaments, dependent: :destroy
 end
