@@ -33,10 +33,12 @@ RSpec.describe TournamentsController, type: :controller do
       end
 
       it 'returns private tournaments owned by the authenticated user' do
-        apply_authentication_headers_for @user
+        apply_authentication_headers_for @another_user
         get :index
         tournaments = deserialize_response response
-        expect(tournaments.filter { |t| !t[:public] }).to match_array(Tournament.where(owner: @owner, public: false))
+        private_tournaments = Tournament.where(owner: @another_user, public: false).map { |t| t[:id] }
+        returned_private_tournaments = tournaments.filter { |t| !t[:public] }.map { |t| t[:id] }
+        expect(returned_private_tournaments).to match_array(private_tournaments)
       end
 
       it 'returns no private tournaments owned by another user' do
