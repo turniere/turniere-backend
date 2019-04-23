@@ -114,8 +114,8 @@ RSpec.describe MatchService do
       end
     end
 
-    it 'generates no matches for 0 teams' do
-      expect(MatchService.generate_matches([])). to eq(nil)
+    it 'raises an exception for for 0 teams' do
+      expect { MatchService.generate_matches([]) }. to raise_error 'Cannot generate Matches without teams'
     end
   end
 end

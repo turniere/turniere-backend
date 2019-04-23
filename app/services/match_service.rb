@@ -8,7 +8,7 @@ class MatchService
   def self.generate_matches(teams)
     if teams.empty?
       # should be prevented by controller
-      return
+      raise 'Cannot generate Matches without teams'
     end
 
     if teams.size == 1
