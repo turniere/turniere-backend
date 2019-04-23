@@ -61,11 +61,12 @@ class PlayoffStageService
   # @param number_of_teams [Integer] the teams number of teams to calculate amount of stages
   # @return [Integer] amount of required stages
   def self.calculate_required_stage_count(number_of_teams)
-    if number_of_teams.zero? || number_of_teams == 1
-      0
+    if number_of_teams == 1
+      1
     else
       # black voodoo magic
-      stage_count = Math.log(Utils.previous_power_of_two(number_of_teams)) / Math.log(2)
+      stage_count = Math.log(Utils.next_power_of_two(number_of_teams)) / Math.log(2)
+      stage_count -= 1 if Utils.po2?(number_of_teams)
       stage_count.to_int
     end
   end

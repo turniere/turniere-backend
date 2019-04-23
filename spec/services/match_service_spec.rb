@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe MatchService do
-  describe '#generate_matches' do
+  describe 'generates' do
     [
       { team_size: 2 },
       { team_size: 4 },
@@ -11,7 +11,7 @@ RSpec.describe MatchService do
       { team_size: 64 }
     ].each do |parameters|
       result = parameters[:team_size] / 2
-      it "generates #{result} matches from #{parameters[:team_size]} teams" do
+      it "#{result} matches from #{parameters[:team_size]} teams" do
         teams = build_list(:team, parameters[:team_size], tournament: create(:tournament))
         generated_matches = MatchService.generate_matches teams
         expect(generated_matches.size).to eq(result)
@@ -54,7 +54,7 @@ RSpec.describe MatchService do
       { team_size: 256 }
 
     ].each do |parameters|
-      it "matches the right teams for powers of 2 (#{parameters[:team_size]})" do
+      it "the right matchups for powers of 2 (#{parameters[:team_size]})" do
         teams = build_list(:team, parameters[:team_size], tournament: create(:tournament))
         generated_matches = MatchService.generate_matches teams
         generated_matches.each_index do |index|
@@ -67,7 +67,30 @@ RSpec.describe MatchService do
       end
     end
 
-    # TODO: matches right teams for !powers of 2
+    [
+      { team_size: 3 },
+      { team_size: 5 },
+      { team_size: 7 },
+      { team_size: 9 },
+      { team_size: 19 },
+      { team_size: 41 },
+      { team_size: 52 },
+      { team_size: 111 }
+
+    ].each do |parameters|
+      it "the right matchups for team numbers that are not powers of 2 (#{parameters[:team_size]})" do
+        team_size = parameters[:team_size]
+        teams = build_list(:team, team_size, tournament: create(:tournament))
+        generated_matches = MatchService.generate_matches teams
+        team_order = []
+        generated_matches.each do |match|
+          match.match_scores.each do |score|
+            team_order << score.team
+          end
+        end
+        expect(team_order).to match_array(teams)
+      end
+    end
 
     [
       { team_size: 3, single_team_matches: 1 },
@@ -91,12 +114,8 @@ RSpec.describe MatchService do
       end
     end
 
-    it 'generates no matches for 0 teams' do
-      expect(MatchService.generate_matches([])). to eq(nil)
-    end
-
-    it 'generates no matches for 1 team' do
-      expect(MatchService.generate_matches(build_list(:team, 1))). to eq(nil)
+    it 'raises an exception for for 0 teams' do
+      expect { MatchService.generate_matches([]) }. to raise_error 'Cannot generate Matches without teams'
     end
   end
 end

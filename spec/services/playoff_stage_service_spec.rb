@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe PlayoffStageService do
-  describe '#generate_empty_matches' do
+  describe 'generates' do
     [
       { amount: 1 },
       { amount: 3 },
@@ -12,7 +12,7 @@ RSpec.describe PlayoffStageService do
       { amount: 82 },
       { amount: 359 }
     ].each do |parameters|
-      it "generates #{parameters[:amount]} empty matches" do
+      it "#{parameters[:amount]} empty matches" do
         amount = parameters[:amount]
         generated_matches = PlayoffStageService.generate_empty_matches amount
         generated_matches.each_index do |i|
@@ -24,7 +24,7 @@ RSpec.describe PlayoffStageService do
     end
   end
 
-  describe '#generate_stages_with_empty_matches' do
+  describe 'generates' do
     [
       { stages: 1 },
       { stages: 2 },
@@ -37,7 +37,7 @@ RSpec.describe PlayoffStageService do
       { stages: 9 },
       { stages: 10 }
     ].each do |parameters|
-      it "generates #{parameters[:stages]} stages with matches provided by #generate_empty_matches" do
+      it "#{parameters[:stages]} stages with matches provided by #generate_empty_matches" do
         amount_of_empty_stages = parameters[:stages]
         empty_stages = PlayoffStageService.generate_stages_with_empty_matches(amount_of_empty_stages)
         expect(empty_stages.size).to eq(amount_of_empty_stages)
@@ -51,17 +51,22 @@ RSpec.describe PlayoffStageService do
     end
   end
 
-  describe '#generate_playoffs' do
+  describe 'generates playoff stages for' do
     [
+      { team_size: 1, expected_amount_of_playoff_stages: 1 },
+      { team_size: 2, expected_amount_of_playoff_stages: 1 },
+      { team_size: 3, expected_amount_of_playoff_stages: 2 },
       { team_size: 4, expected_amount_of_playoff_stages: 2 },
       { team_size: 8, expected_amount_of_playoff_stages: 3 },
+      { team_size: 9, expected_amount_of_playoff_stages: 4 },
+      { team_size: 10, expected_amount_of_playoff_stages: 4 },
       { team_size: 16, expected_amount_of_playoff_stages: 4 },
-      { team_size: 24, expected_amount_of_playoff_stages: 4 },
+      { team_size: 24, expected_amount_of_playoff_stages: 5 },
       { team_size: 32, expected_amount_of_playoff_stages: 5 },
       { team_size: 64, expected_amount_of_playoff_stages: 6 },
-      { team_size: 111, expected_amount_of_playoff_stages: 6 }
+      { team_size: 111, expected_amount_of_playoff_stages: 7 }
     ].each do |parameters|
-      it "generates playoff stages for #{parameters[:team_size]} teams" do
+      it "#{parameters[:team_size]} teams" do
         amount_of_teams = parameters[:team_size]
         expected_amount_of_playoff_stages = parameters[:expected_amount_of_playoff_stages]
         teams = build_list(:team, amount_of_teams)

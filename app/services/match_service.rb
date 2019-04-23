@@ -6,9 +6,16 @@ class MatchService
   # @param teams [Array] the teams to generate matches with
   # @return [Array] the generated matches
   def self.generate_matches(teams)
-    if teams.size < 2
+    if teams.empty?
       # should be prevented by controller
-      return
+      raise 'Cannot generate Matches without teams'
+    end
+
+    if teams.size == 1
+      matches = []
+      match = Match.new state: :single_team, position: 1, match_scores: [MatchScore.create(team: teams.first)]
+      matches << match
+      return matches
     end
 
     # normal_games = number of matches with two teams attending
@@ -37,9 +44,11 @@ class MatchService
       matches << match
     end
 
+    # the start point is to compensate for all the teams that are already within a "normal" match
+    startpoint = matches.size
     until matches.size >= needed_games
       # while we do not have enough matches in general we need to fill the array with "single team" matches
-      i = matches.size
+      i = matches.size + startpoint
       match = Match.new state: :single_team, position: i, match_scores: [MatchScore.create(team: teams[i])]
       matches << match
     end
