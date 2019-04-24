@@ -20,7 +20,7 @@ RSpec.describe AddPlayoffsToTournament do
     @stages = create_list(:stage, 5)
   end
 
-  context 'ez lyfe' do
+  context 'PlayoffStageService mocked' do
     before do
       expect(class_double('PlayoffStageService').as_stubbed_const(transfer_nested_constants: true))
         .to receive(:generate_playoff_stages_from_tournament)
