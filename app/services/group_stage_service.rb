@@ -2,6 +2,7 @@
 
 class GroupStageService
   def self.generate_group_stage(groups)
+    return false if groups.length.zero?
     average_group_size = (groups.map{ |g| g.teams }.flatten.length.to_f / groups.length.to_f)
     if (average_group_size %1).zero?
       groups = groups.map { |group| get_group_object_from(group) }
