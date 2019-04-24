@@ -83,7 +83,7 @@ class TournamentsController < ApplicationController
   end
 
   def tournament_params
-    params.slice(:name, :description, :public, :teams).permit!
+    params.slice(:name, :description, :public, :teams, :group_stage).permit!
   end
 
   def validate_create_params
