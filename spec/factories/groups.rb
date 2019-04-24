@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :group do
-    number { 0 }
+    sequence(:number)
     stage
   end
 end
