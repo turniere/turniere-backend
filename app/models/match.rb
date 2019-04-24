@@ -11,6 +11,10 @@ class Match < ApplicationRecord
 
   validate :stage_xor_group
 
+  def teams
+    match_scores.map{ |ms| ms.team}.flatten.uniq
+  end
+
   private
 
   def stage_xor_group

@@ -6,6 +6,6 @@ class Stage < ApplicationRecord
   has_many :groups, dependent: :destroy
 
   def teams
-    groups.map{|g| g.matches.map{ |m| m.match_scores.map{ |ms| ms.team}}}.flatten.uniq
+    groups.map{|g| g.teams}.flatten.uniq
   end
 end
