@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: turniere
+  labels:
+    app: turniere-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: turniere-backend
+  template:
+    metadata:
+      labels:
+        app: turniere-backend
+    spec:
+      containers:
+      - name: backend-container
+        image: registry.gitlab.com/turniere/turniere-backend:<%= current_sha %>
+        ports:
+        - containerPort: 3000
+        env:
+        - name: RAILS_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: turniere-secret
+              key: master.key

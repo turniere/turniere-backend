@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: turniere
+spec:
+  selector:
+    app: turniere-backend
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: backend-ingress
+  namespace: turniere
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: api01.turnie.re
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: backend-service
+          servicePort: http
