@@ -31,25 +31,47 @@ class TournamentsController < ApplicationController
   def create
     params = tournament_params
     params.require(:teams)
-    # convert teams parameter into Team objects
-    teams = params.delete('teams').map do |team|
-      if team[:id]
-        Team.find team[:id]
-      elsif team[:name]
-        Team.create name: team[:name]
-      end
-    end
+    group_stage = params.delete(:group_stage)
+    teams = params.delete('teams')
     # create tournament
     tournament = current_user.tournaments.new params
-    # associate provided teams with tournament
-    tournament.teams = teams
+    if group_stage
+      groups = {}
+      teams.each do |team|
+        team_id = team[:id]
+        team_name = team[:name]
+        group = team[:group]
+        unless team_id.nil?
+          team = Team.find team_id
+          put_team_into_groups_hash(groups, team, group)
+        end
+
+        unless team_name.nil?
+          team = Team.create name: team_name
+          put_team_into_groups_hash(groups, team, group)
+        end
+      end
+      # add groups to tournament
+      result = AddGroupStageToTournamentAndSaveTournamentToDatabase.call(tournament: tournament, groups: groups.values)
+    else
+      # convert teams parameter into Team objects
+      teams = teams.map do |team|
+        if team[:id]
+          Team.find team[:id]
+        elsif team[:name]
+          Team.create name: team[:name]
+        end
+      end
+      # associate provided teams with tournament
+      tournament.teams = teams
+      # add playoff stage to tournament
+      result = AddPlayoffsToTournamentAndSaveTournamentToDatabase.call(tournament: tournament)
+    end
     # validate tournament
     unless tournament.valid?
       render json: tournament.errors, status: :unprocessable_entity
       return
     end
-    # add playoff stage to tournament
-    result = AddPlayoffsToTournamentAndSaveTournamentToDatabase.call(tournament: tournament)
     # return appropriate result
     if result.success?
       render json: result.tournament, status: :created, location: result.tournament
@@ -73,6 +95,14 @@ class TournamentsController < ApplicationController
   end
 
   private
+
+  def put_team_into_groups_hash(groups, team, group)
+    if groups[group].is_a?(Array)
+      groups[group] << team
+    else
+      groups[group] = [team]
+    end
+  end
 
   def set_tournament
     @tournament = Tournament.find(params[:id])

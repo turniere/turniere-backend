@@ -9,6 +9,8 @@ RSpec.describe TournamentsController, type: :controller do
     @another_user = create(:user)
     @private_tournament = create(:tournament, user: @another_user, public: false)
     @teams = create_list(:detached_team, 4)
+    @teams16 = create_list(:detached_team, 16)
+    @groups = create_list(:group, 4)
   end
 
   describe 'GET #index' do
@@ -112,6 +114,17 @@ RSpec.describe TournamentsController, type: :controller do
       }
     end
 
+    let(:create_group_tournament_data) do
+      teams_with_groups = @teams16.each_with_index.map { |team, i| { id: team.id, group: (i / 4).floor } }
+      {
+        name: Faker::TvShows::FamilyGuy.character,
+        description: Faker::Movies::HarryPotter.quote,
+        public: false,
+        group_stage: true,
+        teams: teams_with_groups
+      }
+    end
+
     context 'without authentication headers' do
       it 'renders an unauthorized error response' do
         put :create, params: create_playoff_tournament_data
@@ -159,6 +172,24 @@ RSpec.describe TournamentsController, type: :controller do
           expect(included_teams).to match_array(@teams)
         end
 
+        context 'generates a group stage tournament' do
+          before(:each) do
+            post :create, params: create_group_tournament_data
+            body = deserialize_response response
+            @group_stage_tournament = Tournament.find(body[:id])
+          end
+
+          it 'with all given teams in their respective groups' do
+            included_teams = @group_stage_tournament.stages.find_by(level: -1).teams
+            expect(included_teams).to match_array(@teams16)
+          end
+
+          it 'which is a stage' do
+            group_stage = @group_stage_tournament.stages.find_by(level: -1)
+            expect(group_stage).to be_a(Stage)
+          end
+        end
+
         it 'renders a JSON response with the new tournament' do
           post :create, params: create_playoff_tournament_data
           expect(response).to have_http_status(:created)
@@ -173,6 +204,15 @@ RSpec.describe TournamentsController, type: :controller do
           data[:teams] << { id: Team.last.id + 1 }
           post :create, params: data
           expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context 'with unequal group sizes' do
+        it 'returns an error response' do
+          data = create_group_tournament_data
+          data[:teams].pop
+          post :create, params: data
+          expect(response).to have_http_status(:unprocessable_entity)
         end
       end
 
