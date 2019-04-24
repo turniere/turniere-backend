@@ -22,6 +22,8 @@ kaniko:
 
 kubernetes:
   stage: deploy
+  only:
+    - master
   image: ruby
   variables:
     KUBERNETES_SERVICE_ACCOUNT_OVERWRITE: gitlab-deploy
