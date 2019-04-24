@@ -12,37 +12,81 @@ RSpec.describe TournamentsController, type: :controller do
   end
 
   describe 'GET #index' do
-    it 'returns a success response' do
-      get :index
-      expect(response).to be_successful
+    context 'without parameters' do
+      it 'returns a success response' do
+        get :index
+        expect(response).to be_successful
+      end
+
+      it 'returns all public tournaments' do
+        get :index
+        tournaments = deserialize_response response
+        public_tournaments = tournaments.select { |t| t[:public] }
+        expect(public_tournaments.map { |t| t[:id] }).to match_array(Tournament.where(public: true).map { |t| t[:id] })
+      end
     end
 
-    it 'returns all public tournaments' do
-      get :index
-      tournaments = deserialize_response response
-      public_tournaments = tournaments.select { |t| t[:public] }
-      expect(public_tournaments.map { |t| t[:id] }).to match_array(Tournament.where(public: true).map { |t| t[:id] })
+    context 'with type=private parameter' do
+      let(:params) do
+        { type: 'private' }
+      end
+
+      it 'returns all private tournaments' do
+        apply_authentication_headers_for @another_user
+        get :index, params: params
+        tournaments = deserialize_response response
+        private_tournaments = Tournament.where(owner: @another_user, public: false).map { |t| t[:id] }
+        returned_private_tournaments = tournaments.filter { |t| !t[:public] }.map { |t| t[:id] }
+        expect(returned_private_tournaments).to match_array(private_tournaments)
+      end
+
+      it 'returns no private tournaments for unauthenticated users' do
+        get :index, params: params
+        tournaments = deserialize_response response
+        private_tournaments = tournaments.reject { |t| t[:public] }
+        expect(private_tournaments.size).to eq(0)
+      end
+
+      it 'returns no private tournaments owned by another user' do
+        apply_authentication_headers_for @user
+        get :index, params: params
+        tournaments = deserialize_response response
+        expect(tournaments.map { |t| t[:id] }).not_to include(@private_tournament.id)
+      end
+
+      it 'returns no public tournaments' do
+        apply_authentication_headers_for @another_user
+        get :index, params: params
+        tournaments = deserialize_response response
+        expect(tournaments.filter { |t| t[:public] }.size).to eq(0)
+      end
     end
 
-    it 'returns no private tournaments for unauthenticated users' do
-      get :index
-      tournaments = deserialize_response response
-      private_tournaments = tournaments.reject { |t| t[:public] }
-      expect(private_tournaments.size).to eq(0)
+    context 'with type=public parameter' do
+      let(:params) do
+        { type: 'public' }
+      end
+
+      it 'returns all public tournaments' do
+        get :index, params: params
+        tournaments = deserialize_response response
+        public_tournaments = tournaments.select { |t| t[:public] }
+        expect(public_tournaments.map { |t| t[:id] }).to match_array(Tournament.where(public: true).map { |t| t[:id] })
+      end
+
+      it 'returns no private tournaments' do
+        apply_authentication_headers_for @another_user
+        get :index, params: params
+        tournaments = deserialize_response response
+        expect(tournaments.filter { |t| !t[:public] }.size).to eq(0)
+      end
     end
 
-    it 'returns private tournaments owned by the authenticated user' do
-      apply_authentication_headers_for @user
-      get :index
-      tournaments = deserialize_response response
-      expect(tournaments.filter { |t| !t[:public] }).to match_array(Tournament.where(owner: @owner, public: false))
-    end
-
-    it 'returns no private tournaments owned by another user' do
-      apply_authentication_headers_for @user
-      get :index
-      tournaments = deserialize_response response
-      expect(tournaments.map { |t| t[:id] }).not_to include(@private_tournament.id)
+    context 'with invalid type parameter' do
+      it 'renders a bad request error response' do
+        put :index, params: { type: 'invalid' }
+        expect(response).to have_http_status(:bad_request)
+      end
     end
   end
 

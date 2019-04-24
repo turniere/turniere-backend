@@ -9,7 +9,16 @@ class TournamentsController < ApplicationController
 
   # GET /tournaments
   def index
-    tournaments = Tournament.where(public: true).or(Tournament.where(owner: current_user)).order(:created_at)
+    type = index_params.fetch(:type, 'public')
+    if type == 'public'
+      tournaments = Tournament.where(public: true).order(:created_at)
+    elsif type == 'private'
+      tournaments = Tournament.where(owner: current_user, public: false).order(:created_at)
+    else
+      # invalid type specified
+      render json: { error: 'invalid type' }, status: :bad_request
+      return
+    end
     render json: tournaments, each_serializer: SimpleTournamentSerializer
   end
 
@@ -67,6 +76,10 @@ class TournamentsController < ApplicationController
 
   def set_tournament
     @tournament = Tournament.find(params[:id])
+  end
+
+  def index_params
+    params.permit(:type)
   end
 
   def tournament_params
