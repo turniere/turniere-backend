@@ -4,5 +4,6 @@ FactoryBot.define do
   factory :group do
     sequence(:number)
     stage
+    group_match
   end
 end
