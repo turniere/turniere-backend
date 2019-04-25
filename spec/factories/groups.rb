@@ -2,8 +2,15 @@
 
 FactoryBot.define do
   factory :group do
+    transient do
+      match_count { 4 }
+    end
+
     sequence(:number)
     stage
-    group_match
+
+    after(:create) do |group, evaluator|
+      create_list(:group_match, evaluator.match_count, group: group)
+    end
   end
 end
