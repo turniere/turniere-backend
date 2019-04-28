@@ -41,12 +41,10 @@ class TournamentsController < ApplicationController
         team_id = team[:id]
         team_name = team[:name]
         group = team[:group]
-        unless team_id.nil?
+        if team_id
           team = Team.find team_id
           put_team_into_groups_hash(groups, team, group)
-        end
-
-        unless team_name.nil?
+        elsif team_name
           team = Team.create name: team_name
           put_team_into_groups_hash(groups, team, group)
         end
