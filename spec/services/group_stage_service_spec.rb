@@ -57,7 +57,7 @@ RSpec.describe GroupStageService do
     it 'gives matches exclusive positions' do
       matches = GroupStageService.generate_all_matches_between(@teams2)
       match_positions = matches.map(&:position)
-      expect(match_positions).to eq(match_positions.uniq)
+      expect(match_positions.length).to eq(match_positions.uniq.length)
     end
 
     it 'doesn\'t match a team against itself' do
