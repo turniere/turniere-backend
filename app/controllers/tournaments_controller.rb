@@ -43,10 +43,10 @@ class TournamentsController < ApplicationController
         group = team[:group]
         if team_id
           team = Team.find team_id
-          put_team_into_groups_hash(groups, team, group)
+          put_team_into_groups_hash!(groups, team, group)
         elsif team_name
           team = Team.create name: team_name
-          put_team_into_groups_hash(groups, team, group)
+          put_team_into_groups_hash!(groups, team, group)
         end
       end
       # add groups to tournament
@@ -94,7 +94,7 @@ class TournamentsController < ApplicationController
 
   private
 
-  def put_team_into_groups_hash(groups, team, group)
+  def put_team_into_groups_hash!(groups, team, group)
     if groups[group].is_a?(Array)
       groups[group] << team
     else
