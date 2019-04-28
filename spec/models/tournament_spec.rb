@@ -33,5 +33,7 @@ RSpec.describe Tournament, type: :model do
 
   it 'has valid factory' do
     expect(build(:tournament)).to be_valid
+    expect(build(:stage_tournament)).to be_valid
+    expect(build(:group_stage_tournament)).to be_valid
   end
 end

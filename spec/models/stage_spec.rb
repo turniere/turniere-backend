@@ -11,5 +11,6 @@ RSpec.describe Stage, type: :model do
 
   it 'has a valid factory' do
     expect(build(:stage)).to be_valid
+    expect(build(:group_stage)).to be_valid
   end
 end
