@@ -6,9 +6,8 @@ class GroupStageService
 
     average_group_size = (groups.flatten.length.to_f / groups.length.to_f)
     if (average_group_size % 1).zero?
-      groups = groups.map { |group| get_group_object_from(group) }
-      group_stage = Stage.new level: -1, groups: groups
-      group_stage
+      groups = groups.map(&method(:get_group_object_from))
+      Stage.new level: -1, groups: groups
     else
       false
     end
@@ -16,8 +15,7 @@ class GroupStageService
 
   def self.get_group_object_from(team_array)
     matches = generate_all_matches_between team_array
-    group = Group.new matches: matches
-    group
+    Group.new matches: matches
   end
 
   def self.generate_all_matches_between(teams)
