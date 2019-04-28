@@ -36,11 +36,15 @@ class TournamentsController < ApplicationController
     # create tournament
     tournament = current_user.tournaments.new params
     if group_stage
+      # if parameter group_stage = true
       groups = {}
+      # each team gets put into a hash of groups depending on the value assigned in team[:group]
+      # groups is a key value hash; key being the group, value being the array of teams within that group
       teams.each do |team|
         team_id = team[:id]
         team_name = team[:name]
         group = team[:group]
+        # convert teams parameter into Team objects
         if team_id
           team = Team.find team_id
           put_team_into_groups_hash!(groups, team, group)
