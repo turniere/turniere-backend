@@ -23,8 +23,8 @@ RSpec.describe AddGroupStageToTournament do
                                           .and_return(@group_stage)
     end
 
-    context 'Empty tournament' do
-      it 'context succeeds' do
+    context 'empty tournament' do
+      it 'succeeds' do
         expect(empty_tournament_context).to be_a_success
       end
 
@@ -42,12 +42,12 @@ RSpec.describe AddGroupStageToTournament do
                                           .and_return(false)
     end
 
-    it 'context fails' do
+    it 'fails' do
       expect(empty_tournament_context).to be_a_failure
     end
   end
 
-  context 'Tournament where group stage is already generated' do
+  context 'tournament where group stage is already generated' do
     it 'does not add group stage' do
       expect(group_stage_tournament_context).to be_a_failure
     end

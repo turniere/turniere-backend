@@ -7,7 +7,7 @@ RSpec.describe GroupStageService do
     @teams2 = create_list(:team, 4)
     @groups = Hash[1 => @teams1, 2 => @teams2].values
   end
-  describe 'generate_group_stage method' do
+  describe '#generate_group_stage method' do
     it 'returns a stage object' do
       group_stage = GroupStageService.generate_group_stage(@groups)
       expect(group_stage).to be_a(Stage)
@@ -31,14 +31,14 @@ RSpec.describe GroupStageService do
     end
   end
 
-  describe 'get_group_object_from' do
+  describe '#get_group_object_from' do
     it 'returns a group' do
       group = GroupStageService.get_group_object_from(@teams1)
       expect(group).to be_a(Group)
     end
   end
 
-  describe 'generate_all_matches_between' do
+  describe '#generate_all_matches_between' do
     it 'generates a list of not started matches' do
       matches = GroupStageService.generate_all_matches_between(@teams2)
       matches.each do |match|

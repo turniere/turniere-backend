@@ -172,19 +172,19 @@ RSpec.describe TournamentsController, type: :controller do
           expect(included_teams).to match_array(@teams)
         end
 
-        context 'generates a group stage tournament' do
+        context 'with parameter group_stage=true' do
           before(:each) do
             post :create, params: create_group_tournament_data
             body = deserialize_response response
             @group_stage_tournament = Tournament.find(body[:id])
           end
 
-          it 'with all given teams in their respective groups' do
+          it 'generates a group stage with all teams given in parameters' do
             included_teams = @group_stage_tournament.stages.find_by(level: -1).teams
             expect(included_teams).to match_array(@teams16)
           end
 
-          it 'which is a stage' do
+          it 'generates a group stage' do
             group_stage = @group_stage_tournament.stages.find_by(level: -1)
             expect(group_stage).to be_a(Stage)
           end
