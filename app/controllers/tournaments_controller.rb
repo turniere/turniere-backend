@@ -36,34 +36,12 @@ class TournamentsController < ApplicationController
     # create tournament
     tournament = current_user.tournaments.new params
     if group_stage
-      # if parameter group_stage = true
-      groups = {}
-      # each team gets put into a hash of groups depending on the value assigned in team[:group]
-      # groups is a key value hash; key being the group, value being the array of teams within that group
-      teams.each do |team|
-        team_id = team[:id]
-        team_name = team[:name]
-        group = team[:group]
-        # convert teams parameter into Team objects
-        if team_id
-          team = Team.find team_id
-          put_team_into_groups_hash!(groups, team, group)
-        elsif team_name
-          team = Team.create name: team_name
-          put_team_into_groups_hash!(groups, team, group)
-        end
-      end
+      groups = organize_teams_in_groups(teams)
       # add groups to tournament
-      result = AddGroupStageToTournamentAndSaveTournamentToDatabase.call(tournament: tournament, groups: groups.values)
+      result = AddGroupStageToTournamentAndSaveTournamentToDatabase.call(tournament: tournament, groups: groups)
     else
       # convert teams parameter into Team objects
-      teams = teams.map do |team|
-        if team[:id]
-          Team.find team[:id]
-        elsif team[:name]
-          Team.create name: team[:name]
-        end
-      end
+      teams = teams.map(&method(:find_or_create_team))
       # associate provided teams with tournament
       tournament.teams = teams
       # add playoff stage to tournament
@@ -98,11 +76,21 @@ class TournamentsController < ApplicationController
 
   private
 
-  def put_team_into_groups_hash!(groups, team, group)
-    if groups[group].is_a?(Array)
-      groups[group] << team
-    else
-      groups[group] = [team]
+  def organize_teams_in_groups(teams)
+    # each team gets put into a array of teams depending on the group specified in team[:group]
+    teams.group_by { |team| team['group'] }.values.map do |group|
+      group.map do |team|
+        find_or_create_team(team)
+      end
+    end
+  end
+
+  def find_or_create_team(team)
+    # convert teams parameter into Team objects
+    if team[:id]
+      Team.find team[:id]
+    elsif team[:name]
+      Team.create name: team[:name]
     end
   end
 
