@@ -43,6 +43,40 @@ RSpec.describe Match, type: :model do
     end
   end
 
+  context '#teams' do
+    before do
+      @playoff_match = create(:running_playoff_match)
+      @group_match = create(:running_group_match)
+      @teams = create_list(:team, 2)
+      @match_scores = create_list(:match_score, 2)
+      @match_scores.each_with_index { |match, i| match.team = @teams[i] }
+      @playoff_match.match_scores = @match_scores
+      @group_match.match_scores = @match_scores
+    end
+
+    context 'called on group match' do
+      let(:call_teams_on_group_match) do
+        @group_match.teams
+      end
+
+      it 'returns 2 team objects' do
+        teams = call_teams_on_group_match
+        expect(teams).to match_array(@teams)
+      end
+    end
+
+    context 'called on playoff match' do
+      let(:call_teams_on_playoff_match) do
+        @playoff_match.teams
+      end
+
+      it 'returns 2 team objects' do
+        teams = call_teams_on_playoff_match
+        expect(teams).to match_array(@teams)
+      end
+    end
+  end
+
   it 'has a valid factory' do
     expect(build(:match)).to be_valid
     expect(build(:running_playoff_match)).to be_valid
