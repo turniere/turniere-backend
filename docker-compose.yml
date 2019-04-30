@@ -4,3 +4,5 @@ services:
     image: registry.gitlab.com/turniere/turniere-backend:feature-development-docker-container
     ports:
       - 3000:3000
+    environment:
+      RAILS_ENV=development
