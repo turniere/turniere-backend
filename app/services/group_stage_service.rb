@@ -2,15 +2,13 @@
 
 class GroupStageService
   def self.generate_group_stage(groups)
-    return false if groups.length.zero?
+    raise 'Cannot generate group stage without groups' if groups.length.zero?
 
     average_group_size = (groups.flatten.length.to_f / groups.length.to_f)
-    if (average_group_size % 1).zero?
-      groups = groups.map(&method(:get_group_object_from))
-      Stage.new level: -1, groups: groups
-    else
-      false
-    end
+    raise 'Groups need to be equal size' unless (average_group_size % 1).zero?
+
+    groups = groups.map(&method(:get_group_object_from))
+    Stage.new level: -1, groups: groups
   end
 
   def self.get_group_object_from(team_array)

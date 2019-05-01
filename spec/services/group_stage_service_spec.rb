@@ -23,11 +23,16 @@ RSpec.describe GroupStageService do
       expect(group_stage_teams).to match_array(@groups.flatten)
     end
 
-    it 'returns false when given different sizes of groups' do
+    it 'raises exception when given different sizes of groups' do
       unequal_groups = @groups
       unequal_groups.first.pop
-      group_stage = GroupStageService.generate_group_stage(@groups)
-      expect(group_stage).to eq(false)
+      expect { GroupStageService.generate_group_stage(unequal_groups) }
+        .to raise_exception 'Groups need to be equal size'
+    end
+
+    it 'raises exception when given no groups' do
+      expect { GroupStageService.generate_group_stage([]) }
+        .to raise_exception 'Cannot generate group stage without groups'
     end
   end
 

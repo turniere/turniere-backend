@@ -35,14 +35,26 @@ RSpec.describe AddGroupStageToTournament do
     end
   end
 
-  context 'playoff generation fails' do
+  context 'empty groups' do
     before do
       expect(class_double('GroupStageService').as_stubbed_const(transfer_nested_constants: true))
         .to receive(:generate_group_stage).with(@groups)
-                                          .and_return(false)
+                                          .and_raise('Cannot generate group stage without groups')
     end
 
-    it 'fails' do
+    it 'playoff generation fails' do
+      expect(empty_tournament_context).to be_a_failure
+    end
+  end
+
+  context 'unequal group sizes' do
+    before do
+      expect(class_double('GroupStageService').as_stubbed_const(transfer_nested_constants: true))
+        .to receive(:generate_group_stage).with(@groups)
+                                          .and_raise('Groups need to be equal size')
+    end
+
+    it 'playoff generation fails' do
       expect(empty_tournament_context).to be_a_failure
     end
   end
