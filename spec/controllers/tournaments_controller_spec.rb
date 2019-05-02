@@ -233,6 +233,15 @@ RSpec.describe TournamentsController, type: :controller do
           expect(response).to have_http_status(:unprocessable_entity)
         end
       end
+
+      context 'with empty team objects' do
+        it 'renders an unprocessable entity response' do
+          data = create_group_tournament_data
+          data[:teams] = [{ group: 1 }, { group: 1 }, { group: 2 }, { group: 2 }]
+          post :create, params: data
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
     end
   end
 
