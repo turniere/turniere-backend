@@ -2,7 +2,7 @@
 
 namespace :factorybot do
   desc 'Lint FactoryBot factories'
-  task :lint do |_|
+  task lint: :environment do
     FactoryBot.lint
   end
 end
