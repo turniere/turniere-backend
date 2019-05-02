@@ -173,7 +173,7 @@ RSpec.describe TournamentsController, type: :controller do
         end
 
         context 'with parameter group_stage=true' do
-          before(:each) do
+          before do
             post :create, params: create_group_tournament_data
             body = deserialize_response response
             @group_stage_tournament = Tournament.find(body[:id])
