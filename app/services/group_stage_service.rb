@@ -23,8 +23,8 @@ class GroupStageService
       match = Match.new state: :not_started,
                         position: i,
                         match_scores: [
-                          MatchScore.create(team: matchup.first),
-                          MatchScore.create(team: matchup.second)
+                          MatchScore.new(team: matchup.first),
+                          MatchScore.new(team: matchup.second)
                         ]
       matches << match
     end
