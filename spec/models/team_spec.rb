@@ -15,5 +15,6 @@ RSpec.describe Team, type: :model do
 
   it 'has a valid factory' do
     expect(build(:team)).to be_valid
+    expect(build(:detached_team)).to be_valid
   end
 end

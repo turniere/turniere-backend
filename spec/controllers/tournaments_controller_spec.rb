@@ -9,6 +9,8 @@ RSpec.describe TournamentsController, type: :controller do
     @another_user = create(:user)
     @private_tournament = create(:tournament, user: @another_user, public: false)
     @teams = create_list(:detached_team, 4)
+    @teams16 = create_list(:detached_team, 16)
+    @groups = create_list(:group, 4)
   end
 
   describe 'GET #index' do
@@ -103,7 +105,7 @@ RSpec.describe TournamentsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:create_data) do
+    let(:create_playoff_tournament_data) do
       {
         name: Faker::Creature::Dog.name,
         description: Faker::Lorem.sentence,
@@ -112,9 +114,20 @@ RSpec.describe TournamentsController, type: :controller do
       }
     end
 
+    let(:create_group_tournament_data) do
+      teams_with_groups = @teams16.each_with_index.map { |team, i| { id: team.id, group: (i / 4).floor } }
+      {
+        name: Faker::TvShows::FamilyGuy.character,
+        description: Faker::Movies::HarryPotter.quote,
+        public: false,
+        group_stage: true,
+        teams: teams_with_groups
+      }
+    end
+
     context 'without authentication headers' do
       it 'renders an unauthorized error response' do
-        put :create, params: create_data
+        put :create, params: create_playoff_tournament_data
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -127,40 +140,58 @@ RSpec.describe TournamentsController, type: :controller do
       context 'with existing teams' do
         it 'creates a new Tournament' do
           expect do
-            post :create, params: create_data
+            post :create, params: create_playoff_tournament_data
           end.to change(Tournament, :count).by(1)
         end
 
         it 'associates the new tournament with the authenticated user' do
           expect do
-            post :create, params: create_data
+            post :create, params: create_playoff_tournament_data
           end.to change(@user.tournaments, :count).by(1)
         end
 
         it 'associates the given teams with the created tournament' do
-          post :create, params: create_data
+          post :create, params: create_playoff_tournament_data
           body = deserialize_response response
           tournament = Tournament.find(body[:id])
           expect(tournament.teams).to match_array(@teams)
         end
 
         it 'generates a playoff stage' do
-          post :create, params: create_data
+          post :create, params: create_playoff_tournament_data
           body = deserialize_response response
           tournament = Tournament.find(body[:id])
           expect(tournament.stages.first).to be_a(Stage)
         end
 
         it 'generates a playoff stage with all given teams' do
-          post :create, params: create_data
+          post :create, params: create_playoff_tournament_data
           body = deserialize_response response
           tournament = Tournament.find(body[:id])
           included_teams = tournament.stages.first.matches.map { |m| m.match_scores.map(&:team) }.flatten.uniq
           expect(included_teams).to match_array(@teams)
         end
 
+        context 'with parameter group_stage=true' do
+          before do
+            post :create, params: create_group_tournament_data
+            body = deserialize_response response
+            @group_stage_tournament = Tournament.find(body[:id])
+          end
+
+          it 'generates a group stage with all teams given in parameters' do
+            included_teams = @group_stage_tournament.stages.find_by(level: -1).teams
+            expect(included_teams).to match_array(@teams16)
+          end
+
+          it 'generates a group stage' do
+            group_stage = @group_stage_tournament.stages.find_by(level: -1)
+            expect(group_stage).to be_a(Stage)
+          end
+        end
+
         it 'renders a JSON response with the new tournament' do
-          post :create, params: create_data
+          post :create, params: create_playoff_tournament_data
           expect(response).to have_http_status(:created)
           expect(response.content_type).to eq('application/json')
           expect(response.location).to eq(tournament_url(Tournament.last))
@@ -169,16 +200,25 @@ RSpec.describe TournamentsController, type: :controller do
 
       context 'with missing teams' do
         it 'returns an error response' do
-          data = create_data
+          data = create_playoff_tournament_data
           data[:teams] << { id: Team.last.id + 1 }
           post :create, params: data
           expect(response).to have_http_status(:not_found)
         end
       end
 
+      context 'with unequal group sizes' do
+        it 'returns an error response' do
+          data = create_group_tournament_data
+          data[:teams].pop
+          post :create, params: data
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+
       context 'with team names' do
         it 'creates teams for given names' do
-          data = create_data
+          data = create_playoff_tournament_data
           data.delete :teams
           data[:teams] = (1..12).collect { { name: Faker::Creature::Dog.name } }
           expect do
@@ -190,6 +230,15 @@ RSpec.describe TournamentsController, type: :controller do
       context 'with invalid parameters' do
         it 'renders an unprocessable entity response' do
           put :create, params: { teams: [1, 2, 3] }
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+
+      context 'with empty team objects' do
+        it 'renders an unprocessable entity response' do
+          data = create_group_tournament_data
+          data[:teams] = [{ group: 1 }, { group: 1 }, { group: 2 }, { group: 2 }]
+          post :create, params: data
           expect(response).to have_http_status(:unprocessable_entity)
         end
       end

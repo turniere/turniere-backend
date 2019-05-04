@@ -31,25 +31,27 @@ class TournamentsController < ApplicationController
   def create
     params = tournament_params
     params.require(:teams)
-    # convert teams parameter into Team objects
-    teams = params.delete('teams').map do |team|
-      if team[:id]
-        Team.find team[:id]
-      elsif team[:name]
-        Team.create name: team[:name]
-      end
-    end
+    group_stage = params.delete(:group_stage)
+    teams = params.delete('teams')
     # create tournament
     tournament = current_user.tournaments.new params
-    # associate provided teams with tournament
-    tournament.teams = teams
+    if group_stage
+      groups = organize_teams_in_groups(teams)
+      # add groups to tournament
+      result = AddGroupStageToTournamentAndSaveTournamentToDatabase.call(tournament: tournament, groups: groups)
+    else
+      # convert teams parameter into Team objects
+      teams = teams.map(&method(:find_or_create_team))
+      # associate provided teams with tournament
+      tournament.teams = teams
+      # add playoff stage to tournament
+      result = AddPlayoffsToTournamentAndSaveTournamentToDatabase.call(tournament: tournament)
+    end
     # validate tournament
     unless tournament.valid?
       render json: tournament.errors, status: :unprocessable_entity
       return
     end
-    # add playoff stage to tournament
-    result = AddPlayoffsToTournamentAndSaveTournamentToDatabase.call(tournament: tournament)
     # return appropriate result
     if result.success?
       render json: result.tournament, status: :created, location: result.tournament
@@ -74,6 +76,24 @@ class TournamentsController < ApplicationController
 
   private
 
+  def organize_teams_in_groups(teams)
+    # each team gets put into a array of teams depending on the group specified in team[:group]
+    teams.group_by { |team| team['group'] }.values.map do |group|
+      group.map do |team|
+        find_or_create_team(team)
+      end
+    end
+  end
+
+  def find_or_create_team(team)
+    # convert teams parameter into Team objects
+    if team[:id]
+      Team.find team[:id]
+    elsif team[:name]
+      Team.create name: team[:name]
+    end
+  end
+
   def set_tournament
     @tournament = Tournament.find(params[:id])
   end
@@ -83,7 +103,7 @@ class TournamentsController < ApplicationController
   end
 
   def tournament_params
-    params.slice(:name, :description, :public, :teams).permit!
+    params.slice(:name, :description, :public, :teams, :group_stage).permit!
   end
 
   def validate_create_params

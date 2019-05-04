@@ -11,12 +11,19 @@ FactoryBot.define do
     after(:create) do |tournament, evaluator|
       tournament.teams = create_list(:team, evaluator.teams_count, tournament: tournament)
     end
+
     factory :stage_tournament do
       transient do
         stage_count { 1 }
       end
       after(:create) do |tournament, evaluator|
         tournament.stages = create_list(:stage, evaluator.stage_count)
+      end
+    end
+
+    factory :group_stage_tournament do
+      after(:create) do |tournament, _evaluator|
+        tournament.stages = create_list(:group_stage, 1)
       end
     end
   end
