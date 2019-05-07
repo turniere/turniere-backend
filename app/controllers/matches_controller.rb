@@ -12,6 +12,12 @@ class MatchesController < ApplicationController
 
   # PATCH/PUT /matches/1
   def update
+    new_state = match_params['state']
+    if new_state == 'finished'
+      # implement logic to move the winning team into the next stage
+      match_params['state'] = 'team1_won' # or 'team2_won' or 'undecided'
+      render json: {}, status: :not_implemented
+    end
     if @match.update(match_params)
       render json: @match
     else
