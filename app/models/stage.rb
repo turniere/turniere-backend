@@ -5,6 +5,8 @@ class Stage < ApplicationRecord
   has_many :matches, dependent: :destroy
   has_many :groups, dependent: :destroy
 
+  delegate :owner, to: :tournament
+
   def teams
     return matches.map(&:teams).flatten.uniq unless matches.size.zero?
 

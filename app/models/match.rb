@@ -15,6 +15,10 @@ class Match < ApplicationRecord
     match_scores.map(&:team).flatten.uniq
   end
 
+  def owner
+    stage ? stage.owner : group.owner
+  end
+
   private
 
   def stage_xor_group
