@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     sessions: 'overrides/sessions'
   }
 
-  resources :matches, only: %i[show]
+  resources :matches, only: %i[show update]
   resources :teams, only: %i[show update]
   resources :tournaments
   resources :match_scores, only: %i[show update]
