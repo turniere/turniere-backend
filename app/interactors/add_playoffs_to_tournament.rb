@@ -12,7 +12,7 @@ class AddPlayoffsToTournament
       else
         tournament.stages.concat playoff_stages
       end
-      context.tournament = tournament
+      context.object_to_save = tournament
     else
       context.fail!
     end
