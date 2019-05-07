@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-RSpec.describe SaveTournamentToDatabase do
+RSpec.describe SaveApplicationRecordObject do
   before do
     @tournament = create(:tournament)
   end
 
   context 'save succeeds' do
     let(:context) do
-      SaveTournamentToDatabase.call(tournament: @tournament)
+      SaveApplicationRecordObject.call(object_to_save: @tournament)
     end
     before do
       expect_any_instance_of(Tournament)
@@ -19,13 +19,13 @@ RSpec.describe SaveTournamentToDatabase do
     end
 
     it 'provides the tournament' do
-      expect(context.tournament).to eq(@tournament)
+      expect(context.object_to_save).to eq(@tournament)
     end
   end
 
   context 'save fails' do
     let(:context) do
-      SaveTournamentToDatabase.call(tournament: @tournament)
+      SaveApplicationRecordObject.call(object_to_save: @tournament)
     end
     before do
       expect_any_instance_of(Tournament)
