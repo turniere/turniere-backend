@@ -38,14 +38,14 @@ class TournamentsController < ApplicationController
     if group_stage
       groups = organize_teams_in_groups(teams)
       # add groups to tournament
-      result = AddGroupStageToTournamentAndSaveTournamentToDatabase.call(tournament: tournament, groups: groups)
+      result = AddGroupStageToTournamentAndSave.call(tournament: tournament, groups: groups)
     else
       # convert teams parameter into Team objects
       teams = teams.map(&method(:find_or_create_team))
       # associate provided teams with tournament
       tournament.teams = teams
       # add playoff stage to tournament
-      result = AddPlayoffsToTournamentAndSaveTournamentToDatabase.call(tournament: tournament)
+      result = AddPlayoffsToTournamentAndSave.call(tournament: tournament)
     end
     # validate tournament
     unless tournament.valid?
