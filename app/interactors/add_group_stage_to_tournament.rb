@@ -10,7 +10,7 @@ class AddGroupStageToTournament
     begin
       group_stage = GroupStageService.generate_group_stage(groups)
       tournament.stages = [group_stage]
-      context.tournament = tournament
+      context.object_to_save = tournament
     rescue StandardError
       context.fail!
     end

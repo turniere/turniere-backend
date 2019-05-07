@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class SaveTournamentToDatabase
+class SaveApplicationRecordObject
   include Interactor
 
   def call
-    if context.tournament.save
+    if context.object_to_save.save
       nil
     else
       context.fail!
