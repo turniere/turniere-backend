@@ -6,8 +6,12 @@ class Stage < ApplicationRecord
   has_many :groups, dependent: :destroy
 
   def teams
-    return matches.map(&:teams).flatten.uniq unless matches.size.zero?
+    if groups.size.zero?
+      return matches.map(&:teams).flatten.uniq
+    elsif matches.size.zero?
+      return groups.map(&:teams).flatten.uniq
+    end
 
-    groups.map(&:teams).flatten.uniq unless groups.size.zero?
+    []
   end
 end
