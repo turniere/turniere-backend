@@ -32,7 +32,7 @@ RSpec.describe MatchesController, type: :controller do
 
     let(:invalid_update) do
       {
-        state: 'team1_won'
+        state: 'finished'
       }
     end
 

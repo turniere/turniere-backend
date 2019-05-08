@@ -14,10 +14,10 @@ RSpec.describe AddPlayoffsToTournament do
   end
 
   before do
-    @group_stage_tournament = create(:stage_tournament)
-    @playoff_stage_tournament = create(:tournament)
-    @full_tournament = create(:stage_tournament, stage_count: 5)
-    @stages = create_list(:stage, 5)
+    @group_stage_tournament = create(:group_stage_only_tournament, group_count: 0)
+    @playoff_stage_tournament = create(:stageless_tournament)
+    @full_tournament = create(:dummy_stage_tournament)
+    @stages = create_list(:stage, 3)
   end
 
   context 'PlayoffStageService mocked' do
