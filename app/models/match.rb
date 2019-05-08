@@ -25,16 +25,6 @@ class Match < ApplicationRecord
     errors.add(:stage_xor_group, 'Stage and Group missing or both present') unless stage.present? ^ group.present?
   end
 
-  def evaluate_status
-    if score_team1 < score_team2
-      :team2_won
-    elsif score_team2 < score_team1
-      :team1_won
-    else
-      group_match? ? :undecided : :in_progress
-    end
-  end
-
   def group_match?
     group.present?
   end
