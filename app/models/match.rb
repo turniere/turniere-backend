@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Match < ApplicationRecord
-  enum state: %i[single_team not_ready not_started in_progress team1_won team2_won undecided]
+  enum state: %i[single_team not_ready not_started in_progress finished undecided]
 
   belongs_to :stage, optional: true
   belongs_to :group, optional: true
