@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class MatchService
+  # Starts a Match; setting its state to running
+  #
+  # @param match Match the Match to be started
+  # @return Match the resulting Match
+  def self.start_match(match); end
+
   # Generates all necessary matches from a list of teams
   #
   # @param teams [Array] the teams to generate matches with
