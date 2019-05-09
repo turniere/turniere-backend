@@ -70,4 +70,11 @@ class PlayoffStageService
       stage_count.to_int
     end
   end
+
+  def self.populate_match_below(match)
+    current_stage = match.stage
+    next_stage = match.stage.tournament.stages.
+
+                 puts
+  end
 end
