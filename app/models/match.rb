@@ -21,6 +21,12 @@ class Match < ApplicationRecord
 
   private
 
+  def evaluate_winner
+    return nil if match_scores.first.points == match_scores.second.points
+
+    match_scores.max_by(&:points).team
+  end
+
   def stage_xor_group
     errors.add(:stage_xor_group, 'Stage and Group missing or both present') unless stage.present? ^ group.present?
   end
