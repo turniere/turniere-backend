@@ -43,6 +43,20 @@ RSpec.describe Match, type: :model do
     end
   end
 
+  context '#winner' do
+    it 'returns a winner Team for a decided match' do
+      decided_playoff_match = create(:decided_playoff_match)
+      winning_team_match_score = decided_playoff_match.match_scores.first
+      winning_team_match_score.points = 9999
+      winning_team = winning_team_match_score.team
+      expect(decided_playoff_match.winner).to be winning_team
+    end
+
+    it 'returns nil for an undecided match' do
+      expect(create(:undecided_group_match).winner).to be(nil)
+    end
+  end
+
   context '#teams' do
     before do
       @playoff_match = create(:running_playoff_match)
