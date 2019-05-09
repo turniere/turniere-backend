@@ -17,7 +17,10 @@ FactoryBot.define do
         stage_count { 1 }
       end
       after(:create) do |tournament, evaluator|
-        tournament.stages = create_list(:stage, evaluator.stage_count)
+        # this is basically a manual create_list as we need to count up the level of the stage
+        tournament.stages.concat 1..evaluator.stage_count.map do |level|
+          create(:playoff_stage, level: level, match_count: -1)
+        end
       end
 
       factory :group_stage_tournament do
