@@ -19,7 +19,10 @@ FactoryBot.define do
         match_count { 4 }
       end
       after(:create) do |stage, evaluator|
-        stage.matches = create_list(:match, evaluator.match_count)
+        # match_count -1 automatically generates 2 ^ stage.level matches
+        # (as this would be the amount of stages present in the real world)
+        stage.matches = create_list(:match, evaluator.match_count == -1 ? 2**stage.level : evaluator.match_count)
+        stage.matches.each_with_index { |match, i| match.position = i }
       end
     end
   end
