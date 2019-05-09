@@ -24,6 +24,10 @@ class Match < ApplicationRecord
     # This should maybe be cached or put into db
   end
 
+  def group_match?
+    group.present?
+  end
+
   private
 
   def evaluate_winner
@@ -35,9 +39,5 @@ class Match < ApplicationRecord
 
   def stage_xor_group
     errors.add(:stage_xor_group, 'Stage and Group missing or both present') unless stage.present? ^ group.present?
-  end
-
-  def group_match?
-    group.present?
   end
 end
