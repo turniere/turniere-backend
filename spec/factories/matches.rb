@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :playoff_match, aliases: [:match], class: Match do
     stage
+    position { 0 }
     factory :running_playoff_match do
       transient do
         match_scores_count { 2 }
@@ -31,6 +32,7 @@ FactoryBot.define do
 
   factory :group_match, class: Match do
     group
+    position { 0 }
     factory :running_group_match do
       transient do
         match_scores_count { 2 }
