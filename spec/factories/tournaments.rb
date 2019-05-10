@@ -24,7 +24,7 @@ FactoryBot.define do
             create(:playoff_stage,
                    level: level,
                    match_count: -1,
-                   match_state: level == evaluator.stage_count ? :in_progress : :not_started)
+                   match_type: level == evaluator.stage_count ? :running_playoff_match : :empty_prepared_playoff_match)
           }
       end
 

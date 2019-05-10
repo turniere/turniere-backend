@@ -16,15 +16,14 @@ FactoryBot.define do
     factory :playoff_stage do
       level { rand(10) }
       transient do
-        match_state { :not_started }
+        match_type { :running_playoff_match }
         match_count { 4 }
       end
       after(:create) do |stage, evaluator|
         # match_count -1 automatically generates 2 ^ stage.level matches
         # (as this would be the amount of stages present in the real world)
-        stage.matches = create_list(:running_playoff_match,
-                                    evaluator.match_count == -1 ? 2**stage.level : evaluator.match_count,
-                                    state: evaluator.match_state)
+        stage.matches = create_list(evaluator.match_type,
+                                    evaluator.match_count == -1 ? 2**stage.level : evaluator.match_count)
         stage.matches.each_with_index do |match, i|
           match.position = i
           match.save
