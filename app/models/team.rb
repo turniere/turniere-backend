@@ -7,5 +7,8 @@ class Team < ApplicationRecord
 
   validates :name, presence: true
 
-  delegate :owner, to: :tournament
+  def owner
+    match_scores.first.owner
+    # this will produce errors if we make teams reusable
+  end
 end
