@@ -13,6 +13,10 @@ FactoryBot.define do
       state { :in_progress }
     end
 
+    factory :empty_prepared_playoff_match do
+      state { :not_started }
+    end
+
     factory :decided_playoff_match do
       transient do
         match_scores_count { 2 }
