@@ -10,8 +10,8 @@ RSpec.describe AddGroupStageToTournament do
   end
 
   before do
-    @empty_tournament = create(:stage_tournament, stage_count: 0)
-    @group_stage_tournament = create(:group_stage_tournament)
+    @empty_tournament = create(:stage_less_tournament)
+    @group_stage_tournament = create(:group_stage_only_tournament, group_count: 0)
     @group_stage = create(:group_stage)
     @groups = Hash[1 => create_list(:team, 4), 2 => create_list(:team, 4)].values
   end
