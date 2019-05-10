@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :tournament do
+  factory :tournament, aliases: [:stageless_tournament] do
     name { Faker::Creature::Dog.name }
     description { Faker::Lorem.sentence }
     user
@@ -36,6 +36,15 @@ FactoryBot.define do
         after(:create) do |tournament, _evaluator|
           tournament.stages << create(:group_stage)
         end
+      end
+    end
+
+    factory :dummy_stage_tournament do
+      transient do
+        stage_count { 3 }
+      end
+      after(:create) do |tournament, evaluator|
+        tournament.stages.concat create_list(:stage, evaluator.stage_count)
       end
     end
   end
