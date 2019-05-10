@@ -13,6 +13,7 @@ class MatchScoresController < ApplicationController
   # PATCH/PUT /scores/1
   def update
     if @match_score.update(match_score_params)
+      GroupStageService.calculate_group_points(@match_score)
       render json: @match_score
     else
       render json: @match_score.errors, status: :unprocessable_entity
