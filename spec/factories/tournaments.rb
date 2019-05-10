@@ -6,7 +6,7 @@ FactoryBot.define do
     description { Faker::Lorem.sentence }
     user
     transient do
-      teams_count { 16 }
+      teams_count { 8 }
     end
     after(:create) do |tournament, evaluator|
       tournament.teams = create_list(:team, evaluator.teams_count, tournament: tournament)
