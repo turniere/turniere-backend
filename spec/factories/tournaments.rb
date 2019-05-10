@@ -12,6 +12,15 @@ FactoryBot.define do
       tournament.teams = create_list(:team, evaluator.teams_count, tournament: tournament)
     end
 
+    factory :group_stage_only_tournament do
+      transient do
+        group_count { 2 }
+      end
+      after(:create) do |tournament, evaluator|
+        tournament.stages << create(:group_stage, group_count: evaluator.group_count)
+      end
+    end
+
     factory :stage_tournament do
       transient do
         stage_count { 1 }
