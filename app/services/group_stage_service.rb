@@ -29,4 +29,8 @@ class GroupStageService
     end
     matches
   end
+
+  def self.calculate_group_points(match_score)
+    # code here
+  end
 end
