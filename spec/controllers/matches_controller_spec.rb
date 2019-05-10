@@ -5,8 +5,10 @@ require 'rails_helper'
 RSpec.describe MatchesController, type: :controller do
   before do
     @match = create(:match, state: :not_started)
+    @match_owner = @match.owner
     @tournament = create(:group_stage_tournament, stage_count: 3)
     @running_playoff_match = @tournament.stages.find { |s| s.level == 3 }.matches.first
+    @running_playoff_match_owner = @running_playoff_match.owner
     @match.match_scores = create_pair(:match_score)
   end
 
@@ -40,7 +42,7 @@ RSpec.describe MatchesController, type: :controller do
 
     context 'as owner' do
       before(:each) do
-        apply_authentication_headers_for @match.owner
+        apply_authentication_headers_for @match_owner
       end
 
       context 'with valid params' do
@@ -75,7 +77,7 @@ RSpec.describe MatchesController, type: :controller do
       end
 
       before(:each) do
-        apply_authentication_headers_for @running_playoff_match.owner
+        apply_authentication_headers_for @running_playoff_match_owner
       end
 
       it 'stops the match' do
