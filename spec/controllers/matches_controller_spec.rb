@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe MatchesController, type: :controller do
   before do
     @match = create(:match, state: :not_started)
+    @tournament = create(:group_stage_tournament, stage_count: 3)
+    @running_playoff_match = @tournament.stages.find { |s| s.level == 3 }.matches.first
     @match.match_scores = create_pair(:match_score)
   end
 
@@ -62,6 +64,25 @@ RSpec.describe MatchesController, type: :controller do
           put :update, params: { id: @match.to_param }.merge(invalid_update)
           expect(response).to have_http_status(:unprocessable_entity)
         end
+      end
+    end
+
+    context 'as another owner' do
+      let(:finished) do
+        {
+          state: 'finished'
+        }
+      end
+
+      before(:each) do
+        apply_authentication_headers_for @running_playoff_match.owner
+      end
+
+      it 'stops the match' do
+        put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
+        @running_playoff_match.reload
+        expect(response).to be_successful
+        expect(@running_playoff_match.state).to eq(finished[:state])
       end
     end
 
