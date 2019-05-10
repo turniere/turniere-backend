@@ -25,7 +25,10 @@ FactoryBot.define do
         stage.matches = create_list(:running_playoff_match,
                                     evaluator.match_count == -1 ? 2**stage.level : evaluator.match_count,
                                     state: evaluator.match_state)
-        stage.matches.each_with_index { |match, i| match.position = i }
+        stage.matches.each_with_index do |match, i|
+          match.position = i
+          match.save
+        end
       end
     end
   end
