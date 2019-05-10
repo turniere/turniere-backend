@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe MatchesController, type: :controller do
   before do
     @match = create(:match, state: :not_started)
+    @tournament = create(:group_stage_tournament, stage_count: 3)
+    @running_playoff_match = @tournament.stages.find { |s| s.level == 3 }.matches.first
     @match.match_scores = create_pair(:match_score)
   end
 
@@ -61,6 +63,38 @@ RSpec.describe MatchesController, type: :controller do
         it 'renders an unprocessable entity response' do
           put :update, params: { id: @match.to_param }.merge(invalid_update)
           expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+    end
+
+    context 'as another owner' do
+      let(:finished) do
+        {
+          state: 'finished'
+        }
+      end
+
+      before(:each) do
+        apply_authentication_headers_for @running_playoff_match.owner
+      end
+
+      context 'stops the match' do
+        before do
+          @running_playoff_match.match_scores.each_with_index { |ms, i| ms.points = i }
+          @running_playoff_match.save
+          put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
+          @running_playoff_match.reload
+        end
+
+        it 'updates the matches status' do
+          expect(response).to be_successful
+          expect(@running_playoff_match.state).to eq(finished[:state])
+        end
+
+        it 'fills the match below' do
+          match_below = @tournament.stages.find { |s| s.level == 2 }.matches
+                                   .find { |m| m.position == @running_playoff_match.position / 2 }.reload
+          expect(match_below.teams).to include(@running_playoff_match.winner)
         end
       end
     end
