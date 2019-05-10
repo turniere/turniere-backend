@@ -19,6 +19,11 @@ class Match < ApplicationRecord
     stage ? stage.owner : group.owner
   end
 
+  def winner
+    evaluate_winner
+    # This should maybe be cached or put into db
+  end
+
   private
 
   def evaluate_winner
