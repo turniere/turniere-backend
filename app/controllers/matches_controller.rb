@@ -14,7 +14,7 @@ class MatchesController < ApplicationController
   def update
     new_state = match_params['state']
     if new_state == 'finished'
-      PlayoffStageService.populate_match_below(@match) unless @match.group_match?
+      PopulateMatchBelowAndSave.call(match:@match) unless @match.group_match?
     end
     if @match.update(match_params)
       render json: @match
