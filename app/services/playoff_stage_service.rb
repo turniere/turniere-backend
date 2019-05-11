@@ -74,7 +74,13 @@ class PlayoffStageService
   def self.populate_match_with_winners(match, first_match, second_match)
     match_scores = match.match_scores.sort_by(&:id)
     matches = [first_match, second_match].sort_by(&:position)
-    winners = matches.map(&:winner)
+    winners = []
+    if second_match.finished?
+      winners = matches.map(&:winner)
+    else
+      winners = matches.map{ |m|
+        m == first_match ? m.winner : nil }
+    end
 
     # depending on the amount of match_scores already present we need to do different things
     case match_scores.size
@@ -101,8 +107,8 @@ class PlayoffStageService
     end
 
     # If a match is not decided yet, it will return nil as winner.
-    # This is not allowed in Database. The following code replaces MatchScores that contain nil as team with nil.
-    match_scores.map{ |ms| ms.team.nil? ? nil : ms}
+    # This is not allowed in Database. The following code filters out MatchScores that contain nil as team.
+    match_scores = match_scores.select { |ms| ms.team.present? }
     match.match_scores = match_scores
   end
 
