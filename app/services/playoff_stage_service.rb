@@ -74,13 +74,13 @@ class PlayoffStageService
   def self.populate_match_with_winners(match, first_match, second_match)
     match_scores = match.match_scores.sort_by(&:id)
     matches = [first_match, second_match].sort_by(&:position)
-    winners = []
-    if second_match.finished?
-      winners = matches.map(&:winner)
-    else
-      winners = matches.map{ |m|
-        m == first_match ? m.winner : nil }
-    end
+    winners = if second_match.finished?
+                matches.map(&:winner)
+              else
+                matches.map do |m|
+                  m == first_match ? m.winner : nil
+                end
+              end
 
     # depending on the amount of match_scores already present we need to do different things
     case match_scores.size
