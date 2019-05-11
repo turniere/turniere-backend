@@ -80,11 +80,21 @@ RSpec.describe MatchesController, type: :controller do
         apply_authentication_headers_for @running_playoff_match_owner
       end
 
-      it 'stops the match' do
-        put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
-        @running_playoff_match.reload
-        expect(response).to be_successful
-        expect(@running_playoff_match.state).to eq(finished[:state])
+      context 'stops the match' do
+        before do
+          put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
+          @running_playoff_match.reload
+        end
+
+        it 'updates the matches status' do
+          expect(response).to be_successful
+          expect(@running_playoff_match.state).to eq(finished[:state])
+        end
+
+        it 'fills the match below' do
+          match_below = @tournament.stages.find { |s| s.level == 2 }.matches.find { |m| m.position == @running_playoff_match.position / 2 }.reload
+          expect(match_below.teams).to include(@running_playoff_match.winner)
+        end
       end
     end
 
