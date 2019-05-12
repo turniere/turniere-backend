@@ -80,4 +80,45 @@ RSpec.describe PlayoffStageService do
       end
     end
   end
+
+  describe '# populate_match_below' do
+    before do
+      @tournament = create(:stage_tournament, stage_count: 2)
+      @match = @tournament.stages.find { |s| s.level == 2 }.matches.first
+      @match.state = :finished
+      @match.save
+      @companion_match = @tournament.stages.find { |s| s.level == 2 }.matches.second
+      @match_to_find = @tournament.stages.find { |s| s.level == 1 }.matches.first
+    end
+
+    context 'match below has no match_scores' do
+      it 'finds the correct match and adds two new match_scores to it' do
+        @match_to_find.match_scores = []
+        @match_to_find.save
+        PlayoffStageService.populate_match_below(@match)
+        @match_to_find.reload
+        expect(@match_to_find.teams).to match_array(@match.winner)
+      end
+    end
+
+    context 'match below has one match_score with the winning team' do
+      it 'finds the correct match and adds no match_score' do
+        @match_to_find.match_scores = create_list(:match_score, 1, team: @match.winner)
+        @match_to_find.save
+        PlayoffStageService.populate_match_below(@match)
+        @match_to_find.reload
+        expect(@match_to_find.teams).to match_array(@match.winner)
+      end
+    end
+
+    context 'match below has one match_score with an unknown team' ,focus: true do
+      it 'finds the correct match and adds no match_score' do
+        @match_to_find.match_scores = create_list(:match_score, 1, team: create(:team))
+        @match_to_find.save
+        PlayoffStageService.populate_match_below(@match)
+        @match_to_find.reload
+        expect(@match_to_find.teams).to match_array(@match.winner)
+      end
+    end
+  end
 end
