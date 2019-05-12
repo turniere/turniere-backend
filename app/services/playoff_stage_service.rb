@@ -71,31 +71,43 @@ class PlayoffStageService
     end
   end
 
-
   def self.populate_match_below(current_match)
     current_stage = current_match.stage
     next_stage = current_stage.tournament.stages.find { |s| s.level == current_stage.level - 1 }
+    # return if next stage does not exist (there are no matches after the finale)
     return if next_stage.nil?
 
     current_position = current_match.position
-    next_position = current_position / 2
 
-    companion_match_position = current_position.even? ? current_position + 1 : current_position - 1
-    companion_match = current_stage.matches.find { |m| m.position == companion_match_position }
+    # a "companion" match is the one that with the selected match makes up the two matches of which the winners advance
+    # into the match below
+    # depending on the position of the match, the companion match is either on the left or right of it
+    companion_match = find_companion_match(current_position, current_stage)
 
-    match_below = next_stage.matches.find { |m| m.position == next_position }
-
+    match_below = next_stage.matches.find { |m| m.position == current_position / 2 }
     match_scores = match_below.match_scores.sort_by(&:id)
-    matches = [current_match, companion_match].sort_by(&:position)
-    winners = if companion_match.finished?
-                matches.map(&:winner)
-              else
-                matches.map do |m|
-                  m == current_match ? m.winner : nil
-                end
-              end
+
+    winners = get_winners_of(companion_match, current_match)
 
     # depending on the amount of match_scores already present we need to do different things
+    match_scores = assign_correct_match_scores!(match_scores, winners)
+
+    # If a match is not decided yet, it will return nil as winner.
+    # This is not allowed in Database. The following code filters out MatchScores that contain nil as team.
+    match_scores = match_scores.select { |ms| ms.team.present? }
+    match_below.match_scores = match_scores
+    match_below.save
+    match_below
+  end
+
+  private
+
+  def self.find_companion_match(current_position, current_stage)
+    companion_match_position = current_position.even? ? current_position + 1 : current_position - 1
+    current_stage.matches.find { |m| m.position == companion_match_position }
+  end
+
+  def self.assign_correct_match_scores!(match_scores, winners)
     case match_scores.size
     when 0
       # when 0 match_scores are already there we create both of them with the respective winner from above
@@ -115,13 +127,21 @@ class PlayoffStageService
 
       match_scores.concat MatchScore.new(team: team)
     when 2
+      # when 2 match_scores are present, the teams just get overwritten
       match_scores.first.team = winners.first
       match_scores.second.team = winners.second
     end
+    match_scores
+  end
 
-    # If a match is not decided yet, it will return nil as winner.
-    # This is not allowed in Database. The following code filters out MatchScores that contain nil as team.
-    match_scores = match_scores.select { |ms| ms.team.present? }
-    match_below.match_scores = match_scores
+  def self.get_winners_of(companion_match, current_match)
+    matches = [current_match, companion_match].sort_by(&:position)
+    if companion_match.finished?
+      matches.map(&:winner)
+    else
+      matches.map do |m|
+        m == current_match ? m.winner : nil
+      end
+    end
   end
 end
