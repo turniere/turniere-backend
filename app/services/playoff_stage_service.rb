@@ -71,14 +71,27 @@ class PlayoffStageService
     end
   end
 
-  def self.populate_match_with_winners(match, first_match, second_match)
-    match_scores = match.match_scores.sort_by(&:id)
-    matches = [first_match, second_match].sort_by(&:position)
-    winners = if second_match.finished?
+
+  def self.populate_match_below(current_match)
+    current_stage = current_match.stage
+    next_stage = current_stage.tournament.stages.find { |s| s.level == current_stage.level - 1 }
+    return if next_stage.nil?
+
+    current_position = current_match.position
+    next_position = current_position / 2
+
+    companion_match_position = current_position.even? ? current_position + 1 : current_position - 1
+    companion_match = current_stage.matches.find { |m| m.position == companion_match_position }
+
+    match_below = next_stage.matches.find { |m| m.position == next_position }
+
+    match_scores = match_below.match_scores.sort_by(&:id)
+    matches = [current_match, companion_match].sort_by(&:position)
+    winners = if companion_match.finished?
                 matches.map(&:winner)
               else
                 matches.map do |m|
-                  m == first_match ? m.winner : nil
+                  m == current_match ? m.winner : nil
                 end
               end
 
@@ -109,22 +122,6 @@ class PlayoffStageService
     # If a match is not decided yet, it will return nil as winner.
     # This is not allowed in Database. The following code filters out MatchScores that contain nil as team.
     match_scores = match_scores.select { |ms| ms.team.present? }
-    match.match_scores = match_scores
-  end
-
-  def self.populate_match_below(current_match)
-    current_stage = current_match.stage
-    next_stage = current_stage.tournament.stages.find { |s| s.level == current_stage.level - 1 }
-    return if next_stage.nil?
-
-    current_position = current_match.position
-    next_position = current_position / 2
-
-    companion_match_position = current_position.even? ? current_position + 1 : current_position - 1
-    companion_match = current_stage.matches.find { |m| m.position == companion_match_position }
-
-    match_below = next_stage.matches.find { |m| m.position == next_position }
-
-    populate_match_with_winners(match_below, current_match, companion_match)
+    match_below.match_scores = match_scores
   end
 end
