@@ -82,6 +82,8 @@ RSpec.describe MatchesController, type: :controller do
 
       context 'stops the match' do
         before do
+          @running_playoff_match.match_scores.each_with_index { |ms, i| ms.points = i}
+          @running_playoff_match.save
           put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
           @running_playoff_match.reload
         end
