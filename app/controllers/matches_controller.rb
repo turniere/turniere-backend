@@ -13,14 +13,14 @@ class MatchesController < ApplicationController
   # PATCH/PUT /matches/1
   def update
     new_state = match_params['state']
-    if new_state == 'finished'
-      result = PopulateMatchBelowAndSave.call(match: @match) unless @match.group_match?
-      unless result.success?
-        render json: { error: 'Moving Team one stage down failed' }, status: :unprocessable_entity
-        return
-      end
-    end
     if @match.update(match_params)
+      if new_state == 'finished'
+        result = PopulateMatchBelowAndSave.call(match: @match) unless @match.group_match?
+        unless result.success?
+          render json: { error: 'Moving Team one stage down failed' }, status: :unprocessable_entity
+          return
+        end
+      end
       render json: @match
     else
       render json: @match.errors, status: :unprocessable_entity
