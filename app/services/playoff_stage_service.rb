@@ -95,6 +95,7 @@ class PlayoffStageService
     # If a match is not decided yet, it will return nil as winner.
     # This is not allowed in Database. The following code filters out MatchScores that contain nil as team.
     match_scores = match_scores.select { |ms| ms.team.present? }
+    match_scores.each(&:save)
     match_below.match_scores = match_scores
     match_below.save
     match_below
