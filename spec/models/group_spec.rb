@@ -9,10 +9,6 @@ RSpec.describe Group, type: :model do
     it { should have_many :group_scores }
   end
 
-  it 'has a valid factory' do
-    expect(build(:group)).to be_valid
-  end
-
   describe '#teams' do
     before do
       @group = create(:group, match_count: 1) # this is getting stubbed anyways

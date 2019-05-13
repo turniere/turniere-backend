@@ -76,10 +76,4 @@ RSpec.describe Match, type: :model do
       end
     end
   end
-
-  it 'has a valid factory' do
-    expect(build(:match)).to be_valid
-    expect(build(:running_playoff_match)).to be_valid
-    expect(build(:group_match)).to be_valid
-  end
 end
