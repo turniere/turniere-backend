@@ -101,38 +101,40 @@ class PlayoffStageService
     match_below
   end
 
-  private
+  class << self
+    private
 
-  def self.find_companion_match(current_position, current_stage)
-    companion_match_position = current_position.even? ? current_position + 1 : current_position - 1
-    current_stage.matches.find { |m| m.position == companion_match_position }
-  end
-
-  def self.assign_correct_match_scores!(match_scores, winners)
-    case match_scores.size
-    when 0
-      # when 0 match_scores are already there we create both of them with the respective winner from above
-      match_scores = winners.map { |winner| MatchScore.new(team: winner) }
-    when 1
-      # when 1 match_score is present, we need to check which team is contained within and add the other team as well
-      if match_scores.first.team == winners.first
-        match_scores.push MatchScore.new(team: winners.second)
-      elsif match_scores.first.team == winners.second
-        match_scores.push MatchScore.new(team: winners.first)
-      else
-        match_scores.first.destroy
-        match_scores = winners.map { |winner| MatchScore.new(team: winner) }
-      end
-    when 2
-      # when 2 match_scores are present, the teams just get overwritten
-      match_scores.first.team = winners.first
-      match_scores.second.team = winners.second
+    def find_companion_match(current_position, current_stage)
+      companion_match_position = current_position.even? ? current_position + 1 : current_position - 1
+      current_stage.matches.find { |m| m.position == companion_match_position }
     end
-    match_scores
-  end
 
-  def self.get_winners_of(companion_match, current_match)
-    matches = [current_match, companion_match].sort_by(&:position)
-    matches.map(&:winner)
+    def assign_correct_match_scores!(match_scores, winners)
+      case match_scores.size
+      when 0
+        # when 0 match_scores are already there we create both of them with the respective winner from above
+        match_scores = winners.map { |winner| MatchScore.new(team: winner) }
+      when 1
+        # when 1 match_score is present, we need to check which team is contained within and add the other team as well
+        if match_scores.first.team == winners.first
+          match_scores.push MatchScore.new(team: winners.second)
+        elsif match_scores.first.team == winners.second
+          match_scores.push MatchScore.new(team: winners.first)
+        else
+          match_scores.first.destroy
+          match_scores = winners.map { |winner| MatchScore.new(team: winner) }
+        end
+      when 2
+        # when 2 match_scores are present, the teams just get overwritten
+        match_scores.first.team = winners.first
+        match_scores.second.team = winners.second
+      end
+      match_scores
+    end
+
+    def get_winners_of(companion_match, current_match)
+      matches = [current_match, companion_match].sort_by(&:position)
+      matches.map(&:winner)
+    end
   end
 end
