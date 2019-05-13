@@ -31,6 +31,7 @@ class Match < ApplicationRecord
   private
 
   def evaluate_winner
+    return nil unless finished?
     return nil if match_scores.first.points == match_scores.second.points
 
     match_scores.max_by(&:points).team
