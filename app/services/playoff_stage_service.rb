@@ -114,18 +114,14 @@ class PlayoffStageService
       match_scores = winners.map { |winner| MatchScore.new(team: winner) }
     when 1
       # when 1 match_score is present, we need to check which team is contained within and add the other team as well
-      team = nil
-
       if match_scores.first.team == winners.first
-        team = winners.second
+        match_scores.push MatchScore.new(team: winners.second)
       elsif match_scores.first.team == winners.second
-        team = winners.first
+        match_scores.push MatchScore.new(team: winners.first)
       else
-        match_scores.first.team = winners.first
-        team = winners.second
+        match_scores.first.destroy
+        match_scores = winners.map { |winner| MatchScore.new(team: winner) }
       end
-
-      match_scores.concat MatchScore.new(team: team)
     when 2
       # when 2 match_scores are present, the teams just get overwritten
       match_scores.first.team = winners.first
@@ -136,12 +132,6 @@ class PlayoffStageService
 
   def self.get_winners_of(companion_match, current_match)
     matches = [current_match, companion_match].sort_by(&:position)
-    if companion_match.finished?
-      matches.map(&:winner)
-    else
-      matches.map do |m|
-        m == current_match ? m.winner : nil
-      end
-    end
+    matches.map(&:winner)
   end
 end
