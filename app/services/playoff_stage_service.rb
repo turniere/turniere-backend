@@ -71,6 +71,10 @@ class PlayoffStageService
     end
   end
 
+  # Populates the match below given match with the winners of the matches above
+  #
+  # @param current_match [Match] The Match which finished, the match below it gets populated
+  # @return [Array] the objects that changed and need to be saved
   def self.populate_match_below(current_match)
     current_stage = current_match.stage
     next_stage = current_stage.tournament.stages.find { |s| s.level == current_stage.level - 1 }
@@ -95,10 +99,8 @@ class PlayoffStageService
     # If a match is not decided yet, it will return nil as winner.
     # This is not allowed in Database. The following code filters out MatchScores that contain nil as team.
     match_scores = match_scores.select { |ms| ms.team.present? }
-    match_scores.each(&:save)
     match_below.match_scores = match_scores
-    match_below.save
-    match_below
+    [match_below, match_scores].flatten
   end
 
   class << self

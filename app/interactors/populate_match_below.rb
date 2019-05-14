@@ -6,8 +6,8 @@ class PopulateMatchBelow
   def call
     match = context.match
     begin
-      PlayoffStageService.populate_match_below(match)
-      context.object_to_save = match
+      objects_to_save = PlayoffStageService.populate_match_below(match)
+      context.object_to_save = objects_to_save
     rescue StandardError
       context.fail!
     end
