@@ -4,10 +4,8 @@ class SaveApplicationRecordObject
   include Interactor
 
   def call
-    if context.object_to_save.save
-      nil
-    else
-      context.fail!
+    Array(context.object_to_save).flatten.each do |object|
+      context.fail! unless object.save
     end
   end
 end
