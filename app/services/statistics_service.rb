@@ -17,9 +17,15 @@ class StatisticsService
 
   private
 
-  def sort_group_scores(groups, by)
+  # Sort group scores associated with `groups` by GroupScore#`attr`
+  # in descending order
+  #
+  # @param groups [Array] Groups to take GroupScore objects from
+  # @param attr [Symbol] GroupScore attribute to sort by
+  # @return [Array] Sorted array of group scores
+  def sort_group_scores(groups, attr)
     groups
       .map(&:group_scores).flatten # collect all group scores
-      .sort_by(&by).reverse
+      .sort_by(&attr).reverse
   end
 end
