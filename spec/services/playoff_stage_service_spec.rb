@@ -86,11 +86,16 @@ RSpec.describe PlayoffStageService do
       @tournament = create(:stage_tournament, stage_count: 2)
       @match = @tournament.stages.find { |s| s.level == 2 }.matches.first
       @match.state = :finished
-      @match.match_scores.each_with_index { |ms, i| ms.points = i }
+      @match.match_scores.each_with_index do |ms, i|
+        ms.points = i
+        ms.save
+      end
       @match.save
       @companion_match = @tournament.stages.find { |s| s.level == 2 }.matches.second
-      @companion_match.match_scores.each_with_index { |ms, i| ms.points = i }
-      @companion_match.save
+      @companion_match.match_scores.each_with_index do |ms, i|
+        ms.points = i
+        ms.save
+      end
       @match_to_find = @tournament.stages.find { |s| s.level == 1 }.matches.first
     end
 
