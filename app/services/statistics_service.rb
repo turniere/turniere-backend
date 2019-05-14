@@ -5,15 +5,19 @@ class StatisticsService
     raise 'Unsupported stage type' if stage.nil? || stage.groups.empty?
 
     @stage = stage
-    @group_scores = sort_group_scores(@stage.groups, :group_points)
-
-    @most_dominant_score = sort_group_scores(@stage.groups, :scored_points).first
-    @least_dominant_score = sort_group_scores(@stage.groups, :received_points).first
   end
 
-  attr_reader :group_scores
-  attr_reader :most_dominant_score
-  attr_reader :least_dominant_score
+  def group_scores
+    sort_group_scores(@stage.groups, :group_points)
+  end
+
+  def most_dominant_score
+    sort_group_scores(@stage.groups, :scored_points).first
+  end
+
+  def least_dominant_score
+    sort_group_scores(@stage.groups, :received_points).first
+  end
 
   private
 
