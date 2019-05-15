@@ -15,12 +15,14 @@ RSpec.describe StatisticsController, type: :controller do
       before do
         @tournament = create(:group_stage_tournament)
         @group_stage = @tournament.stages.find_by(level: -1)
-        @most_dominant_score = GroupScore.new team: @tournament.teams.first,
-                                              group_points: 100,
-                                              scored_points: 100, received_points: 0
-        @least_dominant_score = GroupScore.new team: @tournament.teams.first,
-                                               group_points: 0,
-                                               scored_points: 0, received_points: 100
+        @most_dominant_score = create(:group_score,
+                                      team: @tournament.teams.first,
+                                      group_points: 100,
+                                      scored_points: 100, received_points: 0)
+        @least_dominant_score = create(:group_score,
+                                       team: @tournament.teams.first,
+                                       group_points: 0,
+                                       scored_points: 0, received_points: 100)
         @tournament.stages.first.groups.first.group_scores << @most_dominant_score
         @tournament.stages.first.groups.first.group_scores << @least_dominant_score
         @tournament.save!

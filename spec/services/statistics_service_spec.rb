@@ -6,12 +6,12 @@ RSpec.describe StatisticsService do
     tournament = create(:tournament)
     group_stage = create(:group_stage)
     group = group_stage.groups.first
-    @most_dominant_score = GroupScore.new team: create(:team),
-                                          group_points: 100,
-                                          scored_points: 100, received_points: 0
-    @least_dominant_score = GroupScore.new team: create(:team),
-                                           group_points: 0,
-                                           scored_points: 0, received_points: 100
+    @most_dominant_score = create(:group_score,
+                                  group_points: 100,
+                                  scored_points: 100, received_points: 0)
+    @least_dominant_score = create(:group_score,
+                                   group_points: 0,
+                                   scored_points: 0, received_points: 100)
     group.group_scores << @most_dominant_score
     group.group_scores << @least_dominant_score
     tournament.stages << group_stage
