@@ -4,8 +4,7 @@ require 'rails_helper'
 
 RSpec.describe TeamsController, type: :controller do
   before do
-    match_score = create(:match_score)
-    @team = match_score.team
+    @team = create(:tournament).teams.first
     @owner = @team.owner
   end
 

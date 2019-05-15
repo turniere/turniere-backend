@@ -26,7 +26,7 @@ FactoryBot.define do
                                     evaluator.match_count == -1 ? 2**stage.level : evaluator.match_count)
         stage.matches.each_with_index do |match, i|
           match.position = i
-          match.save
+          match.save!
         end
       end
     end
