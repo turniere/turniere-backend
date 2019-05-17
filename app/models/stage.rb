@@ -8,8 +8,12 @@ class Stage < ApplicationRecord
   delegate :owner, to: :tournament
 
   def teams
-    return matches.map(&:teams).flatten.uniq unless matches.size.zero?
-
-    groups.map(&:teams).flatten.uniq unless groups.size.zero?
+    if !matches.size.zero?
+      matches.map(&:teams).flatten.uniq
+    elsif !groups.size.zero?
+      groups.map(&:teams).flatten.uniq
+    else
+      []
+    end
   end
 end
