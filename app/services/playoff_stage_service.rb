@@ -1,6 +1,9 @@
 # frozen_string_literal: true
+require 'singleton'
 
 class PlayoffStageService
+  include Singleton
+
   # Generates the playoff stage given the tournament
   #
   # @param teams [Array] The teams to generate the playoff stages with

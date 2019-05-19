@@ -1,6 +1,9 @@
 # frozen_string_literal: true
+require 'singleton'
 
 class MatchService
+  include Singleton
+
   # Generates all necessary matches from a list of teams
   #
   # @param teams [Array] the teams to generate matches with

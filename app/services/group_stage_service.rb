@@ -1,6 +1,9 @@
 # frozen_string_literal: true
+require 'singleton'
 
 class GroupStageService
+  include Singleton
+
   def self.generate_group_stage(groups)
     raise 'Cannot generate group stage without groups' if groups.length.zero?
 

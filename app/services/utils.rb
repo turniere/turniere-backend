@@ -1,6 +1,9 @@
 # frozen_string_literal: true
+require 'singleton'
 
 class Utils
+  include Singleton
+
   # Calculates the previous power of 2 given a number
   #
   # @param number [Integer] the number to generate the previous power of 2 from
