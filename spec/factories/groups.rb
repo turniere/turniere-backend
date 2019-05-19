@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :group do
     transient do
+      matches { nil }
       match_count { 4 }
     end
 
@@ -10,7 +11,11 @@ FactoryBot.define do
     stage
 
     after(:create) do |group, evaluator|
-      create_list(:group_match, evaluator.match_count, group: group)
+      if evaluator.matches.nil?
+        create_list(:group_match, evaluator.match_count, group: group)
+      else
+        evaluator.matches
+      end
     end
   end
 end

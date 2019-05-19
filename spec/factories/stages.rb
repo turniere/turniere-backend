@@ -6,10 +6,15 @@ FactoryBot.define do
     factory :group_stage do
       level { -1 }
       transient do
+        groups { nil }
         group_count { 4 }
       end
       after(:create) do |stage, evaluator|
-        stage.groups = create_list(:group, evaluator.group_count)
+        stage.groups = if evaluator.groups.nil?
+                         create_list(:group, evaluator.group_count)
+                       else
+                         evaluator.groups
+                       end
       end
     end
 
