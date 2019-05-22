@@ -6,7 +6,7 @@ RSpec.describe MatchesController, type: :controller do
   before do
     @match = create(:match, state: :not_started)
     @tournament = create(:group_stage_tournament, stage_count: 3)
-    @running_playoff_match = @tournament.stages.find { |s| s.level == 3 }.matches.first
+    @running_playoff_match = @tournament.stages.find_by(level: 3).matches.first
     @match.match_scores = create_pair(:match_score)
   end
 
