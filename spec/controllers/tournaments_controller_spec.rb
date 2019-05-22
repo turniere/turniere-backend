@@ -8,8 +8,8 @@ RSpec.describe TournamentsController, type: :controller do
     @user = @tournament.owner
     @another_user = create(:user)
     @private_tournament = create(:tournament, user: @another_user, public: false)
-    @teams = create_list(:detached_team, 4)
-    @teams16 = create_list(:detached_team, 16)
+    @teams = create_list(:team, 4)
+    @teams16 = create_list(:team, 16)
     @groups = create_list(:group, 4)
   end
 
