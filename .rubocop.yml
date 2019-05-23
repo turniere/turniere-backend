@@ -1,4 +1,6 @@
-require: rubocop-performance
+require:
+  - rubocop-performance
+  - rubocop-rails
 
 # Stolen from https://gist.github.com/jhass/a5ae80d87f18e53e7b56
 AllCops:
