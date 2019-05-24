@@ -94,6 +94,10 @@ RSpec.describe MatchesController, type: :controller do
               expect(@running_playoff_match.winner).to be_a(Team)
               expect(@match_below.teams).to include(@running_playoff_match.winner)
             end
+
+            it 'with the right status' do
+              expect(@match_below.state).to eq('not_ready')
+            end
           end
         end
       end

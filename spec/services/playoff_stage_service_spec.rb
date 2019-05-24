@@ -109,6 +109,10 @@ RSpec.describe PlayoffStageService do
       it 'finds the correct match and adds two new match_scores to it' do
         expect(@match_to_find.teams).to match_array(@match.winner)
       end
+
+      it 'finds the correct match and changes its state' do
+        expect(@match_to_find.state).to eq('not_ready')
+      end
     end
 
     context 'match below has one match_score with the winning team' do
@@ -120,6 +124,10 @@ RSpec.describe PlayoffStageService do
 
       it 'finds the correct match and adds no match_score' do
         expect(@test.teams).to match_array(@match.winner)
+      end
+
+      it 'finds the correct match and changes its state' do
+        expect(@test.state).to eq('not_ready')
       end
     end
 
@@ -134,6 +142,10 @@ RSpec.describe PlayoffStageService do
         expect(@test.teams).to match_array(@match.winner)
         expect(@test.match_scores.first.points).to_not be(1337)
       end
+
+      it 'finds the correct match and changes its state' do
+        expect(@test.state).to eq('not_ready')
+      end
     end
 
     context 'match below has one match_score with the correct team' do
@@ -146,6 +158,10 @@ RSpec.describe PlayoffStageService do
       it 'finds the correct match and replaces nothing' do
         expect(@test.teams).to match_array(@match.winner)
         expect(@test.match_scores.first.points).to be(42)
+      end
+
+      it 'finds the correct match and changes its state' do
+        expect(@test.state).to eq('not_ready')
       end
     end
 
@@ -161,6 +177,10 @@ RSpec.describe PlayoffStageService do
 
       it 'finds the correct match and replaces nothing' do
         expect(@test.teams).to match_array([@match.winner, @companion_match.winner])
+      end
+
+      it 'finds the correct match and changes its state' do
+        expect(@test.state).to eq('not_started')
       end
     end
   end

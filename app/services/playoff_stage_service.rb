@@ -101,6 +101,13 @@ class PlayoffStageService
       # This is not allowed in Database. The following code filters out MatchScores that contain nil as team.
       match_scores = match_scores.select { |ms| ms.team.present? }
       match_below.match_scores = match_scores
+      match_below.state = if match_below.match_scores.empty? || match_below.match_scores.size == 1
+                            :not_ready
+                          elsif match_below.match_scores.size == 2
+                            :not_started
+                          else
+                            raise 'Unprocessable amount of match_scores found'
+                          end
       [match_below, match_scores].flatten
     end
 
