@@ -5,8 +5,9 @@ require 'rails_helper'
 RSpec.describe MatchesController, type: :controller do
   before do
     @match = create(:match, state: :not_started)
-    @tournament = create(:stage_tournament, stage_count: 2)
-    @running_playoff_match = @tournament.stages.find_by(level: 2).matches.first
+    @amount_of_stages = 2
+    @tournament = create(:stage_tournament, stage_count: @amount_of_stages)
+    @running_playoff_match = @tournament.stages.find_by(level: @amount_of_stages).matches.first
     @match.match_scores = create_pair(:match_score)
   end
 
@@ -83,11 +84,16 @@ RSpec.describe MatchesController, type: :controller do
             expect(@running_playoff_match.state).to eq(finished[:state])
           end
 
-          it 'populates the match below' do
-            match_below = @tournament.stages.find { |s| s.level == 2 }.matches
-                                     .find { |m| m.position == @running_playoff_match.position / 2 }.reload
-            expect(@running_playoff_match.winner).to be_a(Team)
-            expect(match_below.teams).to include(@running_playoff_match.winner)
+          describe 'updates the match below' do
+            before do
+              @match_below = @tournament.stages.find_by(level: @amount_of_stages - 1).matches
+                                        .find_by(position: @running_playoff_match.position / 2).reload
+            end
+
+            it 'with the right teams' do
+              expect(@running_playoff_match.winner).to be_a(Team)
+              expect(@match_below.teams).to include(@running_playoff_match.winner)
+            end
           end
         end
       end

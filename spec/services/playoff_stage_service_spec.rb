@@ -100,57 +100,67 @@ RSpec.describe PlayoffStageService do
     end
 
     context 'match below has no match_scores' do
-      it 'finds the correct match and adds two new match_scores to it' do
+      before do
         @match_to_find.match_scores = []
         @match_to_find.save
-        PlayoffStageService.populate_match_below(@match)
-        @match_to_find.reload
+        @test = PlayoffStageService.populate_match_below(@match).first
+      end
+
+      it 'finds the correct match and adds two new match_scores to it' do
         expect(@match_to_find.teams).to match_array(@match.winner)
       end
     end
 
     context 'match below has one match_score with the winning team' do
-      it 'finds the correct match and adds no match_score' do
+      before do
         @match_to_find.match_scores = create_list(:match_score, 1, team: @match.winner)
         @match_to_find.save
-        PlayoffStageService.populate_match_below(@match)
-        @match_to_find.reload
-        expect(@match_to_find.teams).to match_array(@match.winner)
+        @test = PlayoffStageService.populate_match_below(@match).first
+      end
+
+      it 'finds the correct match and adds no match_score' do
+        expect(@test.teams).to match_array(@match.winner)
       end
     end
 
     context 'match below has one match_score with an unknown team' do
-      it 'finds the correct match and replaces the match_score' do
+      before do
         @match_to_find.match_scores = create_list(:match_score, 1, team: create(:team), points: 1337)
         @match_to_find.save
-        PlayoffStageService.populate_match_below(@match)
-        @match_to_find.reload
-        expect(@match_to_find.teams).to match_array(@match.winner)
-        expect(@match_to_find.match_scores.first.points).to_not be(1337)
+        @test = PlayoffStageService.populate_match_below(@match).first
+      end
+
+      it 'finds the correct match and replaces the match_score' do
+        expect(@test.teams).to match_array(@match.winner)
+        expect(@test.match_scores.first.points).to_not be(1337)
       end
     end
 
     context 'match below has one match_score with the correct team' do
-      it 'finds the correct match and replaces nothing' do
+      before do
         @match_to_find.match_scores = create_list(:match_score, 1, team: @match.winner, points: 42)
         @match_to_find.save
-        PlayoffStageService.populate_match_below(@match)
-        @match_to_find.reload
-        expect(@match_to_find.teams).to match_array(@match.winner)
-        expect(@match_to_find.match_scores.first.points).to be(42)
+        @test = PlayoffStageService.populate_match_below(@match).first
+      end
+
+      it 'finds the correct match and replaces nothing' do
+        expect(@test.teams).to match_array(@match.winner)
+        expect(@test.match_scores.first.points).to be(42)
       end
     end
 
     context 'match below has two match_scores with the correct teams' do
-      it 'finds the correct match and replaces nothing' do
+      before do
         @companion_match.state = :finished
         @companion_match.save
         @match_to_find.match_scores = [create(:match_score, team: @match.winner),
                                        create(:match_score, team: @companion_match.winner)]
         @match_to_find.save
-        PlayoffStageService.populate_match_below(@match)
-        @match_to_find.reload
-        expect(@match_to_find.teams).to match_array([@match.winner, @companion_match.winner])
+        @test = PlayoffStageService.populate_match_below(@match).first
+      end
+
+      it 'finds the correct match and replaces nothing' do
+        expect(@test.teams).to match_array([@match.winner, @companion_match.winner])
       end
     end
   end
