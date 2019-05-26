@@ -3,7 +3,7 @@
 
 Ruby on Rails application serving as backend for turnie.re
 
-# Installation
+## Installation
 ```bash
 # install dependencies
 $ bundle install
@@ -11,13 +11,13 @@ $ bundle install
 $ rails db:migrate
 ```
 
-# Running
+## Running
 Development (without mail confirmation and separate database):
 ```bash
 $ RAILS_ENV=development rails server
 ```
 
-# Generate diagrams
+## Generate diagrams
 ```bash
 $ rails diagram:all_with_engines
 ```
