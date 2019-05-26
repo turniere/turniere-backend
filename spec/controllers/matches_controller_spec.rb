@@ -96,6 +96,7 @@ RSpec.describe MatchesController, type: :controller do
         it 'populates the match below' do
           match_below = @tournament.stages.find { |s| s.level == 2 }.matches
                                    .find { |m| m.position == @running_playoff_match.position / 2 }.reload
+          expect(@running_playoff_match.winner).to be_a(Team)
           expect(match_below.teams).to include(@running_playoff_match.winner)
         end
       end
