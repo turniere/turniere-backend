@@ -1,7 +1,11 @@
 language: ruby
+addons:
+  sonarcloud:
+    organization: turniere-dhbw
 env:
   - RAILS_ENV=test
 script:
+  - sonar-scanner
   - bundle exec rails db:migrate
   - bundle exec rails spec
 notifications:
