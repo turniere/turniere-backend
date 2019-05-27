@@ -48,6 +48,7 @@ class Match < ApplicationRecord
   end
 
   def group_points_of(team)
+    return 0 unless finished? || in_progress?
     return 0 unless teams.include?(team)
 
     case current_leading_team
