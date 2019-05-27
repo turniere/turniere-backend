@@ -5,4 +5,8 @@ class MatchScore < ApplicationRecord
   belongs_to :team
 
   delegate :owner, to: :match
+
+  def part_of_group_match?
+    match.group_match?
+  end
 end
