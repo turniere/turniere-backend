@@ -5,6 +5,9 @@ require 'rails_helper'
 RSpec.describe MatchesController, type: :controller do
   before do
     @match = create(:match, state: :not_started)
+    @amount_of_stages = 2
+    @tournament = create(:stage_tournament, stage_count: @amount_of_stages)
+    @running_playoff_match = @tournament.stages.find_by(level: @amount_of_stages).matches.first
     @match.match_scores = create_pair(:match_score)
   end
 
@@ -32,7 +35,7 @@ RSpec.describe MatchesController, type: :controller do
 
     let(:invalid_update) do
       {
-        state: 'team1_won'
+        state: 'finished'
       }
     end
 
@@ -54,6 +57,48 @@ RSpec.describe MatchesController, type: :controller do
           expect(response).to be_successful
           body = deserialize_response response
           expect(body[:state]).to eq(valid_update[:state])
+        end
+
+        context 'on a running playoff match' do
+          let(:finished) do
+            {
+              state: 'finished'
+            }
+          end
+
+          before(:each) do
+            apply_authentication_headers_for @running_playoff_match.owner
+          end
+
+          before do
+            @running_playoff_match.match_scores.each_with_index do |ms, i|
+              ms.points = i
+              ms.save!
+            end
+            put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
+            @running_playoff_match.reload
+          end
+
+          it 'updates the matches status' do
+            expect(response).to be_successful
+            expect(@running_playoff_match.state).to eq(finished[:state])
+          end
+
+          describe 'updates the match below' do
+            before do
+              @match_below = @tournament.stages.find_by(level: @amount_of_stages - 1).matches
+                                        .find_by(position: @running_playoff_match.position / 2).reload
+            end
+
+            it 'with the right teams' do
+              expect(@running_playoff_match.winner).to be_a(Team)
+              expect(@match_below.teams).to include(@running_playoff_match.winner)
+            end
+
+            it 'with the right status' do
+              expect(@match_below.state).to eq('not_ready')
+            end
+          end
         end
       end
 

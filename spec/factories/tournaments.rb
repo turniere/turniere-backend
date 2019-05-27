@@ -32,8 +32,14 @@ FactoryBot.define do
             :playoff_stage,
             level: level,
             match_count: -1,
-            match_type: evaluator.stage_count ? :running_playoff_match : :empty_prepared_playoff_match
+            match_type: level == evaluator.stage_count ? :running_playoff_match : :empty_prepared_playoff_match
           )
+          tournament.stages.each do |stage|
+            stage.matches.each_with_index do |match, i|
+              match.position = i
+              match.save!
+            end
+          end
         end
       end
 

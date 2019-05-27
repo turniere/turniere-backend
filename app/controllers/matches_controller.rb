@@ -13,12 +13,14 @@ class MatchesController < ApplicationController
   # PATCH/PUT /matches/1
   def update
     new_state = match_params['state']
-    if new_state == 'finished'
-      # implement logic to move the winning team into the next stage
-      match_params['state'] = 'team1_won' # or 'team2_won' or 'undecided'
-      render json: {}, status: :not_implemented
-    end
     if @match.update(match_params)
+      if new_state == 'finished'
+        result = PopulateMatchBelowAndSave.call(match: @match) unless @match.group_match?
+        unless result.success?
+          render json: { error: 'Moving Team one stage down failed' }, status: :unprocessable_entity
+          return
+        end
+      end
       render json: @match
     else
       render json: @match.errors, status: :unprocessable_entity
