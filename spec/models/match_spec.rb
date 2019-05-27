@@ -126,6 +126,25 @@ RSpec.describe Match, type: :model do
       end
     end
 
+    context 'not started match' do
+      before do
+        @not_started_match = create(:running_group_match, state: :not_started)
+        @team1 = @not_started_match.teams.first
+      end
+
+      it 'returns correct group_points' do
+        expect(@not_started_match.group_points_of(@team1)).to be(0)
+      end
+
+      it 'returns correct scored_points' do
+        expect(@match.scored_points_of(@team1)).to be(0)
+      end
+
+      it 'returns correct received_points' do
+        expect(@match.received_points_of(@team1)).to be(0)
+      end
+    end
+
     context 'uneven match' do
       before do
         @match.match_scores.each do |ms|
