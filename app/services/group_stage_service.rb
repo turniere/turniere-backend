@@ -30,5 +30,29 @@ class GroupStageService
       end
       matches
     end
+
+    # Updates all group_scores of the given group
+    #
+    # @param group Group the group to update the group_scores in
+    # @return [Array] the changed group_scores that need to be saved
+    def update_group_scores(group)
+      changed_group_scores = []
+      group.teams.each do |team|
+        group_score = group.group_scores.find_by(team: team)
+        matches = group.matches.select { |match| match.teams.include team }
+        # reset previous values
+        group_score.group_points = 0
+        group_score.scored_points = 0
+        group_score.received_points = 0
+        matches.each do |match|
+          # calculate points for every match
+          group_score.group_points += match.group_points_of team
+          group_score.scored_points += match.scored_points_of team
+          group_score.received_points += match.received_points_of team
+        end
+        changed_group_scores << group_score
+      end
+      changed_group_scores
+    end
   end
 end
