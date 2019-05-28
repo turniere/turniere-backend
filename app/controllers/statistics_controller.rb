@@ -9,9 +9,9 @@ class StatisticsController < ApplicationController
     if group_stage
       service = StatisticsService.new group_stage
       render json: {
-        most_dominant_score: service.most_dominant_score,
-        least_dominant_score: service.least_dominant_score,
-        group_scores: service.group_scores
+        most_dominant_score: ActiveModelSerializers::SerializableResource.new(service.most_dominant_score).as_json,
+        least_dominant_score: ActiveModelSerializers::SerializableResource.new(service.least_dominant_score).as_json,
+        group_scores: ActiveModelSerializers::SerializableResource.new(service.group_scores).as_json
       }
     else
       render json: {}, status: :not_implemented
