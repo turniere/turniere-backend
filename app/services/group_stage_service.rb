@@ -13,7 +13,8 @@ class GroupStageService
     end
 
     def get_group_object_from(team_array)
-      Group.new matches: generate_all_matches_between(team_array)
+      Group.new matches: generate_all_matches_between(team_array),
+                group_scores: team_array.map{ |team| GroupScore.new team: team}
     end
 
     def generate_all_matches_between(teams)

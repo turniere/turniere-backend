@@ -23,6 +23,12 @@ RSpec.describe GroupStageService do
       expect(group_stage_teams).to match_array(@groups.flatten)
     end
 
+    it 'adds GroupScore objects for every team present in the group' do
+      group_stage = GroupStageService.generate_group_stage(@groups)
+      teams_in_group_scores = group_stage.groups.map{ |g| g.group_scores.map(&:team) }.flatten
+      expect(teams_in_group_scores).to match_array(@groups.flatten)
+    end
+
     it 'raises exception when given different sizes of groups' do
       unequal_groups = @groups
       unequal_groups.first.pop
