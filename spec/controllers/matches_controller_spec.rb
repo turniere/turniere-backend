@@ -70,33 +70,66 @@ RSpec.describe MatchesController, type: :controller do
             apply_authentication_headers_for @running_playoff_match.owner
           end
 
-          before do
-            @running_playoff_match.match_scores.each_with_index do |ms, i|
-              ms.points = i
-              ms.save!
-            end
-            put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
-            @running_playoff_match.reload
-          end
-
-          it 'updates the matches status' do
-            expect(response).to be_successful
-            expect(@running_playoff_match.state).to eq(finished[:state])
-          end
-
-          describe 'updates the match below' do
+          context 'on a decided match' do
             before do
-              @match_below = @tournament.stages.find_by(level: @amount_of_stages - 1).matches
-                                        .find_by(position: @running_playoff_match.position / 2).reload
+              @running_playoff_match.match_scores.each_with_index do |ms, i|
+                ms.points = i
+                ms.save!
+              end
+              put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
+              @running_playoff_match.reload
             end
 
-            it 'with the right teams' do
-              expect(@running_playoff_match.winner).to be_a(Team)
-              expect(@match_below.teams).to include(@running_playoff_match.winner)
+            it 'updates the matches status' do
+              expect(response).to be_successful
+              expect(@running_playoff_match.state).to eq(finished[:state])
             end
 
-            it 'with the right status' do
-              expect(@match_below.state).to eq('not_ready')
+            describe 'updates the match below' do
+              before do
+                @match_below = @tournament.stages.find_by(level: @amount_of_stages - 1).matches
+                                          .find_by(position: @running_playoff_match.position / 2).reload
+              end
+
+              it 'with the right teams' do
+                expect(@running_playoff_match.winner).to be_a(Team)
+                expect(@match_below.teams).to include(@running_playoff_match.winner)
+              end
+
+              it 'with the right status' do
+                expect(@match_below.state).to eq('not_ready')
+              end
+            end
+          end
+
+          context 'on a undecided match' do
+            before do
+              @running_playoff_match.match_scores.each do |ms|
+                ms.points = 42
+                ms.save!
+              end
+              put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
+              @running_playoff_match.reload
+            end
+
+            it 'returns unprocessable entity' do
+              expect(response).to have_http_status(:unprocessable_entity)
+              expect(@running_playoff_match.state).to eq('in_progress')
+            end
+
+            describe 'doesn\'t update the match below' do
+              before do
+                @match_below = @tournament.stages.find_by(level: @amount_of_stages - 1).matches
+                                          .find_by(position: @running_playoff_match.position / 2).reload
+              end
+
+              it 'teams' do
+                expect(@match_below.teams.empty?).to be(true)
+              end
+
+              it 'status' do
+                expect(@match_below.state).to eq('not_ready')
+              end
             end
           end
         end

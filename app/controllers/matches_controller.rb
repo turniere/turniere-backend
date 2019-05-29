@@ -13,6 +13,11 @@ class MatchesController < ApplicationController
   # PATCH/PUT /matches/1
   def update
     new_state = match_params['state']
+    if new_state == 'finished' && @match.current_leading_team.nil?
+      render json: { error: 'Stopping undecided Matches isn\'t allowed in playoff stage' },
+             status: :unprocessable_entity
+      return
+    end
     if @match.update(match_params)
       if new_state == 'finished'
         result = PopulateMatchBelowAndSave.call(match: @match) unless @match.group_match?
