@@ -19,11 +19,16 @@ class Match < ApplicationRecord
     stage ? stage.owner : group.owner
   end
 
-  def winner
-    return nil unless finished?
+  def current_leading_team
     return nil if match_scores.first.points == match_scores.second.points
 
     match_scores.max_by(&:points).team
+  end
+
+  def winner
+    return nil unless finished?
+
+    current_leading_team
   end
 
   def group_match?
