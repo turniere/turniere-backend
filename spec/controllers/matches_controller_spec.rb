@@ -114,6 +114,9 @@ RSpec.describe MatchesController, type: :controller do
 
             it 'returns unprocessable entity' do
               expect(response).to have_http_status(:unprocessable_entity)
+            end
+
+            it 'doesn\'t change the matches status' do
               expect(@running_playoff_match.state).to eq('in_progress')
             end
 
