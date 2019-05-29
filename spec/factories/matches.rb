@@ -34,10 +34,13 @@ FactoryBot.define do
   factory :group_match, class: Match do
     group
     position { 0 }
-    transient do
-      match_scores_count { 2 }
-    end
     factory :running_group_match do
+      transient do
+        match_scores_count { 2 }
+      end
+      after(:create) do |match, evaluator|
+        match.match_scores = create_list(:match_score, evaluator.match_scores_count)
+      end
       state { :in_progress }
     end
 
@@ -49,10 +52,6 @@ FactoryBot.define do
         match.match_scores = create_list(:match_score, evaluator.match_scores_count, points: 3)
       end
       state { :finished }
-    end
-
-    after(:create) do |match, evaluator|
-      match.match_scores = create_list(:match_score, evaluator.match_scores_count)
     end
   end
 end
