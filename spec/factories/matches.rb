@@ -15,7 +15,7 @@ FactoryBot.define do
     end
 
     factory :empty_prepared_playoff_match do
-      state { :not_started }
+      state { :not_ready }
     end
 
     factory :decided_playoff_match do
