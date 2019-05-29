@@ -13,7 +13,7 @@ RSpec.describe StatisticsController, type: :controller do
 
     context 'tournament with a group stage' do
       before do
-        @tournament = create(:group_stage_only_tournament)
+        @tournament = create(:group_stage_tournament, stage_count: 0)
         @group_stage = @tournament.stages.find_by(level: -1)
         @most_dominant_score = create(:group_score,
                                       team: @tournament.teams.first,
