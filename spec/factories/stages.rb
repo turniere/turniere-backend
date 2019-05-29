@@ -7,9 +7,10 @@ FactoryBot.define do
       level { -1 }
       transient do
         group_count { 4 }
+        match_factory { :group_match }
       end
       after(:create) do |stage, evaluator|
-        stage.groups = create_list(:group, evaluator.group_count)
+        stage.groups = create_list(:group, evaluator.group_count, match_factory: evaluator.match_factory)
       end
     end
 
