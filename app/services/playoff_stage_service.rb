@@ -143,7 +143,7 @@ class PlayoffStageService
 
     def get_winners_of(companion_match, current_match)
       matches = [current_match, companion_match].sort_by(&:position)
-      matches.map(&:winner)
+      matches.map(&:current_leading_team)
     end
   end
 end

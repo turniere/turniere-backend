@@ -13,26 +13,28 @@ class MatchesController < ApplicationController
   # PATCH/PUT /matches/1
   def update
     new_state = match_params['state']
-    if new_state == 'finished' && @match.current_leading_team.nil?
-      render json: { error: 'Stopping undecided Matches isn\'t allowed in playoff stage' },
-             status: :unprocessable_entity
-      return
-    end
-    if @match.update(match_params)
-      if new_state == 'finished'
-        result = PopulateMatchBelowAndSave.call(match: @match) unless @match.group_match?
-        unless result.success?
-          render json: { error: 'Moving Team one stage down failed' }, status: :unprocessable_entity
-          return
-        end
+
+    if new_state == 'finished'
+      if @match.current_leading_team.nil? # TODO: handle group matches differently
+        return render_unprocessable_entity(error: 'Stopping undecided Matches isn\'t allowed in playoff stage')
       end
-      render json: @match
-    else
-      render json: @match.errors, status: :unprocessable_entity
+
+      unless @match.group_match?
+        result = PopulateMatchBelowAndSave.call(match: @match)
+        return render_unprocessable_entity(error: 'Moving Team one stage down failed') unless result.success?
+      end
     end
+
+    return render json: @match if @match.update(match_params)
+
+    render_unprocessable_entity(@match.errors)
   end
 
   private
+
+  def render_unprocessable_entity(error_message)
+    render json: error_message, status: :unprocessable_entity
+  end
 
   def validate_params
     case match_params['state']
