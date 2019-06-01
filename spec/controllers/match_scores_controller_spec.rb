@@ -61,4 +61,41 @@ RSpec.describe MatchScoresController, type: :controller do
       end
     end
   end
+
+  describe 'triggers group point calculation' do
+    before(:each) do
+      apply_authentication_headers_for @match_score.owner
+    end
+
+    before do
+      @tournament = create(:group_stage_tournament, stage_count: 0, match_factory: :filled_group_match)
+      @group = @tournament.stages.first.groups.first
+      @match_score = @group.matches.first.match_scores.first
+      expect(UpdateGroupsGroupScoresAndSave).to receive(:call).once.with(group: @group).and_return(context)
+    end
+
+    let(:valid_update) do
+      {
+        points: 42
+      }
+    end
+
+    context 'when successful' do
+      let(:context) { double(:context, success?: true) }
+
+      it 'returns a 200 status code' do
+        put :update, params: { id: @match_score.to_param }.merge(valid_update)
+        expect(response).to be_successful
+      end
+    end
+
+    context 'when unsuccessful' do
+      let(:context) { double(:context, success?: false) }
+
+      it 'returns a 200 status code' do
+        put :update, params: { id: @match_score.to_param }.merge(valid_update)
+        expect(response).to be_successful
+      end
+    end
+  end
 end
