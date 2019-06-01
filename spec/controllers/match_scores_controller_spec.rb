@@ -81,22 +81,23 @@ RSpec.describe MatchScoresController, type: :controller do
       }
     end
 
-    context 'when successful' do
-      let(:context) { double(:context, success?: true) }
-
+    shared_examples_for 'update_of_match_score' do
       it 'returns a 200 status code' do
         put :update, params: { id: @match_score.to_param }.merge(valid_update)
         expect(response).to be_successful
       end
     end
 
+    context 'when successful' do
+      let(:context) { double(:context, success?: true) }
+
+      it_should_behave_like 'update_of_match_score'
+    end
+
     context 'when unsuccessful' do
       let(:context) { double(:context, success?: false) }
 
-      it 'returns a 200 status code' do
-        put :update, params: { id: @match_score.to_param }.merge(valid_update)
-        expect(response).to be_successful
-      end
+      it_should_behave_like 'update_of_match_score'
     end
   end
 end
