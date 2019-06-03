@@ -121,7 +121,8 @@ RSpec.describe TournamentsController, type: :controller do
         description: Faker::Movies::HarryPotter.quote,
         public: false,
         group_stage: true,
-        teams: teams_with_groups
+        teams: teams_with_groups,
+        playoff_teams_amount: (@teams16.size / 2)
       }
     end
 
@@ -187,6 +188,11 @@ RSpec.describe TournamentsController, type: :controller do
           it 'generates a group stage' do
             group_stage = @group_stage_tournament.stages.find_by(level: -1)
             expect(group_stage).to be_a(Stage)
+          end
+
+          it 'saves the amount of teams that advance into playoffs' do
+            expect(@group_stage_tournament.playoff_teams_amount)
+              .to eq(create_group_tournament_data[:playoff_teams_amount])
           end
         end
 

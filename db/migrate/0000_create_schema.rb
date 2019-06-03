@@ -51,6 +51,7 @@ class CreateSchema < ActiveRecord::Migration[5.2]
       t.string :code, null: false, index: { unique: true }
       t.string :description
       t.boolean :public, default: true
+      t.integer :playoff_teams_amount
 
       # relation to owner
       t.belongs_to :user, index: true, null: false, foreign_key: { on_delete: :cascade }
