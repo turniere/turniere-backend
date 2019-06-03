@@ -36,6 +36,7 @@ class TournamentsController < ApplicationController
     # create tournament
     tournament = current_user.tournaments.new params
     if group_stage
+      params.require(:playoff_teams_amount)
       groups = organize_teams_in_groups(teams)
       # add groups to tournament
       result = AddGroupStageToTournamentAndSave.call(tournament: tournament, groups: groups)
@@ -103,7 +104,7 @@ class TournamentsController < ApplicationController
   end
 
   def tournament_params
-    params.slice(:name, :description, :public, :teams, :group_stage).permit!
+    params.slice(:name, :description, :public, :teams, :group_stage, :playoff_teams_amount).permit!
   end
 
   def validate_create_params
