@@ -26,9 +26,7 @@ class Match < ApplicationRecord
   end
 
   def winner
-    return nil unless finished?
-
-    current_leading_team
+    finished? ? current_leading_team : nil
   end
 
   def group_match?
@@ -36,15 +34,11 @@ class Match < ApplicationRecord
   end
 
   def scored_points_of(team)
-    return 0 unless teams.include?(team)
-
-    match_scores.find_by(team: team).points
+    teams.include?(team) ? match_scores.find_by(team: team).points : 0
   end
 
   def received_points_of(team)
-    return 0 unless teams.include?(team)
-
-    match_scores.find { |ms| ms.team != team }.points
+    teams.include?(team) ? match_scores.find { |ms| ms.team != team }.points : 0
   end
 
   def group_points_of(team)
