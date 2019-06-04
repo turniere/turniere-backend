@@ -99,7 +99,7 @@ RSpec.describe GroupStageService do
         @changed_group_scores = GroupStageService.update_group_scores(@group)
       end
 
-      it 'assigns 1 point to every team' do
+      it 'assigns one point to every team' do
         @changed_group_scores.map(&:group_points).each do |points|
           expect(points).to be(1)
         end
