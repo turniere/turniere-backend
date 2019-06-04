@@ -24,7 +24,7 @@ RSpec.describe GroupStageService do
 
     it 'adds GroupScore objects for every team present in the group' do
       group_stage = GroupStageService.generate_group_stage(@prepared_groups)
-      teams_in_group_scores = group_stage.groups.map{ |g| g.group_scores.map(&:team) }.flatten
+      teams_in_group_scores = group_stage.groups.map { |g| g.group_scores.map(&:team) }.flatten
       expect(teams_in_group_scores).to match_array(@prepared_groups.flatten)
     end
 
