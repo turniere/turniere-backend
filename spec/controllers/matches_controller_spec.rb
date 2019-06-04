@@ -158,6 +158,22 @@ RSpec.describe MatchesController, type: :controller do
                 expect(response).to have_http_status(:unprocessable_entity)
               end
             end
+
+            context 'PopulateMatchBelowAndSave fails' do
+              before do
+                expect(PopulateMatchBelowAndSave).to receive(:call).once.with(match: @running_playoff_match)
+                                                                   .and_return(context)
+              end
+
+              context 'when unsuccessful' do
+                let(:context) { double(:context, success?: false) }
+
+                it 'returns unprocessable entity' do
+                  put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
+                  expect(response).to have_http_status(:unprocessable_entity)
+                end
+              end
+            end
           end
         end
 
