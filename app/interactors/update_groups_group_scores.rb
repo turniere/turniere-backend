@@ -4,10 +4,8 @@ class UpdateGroupsGroupScores
   include Interactor
 
   def call
-    group = context.group
     begin
-      group_scores = GroupStageService.update_group_scores(group)
-      context.object_to_save = group_scores
+      context.object_to_save = GroupStageService.update_group_scores(context.group)
     rescue StandardError
       context.fail!
     end
