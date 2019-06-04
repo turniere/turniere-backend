@@ -14,8 +14,7 @@ class MatchScoresController < ApplicationController
   def update
     if @match_score.update(match_score_params)
       if @match_score.part_of_group_match?
-        match_score_group = @match_score.match.group
-        UpdateGroupsGroupScoresAndSave.call(group: match_score_group)
+        UpdateGroupsGroupScoresAndSave.call(group: @match_score.match.group)
       end
       render json: @match_score
     else
