@@ -4,32 +4,32 @@ RSpec.describe GroupStageService do
   before do
     @teams1 = create_list(:team, 4)
     @teams2 = create_list(:team, 4)
-    @groups = Hash[1 => @teams1, 2 => @teams2].values
+    @prepared_groups = Hash[1 => @teams1, 2 => @teams2].values
   end
   describe '#generate_group_stage method' do
     it 'returns a stage object' do
-      group_stage = GroupStageService.generate_group_stage(@groups)
+      group_stage = GroupStageService.generate_group_stage(@prepared_groups)
       expect(group_stage).to be_a(Stage)
     end
 
     it 'returns a stage object with level -1' do
-      group_stage_level = GroupStageService.generate_group_stage(@groups).level
+      group_stage_level = GroupStageService.generate_group_stage(@prepared_groups).level
       expect(group_stage_level).to be(-1)
     end
 
     it 'adds the provided groups to the stage' do
-      group_stage_teams = GroupStageService.generate_group_stage(@groups).teams
-      expect(group_stage_teams).to match_array(@groups.flatten)
+      group_stage_teams = GroupStageService.generate_group_stage(@prepared_groups).teams
+      expect(group_stage_teams).to match_array(@prepared_groups.flatten)
     end
 
     it 'adds GroupScore objects for every team present in the group' do
-      group_stage = GroupStageService.generate_group_stage(@groups)
+      group_stage = GroupStageService.generate_group_stage(@prepared_groups)
       teams_in_group_scores = group_stage.groups.map{ |g| g.group_scores.map(&:team) }.flatten
-      expect(teams_in_group_scores).to match_array(@groups.flatten)
+      expect(teams_in_group_scores).to match_array(@prepared_groups.flatten)
     end
 
     it 'raises exception when given different sizes of groups' do
-      unequal_groups = @groups
+      unequal_groups = @prepared_groups
       unequal_groups.first.pop
       expect { GroupStageService.generate_group_stage(unequal_groups) }
         .to raise_exception 'Groups need to be equal size'
