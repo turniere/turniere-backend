@@ -3,6 +3,9 @@
 
 Ruby on Rails application serving as backend for turnie.re
 
+## Quick install with Docker
+[turnie.re - Quickstart](https://github.com/turniere/turniere-quickstart)
+
 ## Installation
 ```bash
 # install dependencies
