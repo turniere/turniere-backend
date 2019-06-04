@@ -105,8 +105,6 @@ RSpec.describe GroupStageService do
         end
       end
 
-      it_should_behave_like 'only_return_group_scores'
-
       it 'returns correct values for received_points' do
         @changed_group_scores.map(&:received_points).each do |points|
           expect(points).to be(42)
@@ -118,6 +116,8 @@ RSpec.describe GroupStageService do
           expect(points).to be(42)
         end
       end
+
+      it_should_behave_like 'only_return_group_scores'
     end
 
     context 'with only decided matches' do
