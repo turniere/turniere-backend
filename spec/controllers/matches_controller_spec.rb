@@ -8,6 +8,7 @@ RSpec.describe MatchesController, type: :controller do
     @amount_of_stages = 2
     @tournament = create(:stage_tournament, stage_count: @amount_of_stages)
     @running_playoff_match = @tournament.stages.find_by(level: @amount_of_stages).matches.first
+    @not_ready_playoff_match = create(:running_playoff_match, state: :not_ready)
     @match.match_scores = create_pair(:match_score)
   end
 
@@ -184,6 +185,27 @@ RSpec.describe MatchesController, type: :controller do
           it 'renders a forbidden error response' do
             put :update, params: { id: @match.to_param }.merge(valid_update)
             expect(response).to have_http_status(:forbidden)
+          end
+        end
+      end
+    end
+
+    context 'on a playoff match that isn\'t ready yet' do
+      let(:invalid_update) do
+        {
+          state: 'in_progress'
+        }
+      end
+
+      context 'as owner' do
+        before(:each) do
+          apply_authentication_headers_for @not_ready_playoff_match.owner
+        end
+
+        context 'with invalid params' do
+          it 'renders an unprocessable entity response' do
+            put :update, params: { id: @not_ready_playoff_match.to_param }.merge(invalid_update)
+            expect(response).to have_http_status(:unprocessable_entity)
           end
         end
       end
