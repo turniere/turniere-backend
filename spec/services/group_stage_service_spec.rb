@@ -24,7 +24,7 @@ RSpec.describe GroupStageService do
 
     it 'adds GroupScore objects for every team present in the group' do
       group_stage = GroupStageService.generate_group_stage(@prepared_groups)
-      teams_in_group_scores = group_stage.prepared_groups.map{ |g| g.group_scores.map(&:team) }.flatten
+      teams_in_group_scores = group_stage.prepared_groups.map { |g| g.group_scores.map(&:team) }.flatten
       expect(teams_in_group_scores).to match_array(@prepared_groups.flatten)
     end
 
@@ -75,6 +75,74 @@ RSpec.describe GroupStageService do
       matches.each do |match|
         expect(match.teams.first).to_not eq(match.teams.second)
       end
+    end
+  end
+
+  describe '#update_group_scores' do
+    shared_examples_for 'only_return_group_scores' do
+      it 'only returns group_scores' do
+        @changed_group_scores.each do |gs|
+          expect(gs).to be_a(GroupScore)
+        end
+      end
+    end
+
+    context 'with only undecided matches' do
+      before do
+        @group = create(:group, match_factory: :running_group_match)
+        @group.matches.each do |match|
+          match.match_scores.each do |ms|
+            ms.points = 42
+            ms.save!
+          end
+        end
+        @changed_group_scores = GroupStageService.update_group_scores(@group)
+      end
+
+      it 'assigns 1 point to every team' do
+        @changed_group_scores.map(&:group_points).each do |points|
+          expect(points).to be(1)
+        end
+      end
+
+      it_should_behave_like 'only_return_group_scores'
+
+      it 'returns correct values for received_points' do
+        @changed_group_scores.map(&:received_points).each do |points|
+          expect(points).to be(42)
+        end
+      end
+
+      it 'returns correct values for scored_points' do
+        @changed_group_scores.map(&:scored_points).each do |points|
+          expect(points).to be(42)
+        end
+      end
+    end
+
+    context 'with only decided matches' do
+      before do
+        @group = create(:group, match_factory: :running_group_match)
+        @group.matches.each_with_index do |match, i|
+          match.match_scores.each_with_index do |ms, j|
+            match_score_number = i + j
+            ms.points = match_score_number
+            ms.save!
+          end
+        end
+        @changed_group_scores = GroupStageService.update_group_scores(@group)
+      end
+
+      it 'assigns the right amount of points' do
+        winning_teams = @changed_group_scores.select { |gs| gs.group_points == 3 }
+        losing_teams = @changed_group_scores.select { |gs| gs.group_points == 0 }
+        # Assure that half of the teams won and got 3 points
+        expect(winning_teams.size).to be(@changed_group_scores.size / 2)
+        # and half of them lost and got 0
+        expect(losing_teams.size).to be(@changed_group_scores.size / 2)
+      end
+
+      it_should_behave_like 'only_return_group_scores'
     end
   end
 end
