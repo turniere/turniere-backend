@@ -62,17 +62,12 @@ RSpec.describe MatchScoresController, type: :controller do
     end
   end
 
-  describe 'triggers group point calculation' do
-    before(:each) do
-      apply_authentication_headers_for @owner
-    end
-
+  describe 'on a real tournament' do
     before do
       @owner = create(:user)
       @tournament = create(:group_stage_tournament, stage_count: 0, match_factory: :filled_group_match, owner: @owner)
       @group = @tournament.stages.first.groups.first
       @match_score = @group.matches.first.match_scores.first
-      # expect(UpdateGroupsGroupScoresAndSave).to receive(:call).once.with(group: @group).and_return(context)
     end
 
     let(:valid_update) do
@@ -81,23 +76,30 @@ RSpec.describe MatchScoresController, type: :controller do
       }
     end
 
-    shared_examples_for 'update_of_match_score' do
-      it 'returns a 200 status code' do
-        put :update, params: { id: @match_score.to_param }.merge(valid_update)
-        expect(response).to be_successful
+    describe 'updating a match_score' do
+      before(:each) do
+        apply_authentication_headers_for @owner
+        expect(UpdateGroupsGroupScoresAndSave).to receive(:call).once.with(group: @group).and_return(context)
       end
-    end
 
-    context 'when successful' do
-      let(:context) { double(:context, success?: true) }
+      shared_examples_for 'successful_update_of_match_score' do
+        it 'returns a 200 status code' do
+          put :update, params: { id: @match_score.to_param }.merge(valid_update)
+          expect(response).to be_successful
+        end
+      end
 
-      it_should_behave_like 'update_of_match_score'
-    end
+      context 'when group_score calculation succeeds' do
+        let(:context) { double(:context, success?: true) }
 
-    context 'when unsuccessful' do
-      let(:context) { double(:context, success?: false) }
+        it_should_behave_like 'successful_update_of_match_score'
+      end
 
-      it_should_behave_like 'update_of_match_score'
+      context 'when group_score calculation fails' do
+        let(:context) { double(:context, success?: false) }
+
+        it_should_behave_like 'successful_update_of_match_score'
+      end
     end
   end
 end
