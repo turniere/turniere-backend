@@ -2,7 +2,6 @@
 
 RSpec.describe GroupStageService do
   before do
-    @stage = create(:stage)
     @teams1 = create_list(:team, 4)
     @teams2 = create_list(:team, 4)
     @groups = Hash[1 => @teams1, 2 => @teams2].values
