@@ -34,18 +34,32 @@ RSpec.describe MatchScoresController, type: :controller do
         before(:each) do
           apply_authentication_headers_for @owner
         end
+        context 'when match_score update succeeds' do
+          it 'updates the requested score' do
+            put :update, params: { id: @match_score.to_param }.merge(valid_update)
+            @match_score.reload
+            expect(@match_score.points).to eq(valid_update[:points])
+          end
 
-        it 'updates the requested score' do
-          put :update, params: { id: @match_score.to_param }.merge(valid_update)
-          @match_score.reload
-          expect(@match_score.points).to eq(valid_update[:points])
+          it 'renders a response with the updated team' do
+            put :update, params: { id: @match_score.to_param }.merge(valid_update)
+            expect(response).to be_successful
+            body = deserialize_response response
+            expect(body[:points]).to eq(valid_update[:points])
+          end
         end
 
-        it 'renders a response with the updated team' do
-          put :update, params: { id: @match_score.to_param }.merge(valid_update)
-          expect(response).to be_successful
-          body = deserialize_response response
-          expect(body[:points]).to eq(valid_update[:points])
+        context 'when match_score update fails' do
+          before do
+            allow_any_instance_of(MatchScore)
+              .to receive(:update)
+              .and_return(false)
+          end
+
+          it 'returns unprocessable entity' do
+            put :update, params: { id: @match_score.to_param }.merge(valid_update)
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
         end
       end
 
