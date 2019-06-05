@@ -111,7 +111,7 @@ RSpec.describe MatchesController, type: :controller do
                 end
               end
 
-              context 'on a undecided match' do
+              context 'on an undecided match' do
                 before do
                   @running_playoff_match.match_scores.each do |ms|
                     ms.points = 42
@@ -121,7 +121,7 @@ RSpec.describe MatchesController, type: :controller do
                   @running_playoff_match.reload
                 end
 
-                it 'returns unprocessable entity' do
+                it 'returns an unprocessable entity response' do
                   expect(response).to have_http_status(:unprocessable_entity)
                 end
 
