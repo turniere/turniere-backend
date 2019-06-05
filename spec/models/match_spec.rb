@@ -90,4 +90,86 @@ RSpec.describe Match, type: :model do
       end
     end
   end
+
+  context '#points_of' do
+    before do
+      @match = create(:running_group_match)
+      teams = @match.teams
+      @team1 = teams.first
+      @team2 = teams.second
+      @uninvolved_team = create(:team)
+    end
+    context 'even match' do
+      before do
+        @match.match_scores.each do |ms|
+          ms.points = 34
+          ms.save!
+        end
+      end
+
+      it 'returns correct group_points' do
+        expect(@match.group_points_of(@team1)).to be(1)
+        expect(@match.group_points_of(@team2)).to be(1)
+        expect(@match.group_points_of(@uninvolved_team)).to be(0)
+      end
+
+      it 'returns correct scored_points' do
+        expect(@match.scored_points_of(@team1)).to be(34)
+        expect(@match.scored_points_of(@team2)).to be(34)
+        expect(@match.scored_points_of(@uninvolved_team)).to be(0)
+      end
+
+      it 'returns correct received_points' do
+        expect(@match.received_points_of(@team1)).to be(34)
+        expect(@match.received_points_of(@team2)).to be(34)
+        expect(@match.received_points_of(@uninvolved_team)).to be(0)
+      end
+    end
+
+    context 'not started match' do
+      before do
+        @not_started_match = create(:running_group_match, state: :not_started)
+        @team1 = @not_started_match.teams.first
+      end
+
+      it 'returns correct group_points' do
+        expect(@not_started_match.group_points_of(@team1)).to be(0)
+      end
+
+      it 'returns correct scored_points' do
+        expect(@match.scored_points_of(@team1)).to be(0)
+      end
+
+      it 'returns correct received_points' do
+        expect(@match.received_points_of(@team1)).to be(0)
+      end
+    end
+
+    context 'uneven match' do
+      before do
+        @match.match_scores.each do |ms|
+          ms.points = ms.team == @team1 ? 42 : 17
+          ms.save!
+        end
+      end
+
+      it 'returns correct group_points' do
+        expect(@match.group_points_of(@team1)).to be(3)
+        expect(@match.group_points_of(@team2)).to be(0)
+        expect(@match.group_points_of(@uninvolved_team)).to be(0)
+      end
+
+      it 'returns correct scored_points' do
+        expect(@match.scored_points_of(@team1)).to be(42)
+        expect(@match.scored_points_of(@team2)).to be(17)
+        expect(@match.scored_points_of(@uninvolved_team)).to be(0)
+      end
+
+      it 'returns correct received_points' do
+        expect(@match.received_points_of(@team1)).to be(17)
+        expect(@match.received_points_of(@team2)).to be(42)
+        expect(@match.received_points_of(@uninvolved_team)).to be(0)
+      end
+    end
+  end
 end
