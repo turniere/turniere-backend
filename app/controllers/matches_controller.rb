@@ -13,21 +13,36 @@ class MatchesController < ApplicationController
   # PATCH/PUT /matches/1
   def update
     new_state = match_params['state']
-    if @match.update(match_params)
-      if new_state == 'finished'
-        result = PopulateMatchBelowAndSave.call(match: @match) unless @match.group_match?
-        unless result.success?
-          render json: { error: 'Moving Team one stage down failed' }, status: :unprocessable_entity
-          return
-        end
+
+    Match.transaction do
+      if @match.update(match_params)
+        handle_match_end if new_state == 'finished'
+
+        render json: @match
+      else
+        render json: @match.errors, status: :unprocessable_entity
+        raise ActiveRecord::Rollback
       end
-      render json: @match
-    else
-      render json: @match.errors, status: :unprocessable_entity
     end
   end
 
   private
+
+  def handle_match_end
+    return if @match.group_match?
+
+    if @match.winner.nil?
+      render json: { error: 'Stopping undecided Matches isn\'t allowed in playoff stage' },
+             status: :unprocessable_entity
+      raise ActiveRecord::Rollback
+    end
+
+    return if PopulateMatchBelowAndSave.call(match: @match).success?
+
+    render json: { error: 'Moving Team one stage down failed' },
+           status: :unprocessable_entity
+    raise ActiveRecord::Rollback
+  end
 
   def validate_params
     case match_params['state']
