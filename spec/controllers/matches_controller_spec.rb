@@ -161,15 +161,20 @@ RSpec.describe MatchesController, type: :controller do
 
             context 'PopulateMatchBelowAndSave fails' do
               before do
-                expect(PopulateMatchBelowAndSave).to receive(:call).once.with(match: @running_playoff_match)
+                @running_match = create(:running_playoff_match)
+                expect(PopulateMatchBelowAndSave).to receive(:call).once.with(match: @running_match)
                                                                    .and_return(context)
               end
 
               context 'when unsuccessful' do
+                before(:each) do
+                  apply_authentication_headers_for @running_match.owner
+                end
+
                 let(:context) { double(:context, success?: false) }
 
                 it 'returns unprocessable entity' do
-                  put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
+                  put :update, params: { id: @running_match.to_param }.merge(finished)
                   expect(response).to have_http_status(:unprocessable_entity)
                 end
               end
