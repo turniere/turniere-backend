@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe AddGroupStageToTournament do
+RSpec.describe AddGroupStageToTournament, type: :interactor do
   let(:empty_tournament_context) do
     AddGroupStageToTournament.call(tournament: @empty_tournament, groups: @groups)
   end
