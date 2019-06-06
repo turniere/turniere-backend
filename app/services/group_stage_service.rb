@@ -9,7 +9,7 @@ class GroupStageService
       raise 'Groups need to be equal size' unless (groups.flatten.length.to_f / groups.length.to_f % 1).zero?
 
       groups = groups.map(&method(:get_group_object_from))
-      Stage.new level: -1, groups: groups
+      Stage.new level: -1, groups: groups, state: :in_progress
     end
 
     def get_group_object_from(team_array)

@@ -5,6 +5,7 @@ FactoryBot.define do
     tournament
     factory :group_stage do
       level { -1 }
+      state { :in_progress }
       transient do
         group_count { 4 }
         match_factory { :group_match }

@@ -63,6 +63,7 @@ class CreateSchema < ActiveRecord::Migration[5.2]
 
     create_table :stages do |t|
       t.integer :level
+      t.integer :state, default: 0
 
       t.belongs_to :tournament, index: true, foreign_key: { on_delete: :cascade }, null: false
 
