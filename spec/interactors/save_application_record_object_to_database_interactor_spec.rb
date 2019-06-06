@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe SaveApplicationRecordObject do
+RSpec.describe SaveApplicationRecordObject, type: :interactor do
   before do
     @tournament = create(:tournament)
   end

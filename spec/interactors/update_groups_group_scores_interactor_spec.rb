@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe UpdateGroupsGroupScores do
+RSpec.describe UpdateGroupsGroupScores, type: :interactor do
   before do
     @group = create(:group)
     @group_scores = create_list(:group_score, 2)
