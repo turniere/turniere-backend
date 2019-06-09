@@ -11,4 +11,5 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: { case_sensitive: false }
 
   has_many :tournaments, dependent: :destroy
+  has_many :bets, dependent: :destroy
 end
