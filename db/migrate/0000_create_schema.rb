@@ -51,7 +51,7 @@ class CreateSchema < ActiveRecord::Migration[5.2]
       t.string :code, null: false, index: { unique: true }
       t.string :description
       t.boolean :public, default: true
-      t.integer :playoff_teams_amount
+      t.integer :playoff_teams_amount, default: 0
       t.integer :instant_finalists_amount, default: 0
       t.integer :intermediate_round_participants_amount, default: 0
 

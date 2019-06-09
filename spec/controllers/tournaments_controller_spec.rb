@@ -194,6 +194,29 @@ RSpec.describe TournamentsController, type: :controller do
             expect(@group_stage_tournament.playoff_teams_amount)
               .to eq(create_group_tournament_data[:playoff_teams_amount])
           end
+
+          context 'playoff_teams_amount unacceptable' do
+            it 'is not a power of two' do
+              post :create, params: create_group_tournament_data.merge(playoff_teams_amount: 18)
+              expect(response).to have_http_status(:unprocessable_entity)
+              expect(deserialize_response(response).values.first.first)
+                .to eq('playoff_teams_amount needs to be a positive power of two')
+            end
+
+            it 'isn\'t positive' do
+              post :create, params: create_group_tournament_data.merge(playoff_teams_amount: -16)
+              expect(response).to have_http_status(:unprocessable_entity)
+              expect(deserialize_response(response).values.first.first)
+                .to eq('playoff_teams_amount needs to be a positive power of two')
+            end
+
+            it 'isn\'t positive nor a power of two' do
+              post :create, params: create_group_tournament_data.merge(playoff_teams_amount: -42)
+              expect(response).to have_http_status(:unprocessable_entity)
+              expect(deserialize_response(response).values.first.first)
+                .to eq('playoff_teams_amount needs to be a positive power of two')
+            end
+          end
         end
 
         it 'renders a JSON response with the new tournament' do
@@ -234,10 +257,17 @@ RSpec.describe TournamentsController, type: :controller do
       end
 
       context 'with invalid parameters' do
-        it 'renders an unprocessable entity response' do
-          put :create, params: { teams: [1, 2, 3] }
-          expect(response).to have_http_status(:unprocessable_entity)
+        shared_examples_for 'renders unprocessable entity response' do
+          it 'renders an unprocessable entity response' do
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
         end
+
+        before do
+          put :create, params: context
+        end
+
+        context ''
       end
 
       context 'with empty team objects' do
