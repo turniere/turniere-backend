@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class TournamentSerializer < SimpleTournamentSerializer
-  attributes :description
+  attributes :description, :playoff_teams_amount,
+             :instant_finalists_amount, :intermediate_round_participants_amount
   has_many :stages
   has_many :teams
 
