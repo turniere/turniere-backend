@@ -5,7 +5,9 @@ class Match < ApplicationRecord
 
   belongs_to :stage, optional: true
   belongs_to :group, optional: true
+
   has_many :match_scores, dependent: :destroy
+  has_many :bets, dependent: :destroy
 
   validates :match_scores, length: { maximum: 2 }
 
