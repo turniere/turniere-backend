@@ -10,6 +10,7 @@ FactoryBot.define do
     end
     after(:create) do |tournament, evaluator|
       tournament.teams = create_list(:team, evaluator.teams_count, tournament: tournament)
+      tournament.playoff_teams_amount = (tournament.teams.size / 2)
     end
 
     factory :stage_tournament do
