@@ -5,6 +5,7 @@ class TournamentsController < ApplicationController
   before_action :authenticate_user!, only: %i[create update destroy]
   before_action -> { require_owner! @tournament.owner }, only: %i[update destroy]
   before_action :validate_create_params, only: %i[create]
+  before_action :validate_update_params, only: %i[update]
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_error
 
   # GET /tournaments
@@ -112,5 +113,18 @@ class TournamentsController < ApplicationController
     return if teams.is_a?(Array) && teams.reject { |t| t.is_a? ActionController::Parameters }.count.zero?
 
     render json: { error: 'Invalid teams array' }, status: :unprocessable_entity
+  end
+
+  def validate_update_params
+    playoff_teams_amount = params['playoff_teams_amount'] || @tournament.playoff_teams_amount
+    instant_finalists_amount = params['instant_finalists_amount'] || @tournament.instant_finalists_amount
+    intermediate_round_participants_amount = params['intermediate_round_participants_amount'] ||
+                                                 @tournament.intermediate_round_participants_amount
+    return if instant_finalists_amount + (intermediate_round_participants_amount / 2) ==
+              playoff_teams_amount
+
+    render json: {
+      error: 'playoff_teams_amount, instant_finalists_amount and intermediate_round_participants_amount don\'t match'
+    }, status: :unprocessable_entity
   end
 end
