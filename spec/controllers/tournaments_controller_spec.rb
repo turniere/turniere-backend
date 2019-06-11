@@ -312,6 +312,103 @@ RSpec.describe TournamentsController, type: :controller do
           expect(response).to have_http_status(:ok)
           expect(response.content_type).to eq('application/json')
         end
+
+        context 'any variable relevant for group stage to playoff transition changed' do
+          before do
+          end
+
+          before(:each) do
+            @filled_tournament = create(:group_stage_tournament)
+            apply_authentication_headers_for @filled_tournament.owner
+          end
+
+          it 'fails when only instant_finalists_amount is changed' do
+            put :update, params: { id: @filled_tournament.to_param }.merge(instant_finalists_amount: 29)
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
+
+          it 'fails when only intermediate_round_participants_amount is changed' do
+            put :update, params: { id: @filled_tournament.to_param }.merge(intermediate_round_participants_amount: 29)
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
+
+          it 'fails when parameters don\'t match' do
+            put :update, params: { id: @filled_tournament.to_param }.merge(intermediate_round_participants_amount: 29,
+                                                                           instant_finalists_amount: 32)
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
+
+          it 'succeeds when all three are changed correctly' do
+            put :update, params: { id: @filled_tournament.to_param }.merge(intermediate_round_participants_amount: 2,
+                                                                           instant_finalists_amount: 1,
+                                                                           playoff_teams_amount: 2)
+          end
+
+          context 'only playoff_teams_amount is changed reasonably but update fails' do
+            before do
+              allow_any_instance_of(Tournament)
+                .to receive(:update)
+                .and_return(false)
+            end
+
+            it 'returns unprocessable entity' do
+              put :update, params: { id: @filled_tournament.to_param }.merge(playoff_teams_amount: 8)
+              expect(response).to have_http_status(:unprocessable_entity)
+            end
+
+            it 'doesn\'t change playoff_teams_amount' do
+              expect do
+                put :update, params: { id: @filled_tournament.to_param }.merge(playoff_teams_amount: 8)
+                @filled_tournament.reload
+              end
+                .to_not(change { @filled_tournament.playoff_teams_amount })
+            end
+
+            it 'doesn\'t change instant_finalists_amount' do
+              expect do
+                put :update, params: { id: @filled_tournament.to_param }.merge(playoff_teams_amount: 8)
+                @filled_tournament.reload
+              end
+                .to_not(change { @filled_tournament.instant_finalists_amount })
+            end
+
+            it 'doesn\'t change intermediate_round_participants_amount' do
+              expect do
+                put :update, params: { id: @filled_tournament.to_param }.merge(playoff_teams_amount: 8)
+                @filled_tournament.reload
+              end
+                .to_not(change { @filled_tournament.intermediate_round_participants_amount })
+            end
+          end
+
+          context 'only playoff_teams_amount is changed to something reasonable' do
+            before do
+              put :update, params: { id: @filled_tournament.to_param }.merge(playoff_teams_amount: 8)
+              @filled_tournament.reload
+            end
+
+            it 'succeeds' do
+              expect(response).to have_http_status(:ok)
+            end
+
+            it 'changes playoff_teams_amount' do
+              expect(@filled_tournament.playoff_teams_amount).to eq(8)
+            end
+
+            it 'adapts instant_finalists_amount' do
+              expect(@filled_tournament.instant_finalists_amount).to eq(8)
+            end
+
+            it 'adapts intermediate_round_participants_amount' do
+              expect(@filled_tournament.intermediate_round_participants_amount).to eq(0)
+            end
+          end
+
+          it 'fails when playoff_teams_amount is higher than the amount of teams participating' do
+            put :update, params: { id: @filled_tournament.to_param }.merge(playoff_teams_amount: 783)
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
+        end
       end
 
       context 'as another user' do
