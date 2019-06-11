@@ -115,11 +115,20 @@ class TournamentsController < ApplicationController
     render json: { error: 'Invalid teams array' }, status: :unprocessable_entity
   end
 
+  def only_playoff_teams_amount_changed
+    params['playoff_teams_amount'] &&
+      params['instant_finalists_amount'].nil? &&
+      params['intermediate_round_participants_amount'].nil?
+  end
+
   def validate_update_params
+    return if only_playoff_teams_amount_changed
+
     playoff_teams_amount = params['playoff_teams_amount'] || @tournament.playoff_teams_amount
     instant_finalists_amount = params['instant_finalists_amount'] || @tournament.instant_finalists_amount
     intermediate_round_participants_amount = params['intermediate_round_participants_amount'] ||
-                                                 @tournament.intermediate_round_participants_amount
+                                             @tournament.intermediate_round_participants_amount
+
     return if instant_finalists_amount + (intermediate_round_participants_amount / 2) ==
               playoff_teams_amount
 
