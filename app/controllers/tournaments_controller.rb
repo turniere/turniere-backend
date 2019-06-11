@@ -64,10 +64,20 @@ class TournamentsController < ApplicationController
 
   # PATCH/PUT /tournaments/1
   def update
-    if @tournament.update(tournament_params)
-      render json: @tournament
-    else
-      render json: @tournament.errors, status: :unprocessable_entity
+    Tournament.transaction do
+      if only_playoff_teams_amount_changed
+        @tournament.instant_finalists_amount, @tournament.intermediate_round_participants_amount =
+          TournamentService.calculate_default_amount_of_teams_advancing(
+            params['playoff_teams_amount'].to_i,
+            @tournament.stages.find_by(level: -1).groups.size
+          )
+      end
+      if @tournament.update(tournament_params)
+        render json: @tournament
+      else
+        render json: @tournament.errors, status: :unprocessable_entity
+        raise ActiveRecord::Rollback
+      end
     end
   end
 
