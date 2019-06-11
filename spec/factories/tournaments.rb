@@ -11,6 +11,8 @@ FactoryBot.define do
     after(:create) do |tournament, evaluator|
       tournament.teams = create_list(:team, evaluator.teams_count, tournament: tournament)
       tournament.playoff_teams_amount = (tournament.teams.size / 2)
+      tournament.instant_finalists_amount = tournament.playoff_teams_amount
+      tournament.intermediate_round_participants_amount = 0
     end
 
     factory :stage_tournament do
