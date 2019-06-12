@@ -22,7 +22,7 @@ RSpec.describe UpdateGroupsGroupScores, type: :interactor do
     end
 
     it 'provides the objects to save' do
-      expect(context.object_to_save).to eq(@group_scores)
+      expect(context.object_to_save.flatten).to eq(@group_scores)
     end
   end
 

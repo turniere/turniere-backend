@@ -13,7 +13,7 @@ class AddGroupStageToTournament
       tournament.instant_finalists_amount, tournament.intermediate_round_participants_amount =
         TournamentService.calculate_default_amount_of_teams_advancing(tournament.playoff_teams_amount,
                                                                       group_stage.groups.size)
-      context.object_to_save = tournament
+      (context.object_to_save ||= []) << tournament
     rescue StandardError
       context.fail!
     end

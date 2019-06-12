@@ -13,7 +13,7 @@ class AddPlayoffsToTournament
         tournament.stages.concat playoff_stages
       end
       context.intermediate_stage = tournament.stages.find(&:intermediate_stage?)
-      context.object_to_save = [tournament]
+      (context.object_to_save ||= []) << tournament
     else
       context.fail!
     end

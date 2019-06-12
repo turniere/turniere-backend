@@ -9,6 +9,6 @@ class AdvanceTeamsInIntermediateStage
 
     intermediate_stage.matches.select { |m| m.state == 'single_team' }
                       .each { |match| PopulateMatchBelowAndSave.call(match: match) }
-    context.object_to_save << intermediate_stage
+    (context.object_to_save ||= []) << intermediate_stage
   end
 end
