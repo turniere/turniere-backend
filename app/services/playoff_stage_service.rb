@@ -15,9 +15,7 @@ class PlayoffStageService
       playoffs << initial_stage
       # empty stages are the stages, the tournament is filled with to have the matches ready for later
       empty_stages = generate_stages_with_empty_matches(stage_count - 1)
-      empty_stages.each do |stage|
-        playoffs << stage
-      end
+      playoffs.concat empty_stages
       playoffs
     end
 
