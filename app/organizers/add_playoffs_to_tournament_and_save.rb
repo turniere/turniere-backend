@@ -3,5 +3,5 @@
 class AddPlayoffsToTournamentAndSave
   include Interactor::Organizer
 
-  organize AddPlayoffsToTournament, SaveApplicationRecordObject
+  organize AddPlayoffsToTournament, AdvanceTeamsInIntermediateStage, SaveApplicationRecordObject
 end
