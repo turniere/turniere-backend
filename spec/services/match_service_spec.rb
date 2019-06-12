@@ -117,5 +117,16 @@ RSpec.describe MatchService do
     it 'raises an exception for for 0 teams' do
       expect { MatchService.generate_matches([]) }. to raise_error 'Cannot generate Matches without teams'
     end
+
+    it 'generates matches with consecutive positions' do
+      MatchService.generate_matches(create_list(:team, 7)).sort_by(&:position).each_with_index do |match, i|
+        expect(match.position).to eq(i)
+      end
+    end
+
+    it 'places all given teams into the matches exactly once' do
+      teams = create_list(:team, 11)
+      expect(MatchService.generate_matches(teams).map(&:teams).flatten).to match_array(teams)
+    end
   end
 end
