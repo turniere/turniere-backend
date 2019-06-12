@@ -196,25 +196,38 @@ RSpec.describe TournamentsController, type: :controller do
           end
 
           context 'playoff_teams_amount unacceptable' do
-            it 'is not a power of two' do
-              post :create, params: create_group_tournament_data.merge(playoff_teams_amount: 18)
-              expect(response).to have_http_status(:unprocessable_entity)
-              expect(deserialize_response(response).values.first.first)
-                .to eq('playoff_teams_amount needs to be a positive power of two')
+            shared_examples_for 'wrong playoff_teams_amount' do
+              it 'fails' do
+                expect(response).to have_http_status(:unprocessable_entity)
+              end
+              it 'returns the correct error message' do
+                expect(deserialize_response(response).values.first.first)
+                  .to eq('playoff_teams_amount needs to be a positive power of two')
+              end
             end
 
-            it 'isn\'t positive' do
-              post :create, params: create_group_tournament_data.merge(playoff_teams_amount: -16)
-              expect(response).to have_http_status(:unprocessable_entity)
-              expect(deserialize_response(response).values.first.first)
-                .to eq('playoff_teams_amount needs to be a positive power of two')
+            context 'is not a power of two' do
+              before do
+                post :create, params: create_group_tournament_data.merge(playoff_teams_amount: 18)
+              end
+
+              it_should_behave_like 'wrong playoff_teams_amount'
             end
 
-            it 'isn\'t positive nor a power of two' do
-              post :create, params: create_group_tournament_data.merge(playoff_teams_amount: -42)
-              expect(response).to have_http_status(:unprocessable_entity)
-              expect(deserialize_response(response).values.first.first)
-                .to eq('playoff_teams_amount needs to be a positive power of two')
+            context 'isn\'t positive' do
+              before do
+                post :create, params: create_group_tournament_data.merge(playoff_teams_amount: -16)
+              end
+
+              it_should_behave_like 'wrong playoff_teams_amount'
+            end
+
+            context 'isn\'t positive nor a power of two' do
+              before do
+                post :create, params: create_group_tournament_data.merge(playoff_teams_amount: -42)
+              end
+
+              it_should_behave_like 'wrong playoff_teams_amount'
             end
           end
         end
