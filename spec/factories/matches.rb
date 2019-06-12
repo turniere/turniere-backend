@@ -14,6 +14,13 @@ FactoryBot.define do
       state { :in_progress }
     end
 
+    factory :single_team_match do
+      state { :single_team }
+      after(:create) do |match|
+        match.match_scores = [create(:match_score, points: 0)]
+      end
+    end
+
     factory :empty_prepared_playoff_match do
       state { :not_ready }
     end
