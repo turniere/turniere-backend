@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Stage < ApplicationRecord
-  enum state: %i[playoff_stage in_progress finished]
+  enum state: %i[playoff_stage intermediate_stage in_progress finished]
 
   belongs_to :tournament
   has_many :matches, dependent: :destroy

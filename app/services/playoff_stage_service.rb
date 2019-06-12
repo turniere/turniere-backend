@@ -12,6 +12,7 @@ class PlayoffStageService
       # initial_matches are the matches in the first stage; this is the only stage filled with teams from the start on
       initial_matches = MatchService.generate_matches(teams)
       initial_stage = Stage.new level: stage_count - 1, matches: initial_matches
+      initial_stage.state = :intermediate_stage unless initial_stage.matches.find(&:single_team?).nil?
       playoffs << initial_stage
       # empty stages are the stages, the tournament is filled with to have the matches ready for later
       empty_stages = generate_stages_with_empty_matches(stage_count - 1)

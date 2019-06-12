@@ -79,6 +79,38 @@ RSpec.describe PlayoffStageService do
         end
       end
     end
+
+    describe 'number of teams isn\'t a power of two' do
+      let(:generated_stages) do
+        PlayoffStageService.generate_playoff_stages(create_list(:team, 12))
+      end
+
+      let(:intermediate_stage) do
+        generated_stages.max_by(&:level)
+      end
+
+      it 'generates an intermediate stage at the top level' do
+        expect(intermediate_stage.state).to eq('intermediate_stage')
+      end
+
+      it 'generates normal playoff_stage state stages elsewhere' do
+        (generated_stages - [intermediate_stage]).each do |stage|
+          expect(stage.state).to eq('playoff_stage')
+        end
+      end
+    end
+
+    describe 'number of teams is a power of two' do
+      let(:generated_stages) do
+        PlayoffStageService.generate_playoff_stages(create_list(:team, 16))
+      end
+
+      it 'generates only normal playoff_stage state stages' do
+        generated_stages.each do |stage|
+          expect(stage.state).to eq('playoff_stage')
+        end
+      end
+    end
   end
 
   describe '#populate_match_below' do
