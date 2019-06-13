@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe GroupStageService do
+RSpec.describe GroupStageService, focus: true do
   before do
     @teams1 = create_list(:team, 4)
     @teams2 = create_list(:team, 4)
@@ -13,6 +13,10 @@ RSpec.describe GroupStageService do
 
     it 'returns a stage object' do
       expect(prepared_groups_groupstage).to be_a(Stage)
+    end
+
+    it 'assigns the correct state' do
+      expect(prepared_groups_groupstage.state).to eq('in_progress')
     end
 
     it 'returns a stage object with level -1' do
