@@ -201,7 +201,7 @@ RSpec.describe TournamentsController, type: :controller do
                 expect(response).to have_http_status(:unprocessable_entity)
               end
               it 'returns the correct error message' do
-                expect(deserialize_response(response).values.first.first)
+                expect(deserialize_response(response)[:playoff_teams_amount].first)
                   .to eq('playoff_teams_amount needs to be a positive power of two')
               end
             end
