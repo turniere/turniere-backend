@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe PopulateMatchBelow do
+RSpec.describe PopulateMatchBelow, type: :interactor do
   before do
     @match = create(:match)
     @objects_to_save = [create(:match), create_list(:match_score, 2)]

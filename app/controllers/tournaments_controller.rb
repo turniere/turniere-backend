@@ -5,6 +5,7 @@ class TournamentsController < ApplicationController
   before_action :authenticate_user!, only: %i[create update destroy]
   before_action -> { require_owner! @tournament.owner }, only: %i[update destroy]
   before_action :validate_create_params, only: %i[create]
+  before_action :validate_update_params, only: %i[update]
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_error
 
   # GET /tournaments
@@ -63,10 +64,20 @@ class TournamentsController < ApplicationController
 
   # PATCH/PUT /tournaments/1
   def update
-    if @tournament.update(tournament_params)
-      render json: @tournament
-    else
-      render json: @tournament.errors, status: :unprocessable_entity
+    Tournament.transaction do
+      if only_playoff_teams_amount_changed
+        @tournament.instant_finalists_amount, @tournament.intermediate_round_participants_amount =
+          TournamentService.calculate_default_amount_of_teams_advancing(
+            params['playoff_teams_amount'].to_i,
+            @tournament.stages.find_by(level: -1).groups.size
+          )
+      end
+      if @tournament.update(tournament_params)
+        render json: @tournament
+      else
+        render json: @tournament.errors, status: :unprocessable_entity
+        raise ActiveRecord::Rollback
+      end
     end
   end
 
@@ -112,5 +123,27 @@ class TournamentsController < ApplicationController
     return if teams.is_a?(Array) && teams.reject { |t| t.is_a? ActionController::Parameters }.count.zero?
 
     render json: { error: 'Invalid teams array' }, status: :unprocessable_entity
+  end
+
+  def only_playoff_teams_amount_changed
+    params['playoff_teams_amount'] &&
+      params['instant_finalists_amount'].nil? &&
+      params['intermediate_round_participants_amount'].nil?
+  end
+
+  def validate_update_params
+    return if only_playoff_teams_amount_changed
+
+    playoff_teams_amount = params['playoff_teams_amount'].to_i || @tournament.playoff_teams_amount
+    instant_finalists_amount = params['instant_finalists_amount'].to_i || @tournament.instant_finalists_amount
+    intermediate_round_participants_amount = params['intermediate_round_participants_amount'].to_i ||
+                                             @tournament.intermediate_round_participants_amount
+
+    return if instant_finalists_amount + (intermediate_round_participants_amount / 2) ==
+              playoff_teams_amount
+
+    render json: {
+      error: 'playoff_teams_amount, instant_finalists_amount and intermediate_round_participants_amount don\'t match'
+    }, status: :unprocessable_entity
   end
 end
