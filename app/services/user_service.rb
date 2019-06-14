@@ -14,9 +14,9 @@ class UserService
 
   def validate_bet!(match, team)
     if team.nil?
-      raise 'Betting on no team in a playoff match is not supported' unless match.group_match?
+      raise UserServiceError, 'Betting on no team in a playoff match is not supported' unless match.group_match?
     else
-      raise 'The given team is not involved in the given match' unless match.teams.include? team
+      raise UserServiceError, 'The given team is not involved in the given match' unless match.teams.include? team
     end
   end
 end
