@@ -12,7 +12,7 @@ RSpec.describe UserService do
       it 'throws an exception' do
         expect do
           @service.bet! create(:playoff_match), create(:team)
-        end.to raise_error('The given team is not involved in the given match')
+        end.to raise_error(UserServiceError, 'The given team is not involved in the given match')
       end
     end
 
@@ -37,6 +37,7 @@ RSpec.describe UserService do
         expect(@user.bets).to include(bet)
       end
     end
+
     context 'without a team' do
       context 'on a playoff stage' do
         it 'throws an exception' do
@@ -44,7 +45,7 @@ RSpec.describe UserService do
           match.match_scores << create(:match_score, team: @team)
           expect do
             @service.bet! match, nil
-          end.to raise_error('Betting on no team in a playoff match is not supported')
+          end.to raise_error(UserServiceError, 'Betting on no team in a playoff match is not supported')
         end
       end
 
