@@ -14,7 +14,7 @@ RSpec.describe UserService do
   end
 
   def build_match(involved_team = team, factory = :playoff_match)
-    create(factory, match_scores: [create(:match_score, team: involved_team)])
+    create(factory, state: :not_started, match_scores: [create(:match_score, team: involved_team)])
   end
 
   describe '#bet!' do
@@ -23,6 +23,16 @@ RSpec.describe UserService do
         expect do
           user_service.bet! build_match(create(:team)), team
         end.to raise_error(UserServiceError, 'The given team is not involved in the given match')
+      end
+    end
+
+    context 'on a running match' do
+      it 'throws an exception' do
+        match = build_match
+        match.state = :in_progress
+        expect do
+          user_service.bet! match, team
+        end.to raise_error(UserServiceError, 'Betting is not supported while match is in_progress')
       end
     end
 
