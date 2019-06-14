@@ -18,5 +18,6 @@ class UserService
     else
       raise UserServiceError, 'The given team is not involved in the given match' unless match.teams.include? team
     end
+    raise UserServiceError, 'This user already created a bet on this match' if match.bets.map(&:user).include? @user
   end
 end

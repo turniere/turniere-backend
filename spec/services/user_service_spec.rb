@@ -21,20 +21,34 @@ RSpec.describe UserService do
         create(:playoff_match, match_scores: [create(:match_score, team: @team)])
       end
 
-      let(:bet) do
-        @service.bet! match, @team
+      before do
+        @bet = @service.bet! match, @team
+        @user.reload
+        match.reload
+        @team.reload
       end
 
       it 'associates the bet with the given team' do
-        expect(@team.bets).to include(bet)
+        expect(@team.bets).to include(@bet)
       end
 
       it 'associates the bet with the given match' do
-        expect(match.bets).to include(bet)
+        expect(match.bets).to include(@bet)
       end
 
       it 'associates the bet with the creating user' do
-        expect(@user.bets).to include(bet)
+        expect(@user.bets).to include(@bet)
+      end
+
+      context 'with an already existing bet' do
+        it 'throws an exception' do
+          match = create(:playoff_match, match_scores: [create(:match_score, team: @team)])
+          @service.bet! match, @team
+          match.reload
+          expect do
+            @service.bet! match, @team
+          end.to raise_error(UserServiceError, 'This user already created a bet on this match')
+        end
       end
     end
 
@@ -54,6 +68,7 @@ RSpec.describe UserService do
           match = create(:group_match)
           match.match_scores << create(:match_score, team: @team)
           bet = @service.bet! match, nil
+          match.reload
           expect(match.bets).to include(bet)
           expect(@user.bets).to include(bet)
         end
