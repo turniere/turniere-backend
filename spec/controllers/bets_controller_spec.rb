@@ -80,7 +80,7 @@ RSpec.describe BetsController, type: :controller do
       context 'on service exception' do
         it 'returns an error response' do
           msg = 'an error'
-          expect(user_service).to receive(:bet!).and_throw(UserServiceError.new(msg))
+          expect(user_service).to receive(:bet!).and_raise(UserServiceError, msg)
           post :create, params: create_params
           expect(response).to have_http_status(:unprocessable_entity)
           expect(deserialize_response(response)[:error]).to eq(msg)
