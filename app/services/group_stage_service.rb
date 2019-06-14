@@ -55,5 +55,32 @@ class GroupStageService
       end
       changed_group_scores
     end
+
+    # Returns a list of the teams in the group sorted by their group_points, difference_in_points, scored_points
+    #
+    # @param group Group the group to get the teams from
+    # @return [Array] of teams
+    def teams_sorted_by_group_scores(group)
+      group.teams.sort_by do |t|
+        [group.group_scores.find_by(team: t).group_points,
+         group.group_scores.find_by(team: t).difference_in_points,
+         group.group_scores.find_by(team: t).scored_points]
+      end
+    end
+
+    # Returns all teams advancing to playoff stage from given group stage
+    # They are ordered in such a way, that PlayoffStageService will correctly match the teams
+    #
+    # @param group_stage GroupStage the group stage to get all advancing teams from
+    # @return [Array] the teams advancing from that group stage
+    def get_advancing_teams(group_stage)
+      advancing_teams = []
+      group_winners = group_stage.groups.map(&method(:teams_sorted_by_group_scores))
+      (group_stage.tournament.instant_finalists_amount + group_stage.tournament.intermediate_round_participants_amount)
+        .times do |i|
+        advancing_teams << group_winners[i % group_stage.groups.size].shift
+      end
+      advancing_teams
+    end
   end
 end
