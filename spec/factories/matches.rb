@@ -12,6 +12,9 @@ FactoryBot.define do
         match.match_scores = create_list(:match_score, evaluator.match_scores_count)
       end
       state { :in_progress }
+      factory :finished_playoff_match do
+        state { :finished }
+      end
     end
 
     factory :single_team_match do
