@@ -32,12 +32,11 @@ RSpec.describe PopulateMatchBelow, type: :interactor do
     before do
       allow(PlayoffStageService)
         .to receive(:populate_match_below).with(@match)
-                                          .and_throw('This failed :(')
+                                          .and_raise('This failed :(')
     end
 
     it 'fails' do
-      test = context.failure?
-      expect(test).to eq(true)
+      expect(context.failure?).to eq(true)
     end
   end
 end
