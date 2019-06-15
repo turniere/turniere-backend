@@ -206,6 +206,14 @@ RSpec.describe TournamentsController, type: :controller do
               end
             end
 
+            context 'is forgotten' do
+              before do
+                post :create, params: create_group_tournament_data.except(:playoff_teams_amount)
+              end
+
+              it_should_behave_like 'wrong playoff_teams_amount'
+            end
+
             context 'is not a power of two' do
               before do
                 post :create, params: create_group_tournament_data.merge(playoff_teams_amount: 18)
