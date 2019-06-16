@@ -19,6 +19,13 @@ RSpec.describe GroupStageService do
       expect(prepared_groups_groupstage.state).to eq('in_progress')
     end
 
+    it 'assigns unique numbers to each group' do
+      groups = prepared_groups_groupstage.groups
+      groups.sort_by(&:number).each_with_index do |group, i|
+        expect(group.number).to eq(i + 1)
+      end
+    end
+
     it 'returns a stage object with level -1' do
       expect(prepared_groups_groupstage.level).to be(-1)
     end
