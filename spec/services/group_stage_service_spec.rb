@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe GroupStageService, focus: true do
+RSpec.describe GroupStageService do
   before do
     @teams1 = create_list(:team, 4)
     @teams2 = create_list(:team, 4)
