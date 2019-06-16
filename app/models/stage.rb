@@ -18,4 +18,14 @@ class Stage < ApplicationRecord
       []
     end
   end
+
+  def over?
+    return matches.find { |m| m.state != 'finished' }.nil? unless matches.size.zero?
+
+    unless groups.size.zero? && groups.map(&:matches).flatten.size.zero?
+      return groups.map(&:matches).flatten.find { |m| m.state != 'finished' }.nil?
+    end
+
+    false
+  end
 end
