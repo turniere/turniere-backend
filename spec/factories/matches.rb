@@ -56,6 +56,10 @@ FactoryBot.define do
       after(:create) do |match, evaluator|
         match.match_scores = create_list(:match_score, evaluator.match_scores_count)
       end
+
+      factory :finished_group_match do
+        state { :finished }
+      end
     end
 
     factory :undecided_group_match do
