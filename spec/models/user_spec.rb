@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   describe 'association' do
     it { should have_many :tournaments }
+    it { should have_many :bets }
   end
 
   describe 'validation' do
