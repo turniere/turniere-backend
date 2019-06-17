@@ -61,10 +61,13 @@ class GroupStageService
     # @param group Group the group to get the teams from
     # @return [Array] of teams
     def teams_sorted_by_group_scores(group)
-      group.teams.sort_by do |t|
-        [group.group_scores.find_by(team: t).group_points,
-         group.group_scores.find_by(team: t).difference_in_points,
-         group.group_scores.find_by(team: t).scored_points]
+      group.teams.sort do |a, b|
+        [group.group_scores.find_by(team: b).group_points,
+         group.group_scores.find_by(team: b).difference_in_points,
+         group.group_scores.find_by(team: b).scored_points] <=>
+          [group.group_scores.find_by(team: a).group_points,
+           group.group_scores.find_by(team: a).difference_in_points,
+           group.group_scores.find_by(team: a).scored_points]
       end
     end
 
