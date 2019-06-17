@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe GroupStageService, focus: true do
+RSpec.describe GroupStageService do
   before do
     @teams1 = create_list(:team, 4)
     @teams2 = create_list(:team, 4)
@@ -17,6 +17,13 @@ RSpec.describe GroupStageService, focus: true do
 
     it 'assigns the correct state' do
       expect(prepared_groups_groupstage.state).to eq('in_progress')
+    end
+
+    it 'assigns unique numbers to each group' do
+      groups = prepared_groups_groupstage.groups
+      groups.sort_by(&:number).each_with_index do |group, i|
+        expect(group.number).to eq(i + 1)
+      end
     end
 
     it 'returns a stage object with level -1' do
