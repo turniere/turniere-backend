@@ -26,7 +26,7 @@ RSpec.describe AdvanceTeamsInIntermediateStage do
     end
   end
 
-  context 'intermediate_stage is an realistic stage' do
+  context 'intermediate_stage is a realistic stage' do
     let(:context) do
       AdvanceTeamsInIntermediateStage.call(intermediate_stage: create(:playoff_stage, match_type: :single_team_match))
     end
