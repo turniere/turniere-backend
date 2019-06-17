@@ -21,7 +21,7 @@ RSpec.describe PopulateMatchBelow, type: :interactor do
     end
 
     it 'provides the objects to save' do
-      expect(context.object_to_save).to match_array(@objects_to_save)
+      expect(context.object_to_save.flatten).to match_array(@objects_to_save.flatten)
     end
   end
 

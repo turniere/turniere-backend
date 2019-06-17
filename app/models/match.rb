@@ -28,6 +28,8 @@ class Match < ApplicationRecord
   end
 
   def winner
+    return teams.first if single_team?
+
     finished? ? current_leading_team : nil
   end
 

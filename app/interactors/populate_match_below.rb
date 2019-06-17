@@ -7,7 +7,7 @@ class PopulateMatchBelow
     match = context.match
     begin
       objects_to_save = PlayoffStageService.populate_match_below(match)
-      context.object_to_save = objects_to_save
+      (context.object_to_save ||= []) << objects_to_save
     rescue StandardError
       context.fail!
     end

@@ -51,7 +51,7 @@ RSpec.describe PlayoffStageService do
     end
   end
 
-  describe 'generates playoff stages for' do
+  describe '#generate_playoff_stages' do
     [
       { team_size: 1, expected_amount_of_playoff_stages: 1 },
       { team_size: 2, expected_amount_of_playoff_stages: 1 },
@@ -66,7 +66,7 @@ RSpec.describe PlayoffStageService do
       { team_size: 64, expected_amount_of_playoff_stages: 6 },
       { team_size: 111, expected_amount_of_playoff_stages: 7 }
     ].each do |parameters|
-      it "#{parameters[:team_size]} teams" do
+      it "generates playoff stages for #{parameters[:team_size]} teams" do
         amount_of_teams = parameters[:team_size]
         expected_amount_of_playoff_stages = parameters[:expected_amount_of_playoff_stages]
         teams = build_list(:team, amount_of_teams)
@@ -76,6 +76,38 @@ RSpec.describe PlayoffStageService do
           stage = stages[i]
           stage_level = stages.size - i - 1
           expect(stage.level).to eq stage_level
+        end
+      end
+    end
+
+    describe 'number of teams isn\'t a power of two' do
+      let(:generated_stages) do
+        PlayoffStageService.generate_playoff_stages(create_list(:team, 12))
+      end
+
+      let(:intermediate_stage) do
+        generated_stages.max_by(&:level)
+      end
+
+      it 'generates an intermediate stage at the top level' do
+        expect(intermediate_stage.state).to eq('intermediate_stage')
+      end
+
+      it 'generates normal playoff_stage state stages elsewhere' do
+        (generated_stages - [intermediate_stage]).each do |stage|
+          expect(stage.state).to eq('playoff_stage')
+        end
+      end
+    end
+
+    describe 'number of teams is a power of two' do
+      let(:generated_stages) do
+        PlayoffStageService.generate_playoff_stages(create_list(:team, 16))
+      end
+
+      it 'generates only normal playoff_stage state stages' do
+        generated_stages.each do |stage|
+          expect(stage.state).to eq('playoff_stage')
         end
       end
     end
