@@ -12,4 +12,5 @@ Rails.application.routes.draw do
     resources :statistics, only: %i[index]
   end
   resources :match_scores, only: %i[show update]
+  resources :groups, only: %i[show]
 end
