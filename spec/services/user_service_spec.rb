@@ -32,7 +32,7 @@ RSpec.describe UserService do
         match.state = :in_progress
         expect do
           user_service.bet! match, team
-        end.to raise_error(UserServiceError, 'Betting is not supported while match is in_progress')
+        end.to raise_error(UserServiceError, 'Betting is not allowed while match is in_progress')
       end
     end
 
