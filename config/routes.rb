@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :matches, only: %i[show update] do
     resources :bets, only: %i[index create]
   end
+  resources :stages, only: %i[show update]
   resources :teams, only: %i[show update]
   resources :tournaments do
     resources :statistics, only: %i[index]
