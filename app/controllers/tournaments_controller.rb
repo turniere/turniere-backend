@@ -39,6 +39,8 @@ class TournamentsController < ApplicationController
     if group_stage
       params.require(:playoff_teams_amount)
       groups = organize_teams_in_groups(teams)
+      # associate provided teams with tournament
+      tournament.teams = groups.flatten
       # add groups to tournament
       result = AddGroupStageToTournamentAndSave.call(tournament: tournament, groups: groups)
     else
