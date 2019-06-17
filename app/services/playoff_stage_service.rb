@@ -21,14 +21,6 @@ class PlayoffStageService
       playoffs
     end
 
-    # Generates the playoff stage given the tournament
-    #
-    # @param tournament [Tournament] The tournament to generate the playoff stages from
-    # @return [Array] the generated playoff stages
-    def generate_playoff_stages_from_tournament(tournament, randomize_matches)
-      generate_playoff_stages(tournament.teams, randomize_matches)
-    end
-
     # Generates given number of empty stages
     #
     # @param stage_count [Integer] number of stages to generate

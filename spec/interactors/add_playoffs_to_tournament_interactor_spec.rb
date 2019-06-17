@@ -2,15 +2,15 @@
 
 RSpec.describe AddPlayoffsToTournament, type: :interactor do
   let(:group_stage_tournament_context) do
-    AddPlayoffsToTournament.call(tournament: @group_stage_tournament)
+    AddPlayoffsToTournament.call(tournament: @group_stage_tournament, teams: @group_stage_tournament.teams)
   end
 
   let(:playoff_stage_tournament_context) do
-    AddPlayoffsToTournament.call(tournament: @playoff_stage_tournament)
+    AddPlayoffsToTournament.call(tournament: @playoff_stage_tournament, teams: @playoff_stage_tournament.teams)
   end
 
   let(:full_tournament_context) do
-    AddPlayoffsToTournament.call(tournament: @full_tournament)
+    AddPlayoffsToTournament.call(tournament: @full_tournament, teams: @full_tournament.teams)
   end
 
   before do
@@ -23,7 +23,7 @@ RSpec.describe AddPlayoffsToTournament, type: :interactor do
   context 'PlayoffStageService mocked' do
     before do
       expect(class_double('PlayoffStageService').as_stubbed_const(transfer_nested_constants: true))
-        .to receive(:generate_playoff_stages_from_tournament)
+        .to receive(:generate_playoff_stages)
         .and_return(@stages)
     end
 
@@ -53,7 +53,7 @@ RSpec.describe AddPlayoffsToTournament, type: :interactor do
   context 'playoff generation fails' do
     before do
       expect(class_double('PlayoffStageService').as_stubbed_const(transfer_nested_constants: true))
-        .to receive(:generate_playoff_stages_from_tournament)
+        .to receive(:generate_playoff_stages)
         .and_return(nil)
     end
 
