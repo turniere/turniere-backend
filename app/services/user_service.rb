@@ -19,7 +19,7 @@ class UserService
       raise UserServiceError, 'The given team is not involved in the given match' unless match.teams.include? team
     end
     raise UserServiceError, 'This user already created a bet on this match' if match.bets.map(&:user).include? @user
-    raise UserServiceError, "Betting is not supported while match is #{match.state}" \
+    raise UserServiceError, "Betting is not allowed while match is #{match.state}" \
       unless %w[not_ready not_started].include? match.state
   end
 end
