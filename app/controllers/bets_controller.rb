@@ -6,12 +6,7 @@ class BetsController < ApplicationController
   rescue_from UserServiceError, with: :handle_user_service_error
 
   def index
-    render json: @match.bets.group_by(&:team).map { |team, bets|
-      {
-        team: ActiveModelSerializers::SerializableResource.new(team).as_json,
-        bets: bets.size
-      }
-    }
+    render json: @match.bets, serializer: BetsSerializer
   end
 
   def create
