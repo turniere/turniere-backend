@@ -39,6 +39,12 @@ RSpec.describe Stage, type: :model do
         expect(teams).to match_array(@teams)
       end
     end
+
+    context 'empty stage' do
+      it 'returns an empty Array' do
+        expect(create(:stage).teams).to match_array([])
+      end
+    end
   end
 
   describe '#over?' do
