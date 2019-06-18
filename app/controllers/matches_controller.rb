@@ -7,7 +7,7 @@ class MatchesController < ApplicationController
 
   # GET /matches/1
   def show
-    render json: @match, include: ['match_scores.points', 'match_scores.team']
+    render json: @match, include: ['match_scores.points', 'match_scores.team', 'bets']
   end
 
   # PATCH/PUT /matches/1
