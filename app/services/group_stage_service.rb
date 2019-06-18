@@ -62,12 +62,15 @@ class GroupStageService
     # @return [Array] of teams
     def teams_sorted_by_group_scores(group)
       group.teams.sort do |a, b|
-        [group.group_scores.find_by(team: b).group_points,
-         group.group_scores.find_by(team: b).difference_in_points,
-         group.group_scores.find_by(team: b).scored_points] <=>
-          [group.group_scores.find_by(team: a).group_points,
-           group.group_scores.find_by(team: a).difference_in_points,
-           group.group_scores.find_by(team: a).scored_points]
+        group_score_a = group.group_scores.find_by(team: a)
+        group_score_b = group.group_scores.find_by(team: b)
+
+        [group_score_b.group_points,
+         group_score_b.difference_in_points,
+         group_score_b.scored_points] <=>
+          [group_score_a.group_points,
+           group_score_a.difference_in_points,
+           group_score_a.scored_points]
       end
     end
 
