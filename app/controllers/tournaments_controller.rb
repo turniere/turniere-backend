@@ -49,7 +49,7 @@ class TournamentsController < ApplicationController
       # associate provided teams with tournament
       tournament.teams = teams
       # add playoff stage to tournament
-      result = AddPlayoffsToTournamentAndSave.call(tournament: tournament)
+      result = AddPlayoffsToTournamentAndSave.call(tournament: tournament, teams: tournament.teams)
     end
     # validate tournament
     unless tournament.valid?

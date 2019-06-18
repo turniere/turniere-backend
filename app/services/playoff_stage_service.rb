@@ -6,11 +6,12 @@ class PlayoffStageService
     #
     # @param teams [Array] The teams to generate the playoff stages with
     # @return [Array] the generated playoff stages
-    def generate_playoff_stages(teams)
+    def generate_playoff_stages(teams, randomize_matches)
       playoffs = []
       stage_count = calculate_required_stage_count(teams.size)
       # initial_matches are the matches in the first stage; this is the only stage filled with teams from the start on
       initial_matches = MatchService.generate_matches(teams)
+      initial_matches = initial_matches.shuffle.each_with_index { |m, i| m.position = i } if randomize_matches
       initial_stage = Stage.new level: stage_count - 1, matches: initial_matches
       initial_stage.state = :intermediate_stage unless initial_stage.matches.find(&:single_team?).nil?
       playoffs << initial_stage
@@ -18,14 +19,6 @@ class PlayoffStageService
       empty_stages = generate_stages_with_empty_matches(stage_count - 1)
       playoffs.concat empty_stages
       playoffs
-    end
-
-    # Generates the playoff stage given the tournament
-    #
-    # @param tournament [Tournament] The tournament to generate the playoff stages from
-    # @return [Array] the generated playoff stages
-    def generate_playoff_stages_from_tournament(tournament)
-      generate_playoff_stages tournament.teams
     end
 
     # Generates given number of empty stages

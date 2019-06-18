@@ -156,4 +156,38 @@ RSpec.describe GroupStageService do
       it_should_behave_like 'only_return_group_scores'
     end
   end
+
+  describe '#teams_sorted_by_group_scores' do
+    before do
+      @group_to_sort = create(:group, match_count: 10, match_factory: :filled_group_match)
+    end
+
+    let(:sorted_teams) do
+      GroupStageService.teams_sorted_by_group_scores(@group_to_sort)
+    end
+
+    let(:sorted_teams_grouped_by_group_points) do
+      sorted_teams.group_by { |t| @group_to_sort.group_scores.find_by(team: t).group_points }.values
+    end
+
+    it 'sorts the teams after group_scores first' do
+      i = 0
+      while i < (sorted_teams.size - 1)
+        expect(@group_to_sort.group_scores.find_by(team: sorted_teams[i]).group_points)
+          .to be >= @group_to_sort.group_scores.find_by(team: sorted_teams[i + 1]).group_points
+        i += 1
+      end
+    end
+
+    it 'sorts the teams after difference_in_points second' do
+      sorted_teams_grouped_by_group_points.each do |teams|
+        i = 0
+        while i < (teams.size - 1)
+          expect(@group_to_sort.group_scores.find_by(team: teams[i]).difference_in_points)
+            .to be >= @group_to_sort.group_scores.find_by(team: teams[i + 1]).difference_in_points
+          i += 1
+        end
+      end
+    end
+  end
 end

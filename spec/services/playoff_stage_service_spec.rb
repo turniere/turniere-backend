@@ -70,7 +70,7 @@ RSpec.describe PlayoffStageService do
         amount_of_teams = parameters[:team_size]
         expected_amount_of_playoff_stages = parameters[:expected_amount_of_playoff_stages]
         teams = build_list(:team, amount_of_teams)
-        stages = PlayoffStageService.generate_playoff_stages(teams)
+        stages = PlayoffStageService.generate_playoff_stages(teams, false)
         expect(stages.size).to eq(expected_amount_of_playoff_stages)
         stages.each_index do |i|
           stage = stages[i]
@@ -82,7 +82,7 @@ RSpec.describe PlayoffStageService do
 
     describe 'number of teams isn\'t a power of two' do
       let(:generated_stages) do
-        PlayoffStageService.generate_playoff_stages(create_list(:team, 12))
+        PlayoffStageService.generate_playoff_stages(create_list(:team, 12), false)
       end
 
       let(:intermediate_stage) do
@@ -102,7 +102,7 @@ RSpec.describe PlayoffStageService do
 
     describe 'number of teams is a power of two' do
       let(:generated_stages) do
-        PlayoffStageService.generate_playoff_stages(create_list(:team, 16))
+        PlayoffStageService.generate_playoff_stages(create_list(:team, 16), false)
       end
 
       it 'generates only normal playoff_stage state stages' do

@@ -6,7 +6,7 @@ class AddPlayoffsToTournament
   def call
     tournament = context.tournament
     context.fail! if tournament.stages.size > 1
-    if (playoff_stages = PlayoffStageService.generate_playoff_stages_from_tournament(tournament))
+    if (playoff_stages = PlayoffStageService.generate_playoff_stages(context.teams, context.randomize_matches))
       if tournament.stages.empty?
         tournament.stages = playoff_stages
       else
