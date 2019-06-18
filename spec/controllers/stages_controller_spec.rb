@@ -73,5 +73,27 @@ RSpec.describe StagesController, type: :controller do
         end
       end
     end
+
+    context 'already finished group stage' do
+      let(:finished_group_stage) do
+        group_stage = create(:group_stage, match_factory: :finished_group_match)
+        group_stage.finished!
+        group_stage.save!
+        group_stage
+      end
+
+      before do
+        apply_authentication_headers_for finished_group_stage.owner
+        put :update, params: { id: finished_group_stage.to_param }.merge(state: 'finished')
+      end
+
+      it 'it returns unprocessable entity' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'returns the correct error' do
+        expect(deserialize_response(response)[:error]).to eq('Only running group stages can be finished')
+      end
+    end
   end
 end
