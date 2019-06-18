@@ -40,5 +40,11 @@ module TurniereBackend
         resource '*', headers: :any, methods: :any, expose: ['access-token', 'client', 'expiry', 'uid']
       end
     end
+
+    # Mail
+    config.action_mailer.default_url_options = { host: 'turnie.re' }
+    config.action_mailer.default_options = {
+      from: 'noreply@turnie.re'
+    }
   end
 end
