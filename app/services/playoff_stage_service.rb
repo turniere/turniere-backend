@@ -79,7 +79,7 @@ class PlayoffStageService
       current_stage = current_match.stage
       next_stage = current_stage.tournament.stages.find { |s| s.level == current_stage.level - 1 }
       # return if next stage does not exist (there are no matches after the finale)
-      return if next_stage.nil?
+      return [] if next_stage.nil?
 
       current_position = current_match.position
 

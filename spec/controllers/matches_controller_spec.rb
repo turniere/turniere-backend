@@ -174,6 +174,30 @@ RSpec.describe MatchesController, type: :controller do
                 end
               end
             end
+
+            context 'on the last match in the tournament' do
+              let(:updated_finale) do
+                only_final_tournament = create(:stage_tournament, stage_count: 1)
+                finale = only_final_tournament.stages.first.matches.first
+
+                finale.match_scores.each_with_index do |ms, i|
+                  ms.points = i
+                  ms.save!
+                end
+
+                apply_authentication_headers_for finale.owner
+                put :update, params: { id: finale.to_param }.merge(finished)
+                finale.reload
+              end
+
+              it 'response is successful' do
+                expect(response).to be_successful
+              end
+
+              it 'updates the matches status' do
+                expect(updated_finale.state).to eq(finished[:state])
+              end
+            end
           end
         end
 
