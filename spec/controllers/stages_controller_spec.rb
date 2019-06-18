@@ -115,5 +115,24 @@ RSpec.describe StagesController, type: :controller do
         expect(deserialize_response(response)[:error]).to eq('Only running group stages can be finished')
       end
     end
+
+    context 'trying to change the state to something other than :finished' do
+      let(:group_stage) do
+        create(:group_stage)
+      end
+
+      before do
+        apply_authentication_headers_for group_stage.owner
+        put :update, params: { id: group_stage.to_param }.merge(state: 'in_progress')
+      end
+
+      it 'it returns unprocessable entity' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'returns the correct error' do
+        expect(deserialize_response(response)[:error]).to eq('The state attribute may only be changed to finished')
+      end
+    end
   end
 end
