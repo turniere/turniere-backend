@@ -195,6 +195,10 @@ RSpec.describe TournamentsController, type: :controller do
               .to eq(create_group_tournament_data[:playoff_teams_amount])
           end
 
+          it 'associates the given teams with the created tournament' do
+            expect(@group_stage_tournament.teams).to match_array(@teams16)
+          end
+
           context 'playoff_teams_amount unacceptable' do
             shared_examples_for 'wrong playoff_teams_amount' do
               it 'fails' do

@@ -41,6 +41,8 @@ class TournamentsController < ApplicationController
       groups = organize_teams_in_groups(teams)
       # add groups to tournament
       result = AddGroupStageToTournamentAndSave.call(tournament: tournament, groups: groups)
+      # associate provided teams with tournament on success
+      tournament.teams = groups.flatten if result.success?
     else
       # convert teams parameter into Team objects
       teams = teams.map(&method(:find_or_create_team))
