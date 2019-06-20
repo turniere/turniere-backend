@@ -1,15 +1,7 @@
 stages:
-  - test
   - build
+  - test
   - deploy
-
-rails spec:
-  stage: test
-  image: ruby:2.6.2
-  script:
-    - bundle install --path /cache
-    - bundle exec rails db:migrate RAILS_ENV=test
-    - bundle exec rails spec
 
 kaniko:
   stage: build
@@ -21,6 +13,14 @@ kaniko:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/production/Dockerfile  --destination $CI_REGISTRY_IMAGE/production  --destination $CI_REGISTRY_IMAGE/production/commits:$CI_COMMIT_SHA  --destination $CI_REGISTRY_IMAGE/production/branches:$CI_COMMIT_REF_SLUG
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/development/Dockerfile --destination $CI_REGISTRY_IMAGE/development --destination $CI_REGISTRY_IMAGE/development/commits:$CI_COMMIT_SHA --destination $CI_REGISTRY_IMAGE/development/branches:$CI_COMMIT_REF_SLUG
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/test/Dockerfile        --destination $CI_REGISTRY_IMAGE/test        --destination $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA        --destination $CI_REGISTRY_IMAGE/test/branches:$CI_COMMIT_REF_SLUG
+
+rails spec:
+  stage: test
+  image: ruby:2.6.2
+  script:
+    - bundle install --path /cache
+    - bundle exec rails db:migrate RAILS_ENV=test
+    - bundle exec rails spec
 
 kubernetes:
   stage: deploy
