@@ -1,8 +1,7 @@
 FROM ruby:2.6.2-alpine
 RUN apk add --no-cache build-base tzdata sqlite sqlite-dev postgresql-dev && gem install tzinfo-data
 WORKDIR /app
-COPY Gemfile /app/Gemfile
-COPY Gemfile.lock /app/Gemfile.lock
+COPY Gemfile* /app/
 RUN bundle install --deployment --without development test
 COPY . /app
 ENV RAILS_ENV production
