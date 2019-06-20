@@ -1,6 +1,4 @@
 .git
-test/**
-spec/**
 tmp/**
 .gitignore
 .hound.yml
