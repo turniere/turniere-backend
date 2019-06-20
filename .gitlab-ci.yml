@@ -18,9 +18,9 @@ kaniko:
     entrypoint: [""]
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/production/Dockerfile --destination $CI_REGISTRY_IMAGE/production --destination $CI_REGISTRY_IMAGE/production/commits:$CI_COMMIT_SHA --destination $CI_REGISTRY_IMAGE/production/branches:$CI_COMMIT_REF_SLUG
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/production/Dockerfile  --destination $CI_REGISTRY_IMAGE/production  --destination $CI_REGISTRY_IMAGE/production/commits:$CI_COMMIT_SHA  --destination $CI_REGISTRY_IMAGE/production/branches:$CI_COMMIT_REF_SLUG
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/development/Dockerfile --destination $CI_REGISTRY_IMAGE/development --destination $CI_REGISTRY_IMAGE/development/commits:$CI_COMMIT_SHA --destination $CI_REGISTRY_IMAGE/development/branches:$CI_COMMIT_REF_SLUG
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/test/Dockerfile --destination $CI_REGISTRY_IMAGE/test --destination $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA --destination $CI_REGISTRY_IMAGE/test/branches:$CI_COMMIT_REF_SLUG
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/test/Dockerfile        --destination $CI_REGISTRY_IMAGE/test        --destination $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA        --destination $CI_REGISTRY_IMAGE/test/branches:$CI_COMMIT_REF_SLUG
 
 kubernetes:
   stage: deploy
