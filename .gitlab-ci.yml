@@ -16,10 +16,9 @@ kaniko:
 
 rails spec:
   stage: test
-  image: ruby:2.6.2
+  image: registry.gitlab.com/turniere/turniere-backend/test
   script:
-    - bundle install --path /cache
-    - bundle exec rails db:migrate RAILS_ENV=test
+    - bundle exec rails db:migrate
     - bundle exec rails spec
 
 kubernetes:
