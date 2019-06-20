@@ -23,10 +23,10 @@ kaniko:
 
 rails spec:
   stage: test
-  image: docker:stable
+  image: registry.gitlab.com/turniere/turniere-backend/test
   script:
-    - docker info
-    - docker run $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA
+    - bundle exec rails db:migrate
+    - bundle exec rails spec
 
 kubernetes:
   stage: deploy
