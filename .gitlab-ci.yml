@@ -1,6 +1,5 @@
 stages:
-  - build
-  - test
+  - build & test
   - deploy
 
 services:
@@ -11,7 +10,7 @@ variables:
   DOCKER_DRIVER: overlay2
 
 kaniko:
-  stage: build
+  stage: build & test
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -20,13 +19,6 @@ kaniko:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/production/Dockerfile  --destination $CI_REGISTRY_IMAGE/production  --destination $CI_REGISTRY_IMAGE/production/commits:$CI_COMMIT_SHA  --destination $CI_REGISTRY_IMAGE/production/branches:$CI_COMMIT_REF_SLUG
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/development/Dockerfile --destination $CI_REGISTRY_IMAGE/development --destination $CI_REGISTRY_IMAGE/development/commits:$CI_COMMIT_SHA --destination $CI_REGISTRY_IMAGE/development/branches:$CI_COMMIT_REF_SLUG
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/test/Dockerfile        --destination $CI_REGISTRY_IMAGE/test        --destination $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA        --destination $CI_REGISTRY_IMAGE/test/branches:$CI_COMMIT_REF_SLUG
-
-rails spec:
-  stage: test
-  image: registry.gitlab.com/turniere/turniere-backend/test
-  script:
-    - bundle exec rails db:migrate
-    - bundle exec rails spec
 
 kubernetes:
   stage: deploy
