@@ -3,6 +3,13 @@ stages:
   - test
   - deploy
 
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://localhost:2375/
+  DOCKER_DRIVER: overlay2
+
 kaniko:
   stage: build
   image:
@@ -16,10 +23,10 @@ kaniko:
 
 rails spec:
   stage: test
-  image: $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA
+  image: docker:stable
   script:
-    - bundle exec rails db:migrate RAILS_ENV=test
-    - bundle exec rails spec
+    - docker info
+    - docker run $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA
 
 kubernetes:
   stage: deploy
