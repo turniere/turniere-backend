@@ -16,9 +16,8 @@ kaniko:
 
 rails spec:
   stage: test
-  image: ruby:2.6.2
+  image: $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA
   script:
-    - bundle install --path /cache
     - bundle exec rails db:migrate RAILS_ENV=test
     - bundle exec rails spec
 
