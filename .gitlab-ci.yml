@@ -18,6 +18,7 @@ rails spec:
   stage: test
   image: registry.gitlab.com/turniere/turniere-backend/test
   script:
+    - cd /app
     - bundle exec rails db:migrate
     - bundle exec rails spec
 
