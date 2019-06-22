@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend-container
-        image: registry.gitlab.com/turniere/turniere-backend:<%= current_sha %>
+        image: registry.gitlab.com/turniere/turniere-backend/production/commits:<%= current_sha %>
         ports:
         - containerPort: 3000
         env:
