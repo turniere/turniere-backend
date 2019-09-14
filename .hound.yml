@@ -2,6 +2,5 @@ fail_on_violations: true
 
 rubocop:
   version: 0.72.0
-
-ruby:
   config_file: .rubocop.yml
+
