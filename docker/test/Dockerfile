@@ -1,5 +1,5 @@
 # Build development container locally first with following tag
-FROM registry.gitlab.com/turniere/turniere-backend/development
+FROM turniere-backend/development:local
 WORKDIR /app
 RUN bundle install --deployment --with test
 ENV RAILS_ENV test

@@ -1,5 +1,5 @@
 # Build production container locally first with following tag
-FROM registry.gitlab.com/turniere/turniere-backend/production
+FROM turniere-backend/production:local
 WORKDIR /app
 RUN bundle install --deployment --with development
 ENV RAILS_ENV development
