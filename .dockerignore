@@ -1,7 +1,7 @@
 .git
-test/**
-spec/**
 tmp/**
+coverage/**
+docker/**
 .gitignore
 .hound.yml
 .rspec
