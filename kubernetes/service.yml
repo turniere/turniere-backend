@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: backend-service
-  namespace: turniere
+  namespace: turniere-backend
 spec:
   selector:
     app: turniere-backend
@@ -15,7 +15,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: backend-ingress
-  namespace: turniere
+  namespace: turniere-backend
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
