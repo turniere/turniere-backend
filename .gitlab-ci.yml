@@ -4,6 +4,8 @@ stages:
   - deploy
 
 kaniko:
+  tags:
+    - docker
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -15,6 +17,8 @@ kaniko:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/test/Dockerfile        --destination $CI_REGISTRY_IMAGE/test        --destination $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA        --destination $CI_REGISTRY_IMAGE/test/branches:$CI_COMMIT_REF_SLUG
 
 rails spec:
+  tags:
+    - docker
   stage: test
   image: $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA
   script:
@@ -23,6 +27,8 @@ rails spec:
     - bundle exec rails spec
 
 kubernetes:
+  tags:
+    - turniere-deploy
   stage: deploy
   only:
     - master
