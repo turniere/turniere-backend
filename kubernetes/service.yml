@@ -7,23 +7,40 @@ spec:
   selector:
     app: turniere-backend
   ports:
-  - name: http
-    port: 3000
-    targetPort: 3000
+    - name: http
+      port: 3000
+      targetPort: 3000
 ---
-apiVersion: extensions/v1beta1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
-  name: backend-ingress
+  name: backend-ingress-http
   namespace: turniere-backend
-  annotations:
-    kubernetes.io/ingress.class: traefik
 spec:
-  rules:
-  - host: api01.turnie.re
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: backend-service
-          servicePort: http
+  entryPoints:
+    - http
+  routes:
+    - match: Host(`api01.turnie.re`)
+      kind: Rule
+      services:
+        - name: backend-service
+          port: 3000
+      middlewares:
+        - name: redirect
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: backend-ingress-https
+  namespace: turniere-backend
+spec:
+  entryPoints:
+    - https
+  routes:
+    - match: Host(`api01.turnie.re`)
+      kind: Rule
+      services:
+        - name: backend-service
+          port: 3000
+  tls:
+    certResolver: default
