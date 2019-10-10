@@ -4,6 +4,7 @@ class StagesController < ApplicationController
   before_action :set_stage, only: %i[show update]
   before_action :authenticate_user!, only: %i[update]
   before_action -> { require_owner! @stage.owner }, only: %i[update]
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_error
 
   # GET /stages/1
   def show
@@ -35,6 +36,29 @@ class StagesController < ApplicationController
     end
   end
 
+  def index
+    tournament = Tournament.find(params[:tournament_id])
+    level_param = index_params[:level]
+    if level_param
+      if level_param == 'current'
+        # TODO: find current stage
+      elsif level_param == 'group'
+        group_stage = tournament.stages.find_by(level: -1)
+        if group_stage
+          render json: group_stage
+        else
+          render json: { error: 'There\'s no group stage for this tournament' }, status: :not_found
+        end
+      elsif level_param.to_i.to_s == level_param
+        render json: tournament.stages.find_by!(level: level_param.to_i)
+      else
+        render json: { error: 'Invalid level parameter' }, status: unprocessable_entity
+      end
+    else
+      render json: tournament.stages unless level_param
+    end
+  end
+
   private
 
   def handle_group_stage_end
@@ -58,5 +82,9 @@ class StagesController < ApplicationController
 
   def stage_params
     params.slice(:state).permit!
+  end
+
+  def index_params
+    params.permit(:level)
   end
 end
