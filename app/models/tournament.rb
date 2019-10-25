@@ -16,6 +16,10 @@ class Tournament < ApplicationRecord
 
   after_initialize :generate_code
 
+  def matches
+    stages.map(&:matches).flatten
+  end
+
   private
 
   def generate_code
