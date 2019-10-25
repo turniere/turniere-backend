@@ -48,6 +48,7 @@ RSpec.describe Tournament, type: :model do
       before do
         @tournament = create(:stage_tournament)
       end
+
       it 'returns only matches' do
         @tournament.matches.each do |m|
           expect(m).to be_a Match
