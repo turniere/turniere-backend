@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 def test_get_index_with_filter(filter_state)
-  get :index, params: {state: filter_state, tournament_id: @tournament.to_param}
+  get :index, params: { state: filter_state, tournament_id: @tournament.to_param }
   deserialize_response(response).each do |match|
     expect(match[:state]).to eq(filter_state)
   end
