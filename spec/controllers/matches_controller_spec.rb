@@ -2,6 +2,13 @@
 
 require 'rails_helper'
 
+def test_get_index_with_filter(filter_state)
+  get :index, params: { state: filter_state, tournament_id: @tournament.to_param }
+  deserialize_response(response).each do |match|
+    expect(match[:state]).to eq(filter_state)
+  end
+end
+
 RSpec.describe MatchesController, type: :controller do
   before do
     @match = create(:match, state: :not_started)
@@ -10,6 +17,32 @@ RSpec.describe MatchesController, type: :controller do
     @running_playoff_match = @tournament.stages.find_by(level: @amount_of_stages).matches.first
     @not_ready_playoff_match = create(:running_playoff_match, state: :not_ready)
     @match.match_scores = create_pair(:match_score)
+  end
+
+  describe 'GET #index' do
+    context 'on a running group stage' do
+      before do
+        @tournament = create(:group_stage_tournament, match_factory: :running_group_match)
+        @tournament.matches.each_with_index do |m, i|
+          m.state = :not_started if i.even?
+          m.save!
+        end
+      end
+
+      it 'filters running matches when told to do so' do
+        test_get_index_with_filter('running')
+      end
+
+      it 'filters not_started matches when told to do so' do
+        test_get_index_with_filter('not_started')
+      end
+
+      it 'doesn\'t break if the filter contains rubbish' do
+        get :index, params: { state: 'saftladen', tournament_id: @tournament.to_param }
+        body = deserialize_response response
+        expect(body.empty?).to be true
+      end
+    end
   end
 
   describe 'GET #show' do

@@ -4,6 +4,19 @@ class MatchesController < ApplicationController
   before_action :set_match, only: %i[show update]
   before_action :validate_params, only: %i[update]
   before_action -> { require_owner! @match.owner }, only: %i[update]
+  before_action :set_tournament, only: %i[index]
+
+  # GET/tournaments/1/matches
+  def index
+    matches = if match_params['state'].nil?
+                @tournament.matches
+              else
+                @tournament.matches.select do |m|
+                  m.state == match_params['state']
+                end
+              end
+    render json: matches, each_serializer: MatchSerializer
+  end
 
   # GET /matches/1
   def show
@@ -59,6 +72,10 @@ class MatchesController < ApplicationController
 
   def set_match
     @match = Match.find(params[:id])
+  end
+
+  def set_tournament
+    @tournament = Tournament.find(params[:tournament_id])
   end
 
   def match_params

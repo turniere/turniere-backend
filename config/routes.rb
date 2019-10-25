@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :teams, only: %i[show update]
   resources :tournaments do
     resources :statistics, only: %i[index]
+    resources :matches, only: %i[index]
   end
   resources :match_scores, only: %i[show update]
   resources :groups, only: %i[show]

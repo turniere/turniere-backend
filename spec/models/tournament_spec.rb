@@ -30,4 +30,30 @@ RSpec.describe Tournament, type: :model do
     it { should have_many :teams }
     it { should have_many :stages }
   end
+
+  describe '#matches' do
+    context 'group stage tournament' do
+      before do
+        @tournament = create(:group_stage_tournament)
+      end
+
+      it 'returns only matches' do
+        @tournament.matches.each do |m|
+          expect(m).to be_a Match
+        end
+      end
+    end
+
+    context 'stage tournament' do
+      before do
+        @tournament = create(:stage_tournament)
+      end
+
+      it 'returns only matches' do
+        @tournament.matches.each do |m|
+          expect(m).to be_a Match
+        end
+      end
+    end
+  end
 end
