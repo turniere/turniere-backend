@@ -8,7 +8,14 @@ class MatchesController < ApplicationController
 
   # GET/tournaments/1/matches
   def index
-    render json: @tournament.matches, each_serializer: MatchSerializer
+    matches = if match_params['state'].nil?
+                @tournament.matches
+              else
+                @tournament.matches.select do |m|
+                  m.state == match_params['state']
+                end
+              end
+    render json: matches, each_serializer: MatchSerializer
   end
 
   # GET /matches/1
