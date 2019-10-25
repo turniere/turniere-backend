@@ -25,7 +25,11 @@ class TournamentsController < ApplicationController
 
   # GET /tournaments/1
   def show
-    render json: @tournament, include: '**'
+    if show_params.fetch(:simple, 'false') == 'true'
+      render json: @tournament, serializer: SimpleTournamentSerializer
+    else
+      render json: @tournament, include: '**'
+    end
   end
 
   # POST /tournaments
@@ -114,6 +118,10 @@ class TournamentsController < ApplicationController
 
   def index_params
     params.permit(:type)
+  end
+
+  def show_params
+    params.permit(:simple)
   end
 
   def tournament_params

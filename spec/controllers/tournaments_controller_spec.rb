@@ -102,6 +102,15 @@ RSpec.describe TournamentsController, type: :controller do
       get :show, params: { id: @tournament.to_param }
       expect(deserialize_response(response)[:id].to_i).to eq(@tournament.id)
     end
+
+    context 'with simple=true parameter' do
+      it 'returns no relations' do
+        get :show, params: { id: @tournament.to_param, simple: 'true' }
+        body = deserialize_response response
+        expect(body[:stages]).to be_nil
+        expect(body[:teams]).to be_nil
+      end
+    end
   end
 
   describe 'POST #create' do
