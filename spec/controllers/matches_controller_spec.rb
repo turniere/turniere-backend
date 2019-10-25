@@ -4,8 +4,7 @@ require 'rails_helper'
 
 def test_get_index_with_filter(filter_state)
   get :index, params: {state: filter_state, tournament_id: @tournament.to_param}
-  body = deserialize_response response
-  body.each do |match|
+  deserialize_response(response).each do |match|
     expect(match[:state]).to eq(filter_state)
   end
 end
@@ -39,8 +38,7 @@ RSpec.describe MatchesController, type: :controller do
       end
 
       it 'doesn\'t break if the filter contains rubbish' do
-        filter_state = 'saftladen'
-        get :index, params: { state: filter_state, tournament_id: @tournament.to_param }
+        get :index, params: { state: 'saftladen', tournament_id: @tournament.to_param }
         body = deserialize_response response
         expect(body.empty?).to be true
       end
