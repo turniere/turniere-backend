@@ -15,7 +15,9 @@ class MatchesController < ApplicationController
                   m.state == match_params['state']
                 end
               end
-    render json: matches, each_serializer: MatchSerializer, include: '**'
+    render json: matches, each_serializer: ExtendedMatchSerializer, include: [
+      'match_scores.team', 'bets', 'stage', 'group'
+    ]
   end
 
   # GET /matches/1
