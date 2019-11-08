@@ -10,6 +10,18 @@ class MatchesController < ApplicationController
   def index
     matches = if match_params['state'].nil?
                 @tournament.matches
+              elsif match_params['state'] == 'upcoming'
+                upcoming_matches = @tournament.stages.find_by(level: -1)&.groups&.map { |g| g.matches.select { |m| m.state == 'not_started' }.min_by(&:position) }
+                if upcoming_matches.nil?
+                  next_level = 0
+                  @tournament.stages.sort_by(&:level).reverse_each do |stage|
+                    if stage.matches.reject { |m| m.state == 'running' }.nil?
+                      next_level = stage.level - 1
+                      break
+                    end
+                  end
+                  @tournament.stages.find_by(level: next_level).matches
+                end
               else
                 @tournament.matches.select do |m|
                   m.state == match_params['state']
