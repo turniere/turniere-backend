@@ -18,10 +18,10 @@ class GroupStageService
     end
 
     def deal_with_spacing_of_teams(matches, team_size)
-      if team_size == 4
-        matches[2].position, matches[4].position = matches[4].position, matches[2].position
-        matches
-      end
+      return unless team_size == 4
+
+      matches[2].position, matches[4].position = matches[4].position, matches[2].position
+      matches
     end
 
     def generate_all_matches_between(teams)
