@@ -17,6 +17,13 @@ class GroupStageService
                 group_scores: team_array.map { |team| GroupScore.new team: team }
     end
 
+    def deal_with_spacing_of_teams(matches, team_size)
+      if team_size == 4
+        matches[2].position, matches[4].position = matches[4].position, matches[2].position
+        matches
+      end
+    end
+
     def generate_all_matches_between(teams)
       matches = []
       teams.combination(2).to_a # = matchups
@@ -29,7 +36,7 @@ class GroupStageService
                           ]
         matches << match
       end
-      matches
+      deal_with_spacing_of_teams(matches, teams.size)
     end
 
     # Updates all group_scores of the given group
