@@ -44,3 +44,17 @@ kubernetes:
     - kubectl config set-context local --cluster=k8s --user=sa --namespace=turniere-backend
     - gem install kubernetes-deploy --version '=0.29.0'
     - REVISION=$CI_COMMIT_SHA kubernetes-deploy --template-dir kubernetes turniere-backend local
+
+deploy_watchtower:
+  tags:
+    - docker
+  stage: deploy
+  only:
+    - master
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - docker pull $CI_REGISTRY_IMAGE/production/commits:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE/production/commits:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE/production:deploy
+    - docker push $CI_REGISTRY_IMAGE/production:deploy
