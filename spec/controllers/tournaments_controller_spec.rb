@@ -219,62 +219,72 @@ RSpec.describe TournamentsController, type: :controller do
           context 'with groups of 4' do
             before do
               post :create, params: create_group_tournament_data_groups_of_4
-              body = deserialize_response response
-              @group_stage_tournament = Tournament.find(body[:id])
             end
 
             it 'returns HTTP status created' do
               expect(response).to have_http_status(:created)
             end
 
-            it 'generates a group stage with all teams given in parameters' do
-              included_teams = @group_stage_tournament.stages.find_by(level: -1).teams
-              expect(included_teams).to match_array(@teams16)
-            end
+            context 'looking at the tournament' do
+              before do
+                body = deserialize_response response
+                @group_stage_tournament = Tournament.find(body[:id])
+              end
 
-            it 'generates a group stage' do
-              group_stage = @group_stage_tournament.stages.find_by(level: -1)
-              expect(group_stage).to be_a(Stage)
-            end
+              it 'generates a group stage with all teams given in parameters' do
+                included_teams = @group_stage_tournament.stages.find_by(level: -1).teams
+                expect(included_teams).to match_array(@teams16)
+              end
 
-            it 'saves the amount of teams that advance into playoffs' do
-              expect(@group_stage_tournament.playoff_teams_amount)
-                .to eq(create_group_tournament_data_groups_of_4[:playoff_teams_amount])
-            end
+              it 'generates a group stage' do
+                group_stage = @group_stage_tournament.stages.find_by(level: -1)
+                expect(group_stage).to be_a(Stage)
+              end
 
-            it 'associates the given teams with the created tournament' do
-              expect(@group_stage_tournament.teams).to match_array(@teams16)
+              it 'saves the amount of teams that advance into playoffs' do
+                expect(@group_stage_tournament.playoff_teams_amount)
+                    .to eq(create_group_tournament_data_groups_of_4[:playoff_teams_amount])
+              end
+
+              it 'associates the given teams with the created tournament' do
+                expect(@group_stage_tournament.teams).to match_array(@teams16)
+              end
             end
           end
 
           context 'groups of 5' do
             before do
               post :create, params: create_group_tournament_data_groups_of_5
-              body = deserialize_response response
-              @group_stage_tournament = Tournament.find(body[:id])
             end
 
             it 'returns HTTP status created' do
               expect(response).to have_http_status(:created)
             end
 
-            it 'generates a group stage with all teams given in parameters' do
-              included_teams = @group_stage_tournament.stages.find_by(level: -1).teams
-              expect(included_teams).to match_array(@teams20)
-            end
+            context 'looking at the tournament' do
+              before do
+                body = deserialize_response response
+                @group_stage_tournament = Tournament.find(body[:id])
+              end
 
-            it 'generates a group stage' do
-              group_stage = @group_stage_tournament.stages.find_by(level: -1)
-              expect(group_stage).to be_a(Stage)
-            end
+              it 'generates a group stage with all teams given in parameters' do
+                included_teams = @group_stage_tournament.stages.find_by(level: -1).teams
+                expect(included_teams).to match_array(@teams20)
+              end
 
-            it 'saves the amount of teams that advance into playoffs' do
-              expect(@group_stage_tournament.playoff_teams_amount)
-                  .to eq(create_group_tournament_data_groups_of_5[:playoff_teams_amount])
-            end
+              it 'generates a group stage' do
+                group_stage = @group_stage_tournament.stages.find_by(level: -1)
+                expect(group_stage).to be_a(Stage)
+              end
 
-            it 'associates the given teams with the created tournament' do
-              expect(@group_stage_tournament.teams).to match_array(@teams20)
+              it 'saves the amount of teams that advance into playoffs' do
+                expect(@group_stage_tournament.playoff_teams_amount)
+                    .to eq(create_group_tournament_data_groups_of_5[:playoff_teams_amount])
+              end
+
+              it 'associates the given teams with the created tournament' do
+                expect(@group_stage_tournament.teams).to match_array(@teams20)
+              end
             end
           end
 
