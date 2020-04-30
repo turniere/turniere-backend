@@ -45,7 +45,7 @@ gem 'mailgun-ruby'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'coveralls', require: false
+  gem 'coveralls', '>= 0.8.23', require: false
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rspec-rails'
