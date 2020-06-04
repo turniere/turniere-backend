@@ -30,7 +30,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # Authentication
 gem 'devise'
-gem 'devise_token_auth'
+gem 'devise_token_auth', '>= 1.1.4'
 
 gem 'rack-cors'
 
