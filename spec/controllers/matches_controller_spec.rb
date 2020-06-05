@@ -49,7 +49,7 @@ RSpec.describe MatchesController, type: :controller do
     it 'should return success' do
       get :show, params: { id: @match.to_param }
       expect(response).to be_successful
-      expect(response.content_type).to eq('application/json')
+      expect(response.media_type).to eq('application/json')
     end
 
     it 'should return the correct state' do

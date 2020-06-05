@@ -248,7 +248,7 @@ RSpec.describe TournamentsController, type: :controller do
         it 'renders a JSON response with the new tournament' do
           post :create, params: create_playoff_tournament_data
           expect(response).to have_http_status(:created)
-          expect(response.content_type).to eq('application/json')
+          expect(response.media_type).to eq('application/json')
           expect(response.location).to eq(tournament_url(Tournament.last))
         end
       end
@@ -329,7 +329,7 @@ RSpec.describe TournamentsController, type: :controller do
         it 'renders a JSON response with the tournament' do
           put :update, params: { id: @tournament.to_param }.merge(valid_update)
           expect(response).to have_http_status(:ok)
-          expect(response.content_type).to eq('application/json')
+          expect(response.media_type).to eq('application/json')
         end
 
         context 'any variable relevant for group stage to playoff transition changed' do
