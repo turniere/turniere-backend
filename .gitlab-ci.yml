@@ -21,6 +21,14 @@ rails spec:
     - docker
   stage: test
   image: $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA
+  only:
+    changes:
+      - '*.rb'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+  except:
+    variables:
+      - $SKIP_TEST
   script:
     - cd /app
     - bundle exec rails db:migrate
