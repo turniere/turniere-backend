@@ -1,4 +1,4 @@
-FROM ruby:2.6.5-alpine
+FROM ruby:2.7.1-alpine
 RUN apk add --no-cache build-base tzdata sqlite sqlite-dev postgresql-dev && gem install tzinfo-data
 WORKDIR /app
 COPY Gemfile* /app/
