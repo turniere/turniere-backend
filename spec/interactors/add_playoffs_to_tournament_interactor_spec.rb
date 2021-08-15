@@ -44,7 +44,7 @@ RSpec.describe AddPlayoffsToTournament, type: :interactor do
       end
 
       it 'adds playoffs to the tournament' do
-        test = group_stage_tournament_context.tournament.stages[1..-1]
+        test = group_stage_tournament_context.tournament.stages[1..]
         expect(test).to match_array(@stages)
       end
     end

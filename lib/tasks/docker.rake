@@ -4,13 +4,13 @@ IMAGE_NAME = 'turniere/backend'
 
 namespace :docker do
   desc 'Build docker image'
-  task :build, [:tag] do |_, args|
+  task build: :environment, [:tag] do |_, args|
     args.with_defaults(tag: 'latest')
     sh "docker build -t #{IMAGE_NAME}:#{args.tag} ."
   end
 
   desc 'Tag docker image with Travis build number'
-  task :tag do
+  task tag: :environment do
     next if ENV['TRAVIS_PULL_REQUEST'] != 'false'
 
     tag = "build#{ENV['TRAVIS_BUILD_NUMBER']}"
@@ -18,7 +18,7 @@ namespace :docker do
   end
 
   desc 'Push docker image'
-  task :push do
+  task push: :environment do
     sh "docker push #{IMAGE_NAME}"
   end
 

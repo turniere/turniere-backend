@@ -6,7 +6,7 @@ class GroupStageService
       raise 'Cannot generate group stage without groups' if groups.length.zero?
 
       # raise an error if the average group size is not a whole number
-      raise 'Groups need to be equal size' unless (groups.flatten.length.to_f / groups.length.to_f % 1).zero?
+      raise 'Groups need to be equal size' unless (groups.flatten.length.to_f / groups.length % 1).zero?
 
       groups = groups.map(&method(:get_group_object_from)).each_with_index { |group, i| group.number = i + 1 }
       Stage.new level: -1, groups: groups, state: :in_progress

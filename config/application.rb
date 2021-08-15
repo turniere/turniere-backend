@@ -37,7 +37,7 @@ module TurniereBackend
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
-        resource '*', headers: :any, methods: :any, expose: ['access-token', 'client', 'expiry', 'uid']
+        resource '*', headers: :any, methods: :any, expose: %w[access-token client expiry uid]
       end
     end
 

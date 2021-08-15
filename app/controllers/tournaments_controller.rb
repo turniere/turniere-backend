@@ -11,9 +11,10 @@ class TournamentsController < ApplicationController
   # GET /tournaments
   def index
     type = index_params.fetch(:type, 'public')
-    if type == 'public'
+    case type
+    when 'public'
       tournaments = Tournament.where(public: true).order(:created_at)
-    elsif type == 'private'
+    when 'private'
       tournaments = Tournament.where(owner: current_user, public: false).order(:created_at)
     else
       # invalid type specified

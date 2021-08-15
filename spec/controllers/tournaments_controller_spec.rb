@@ -60,7 +60,7 @@ RSpec.describe TournamentsController, type: :controller do
         apply_authentication_headers_for @another_user
         get :index, params: params
         tournaments = deserialize_response response
-        expect(tournaments.filter { |t| t[:public] }.size).to eq(0)
+        expect(tournaments.count { |t| t[:public] }).to eq(0)
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe TournamentsController, type: :controller do
         apply_authentication_headers_for @another_user
         get :index, params: params
         tournaments = deserialize_response response
-        expect(tournaments.filter { |t| !t[:public] }.size).to eq(0)
+        expect(tournaments.count { |t| !t[:public] }).to eq(0)
       end
     end
 
