@@ -1,0 +1,49 @@
+require:
+  - rubocop-performance
+  - rubocop-rails
+
+# Stolen from https://gist.github.com/jhass/a5ae80d87f18e53e7b56
+AllCops:
+  Exclude:
+    - "bin/**/*"
+    - "db/schema.rb"
+
+# Enable Rails
+Rails:
+  Enabled: true
+
+# Commonly used screens these days easily fit more than 80 characters.
+Metrics/LineLength:
+  Max: 120
+
+# Too short methods lead to extraction of single-use methods, which can make
+# the code easier to read (by naming things), but can also clutter the class
+Metrics/MethodLength:
+  Exclude:
+    - "db/migrate/*"
+  Max: 50
+
+# The guiding principle of classes is SRP, SRP can't be accurately measured by LoC
+Metrics/ClassLength:
+  Max: 1500
+Metrics/ModuleLength:
+  Max: 1500
+
+# Raise AbcSize from 15 to 20
+Metrics/AbcSize:
+  Exclude:
+    - "db/migrate/*"
+  Max: 50
+
+Metrics/BlockLength:
+  ExcludedMethods:
+    - "namespace"
+    - "create_table"
+  Exclude:
+    - "config/**/*.rb"
+    - "spec/**/*.rb"
+
+# Disable documentation checks for now
+# should be done with yard instead
+Style/Documentation:
+  Enabled: false
