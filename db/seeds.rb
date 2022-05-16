@@ -7,7 +7,7 @@ tournament = user.tournaments.create! name: Faker::Creature::Dog.name
 
 @teams = []
 16.times do
-  team = tournament.teams.create! name: Faker::HarryPotter.character
+  team = tournament.teams.create! name: Faker::Movies::HarryPotter.character
   @teams << team
 end
 4.times do |i|
@@ -19,7 +19,7 @@ end
     match.match_scores.create! team: @teams.sample, points: rand(10)
     match.match_scores.create! team: @teams.sample, points: rand(10)
     match.position = j
-    match.state = rand(7)
+    match.state = rand(5)
     match.save!
   end
   stage.save!

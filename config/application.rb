@@ -23,6 +23,7 @@ module TurniereBackend
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
+    config.autoloader = :zeitwerk
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -46,5 +47,8 @@ module TurniereBackend
     config.action_mailer.default_options = {
       from: 'noreply@turnie.re'
     }
+
+    # Active Record
+    config.active_record.legacy_connection_handling = false
   end
 end
