@@ -6,7 +6,6 @@ docker/**
 .hound.yml
 .rspec
 .rubocop.yml
-.travis-yml
 docker-compose.yml
 README.md
-sonar-project.properties
+.gitlab-ci.yml

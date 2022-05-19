@@ -9,6 +9,7 @@ Ruby on Rails application serving as backend for turnie.re
 ## Installation
 ```bash
 # install dependencies
+$ bundle config set with "development test"
 $ bundle install
 # run migrations
 $ rails db:migrate
