@@ -20,7 +20,7 @@ class GroupStageService
     def deal_with_spacing_of_teams(matches, team_size)
       return unless team_size == 4
 
-      matches[2].position, matches[4].position = matches[4].position, matches[2].position
+      matches[5].position, matches[1].position = matches[1].position, matches[5].position
       matches
     end
 
