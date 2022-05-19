@@ -1,5 +1,5 @@
 ARG base_commit
-FROM ruby:2.7.5-alpine
+FROM ruby:3.1.2-alpine
 RUN apk add --no-cache build-base tzdata sqlite sqlite-dev postgresql-dev git && gem install tzinfo-data
 WORKDIR /app
 COPY Gemfile* /app/
