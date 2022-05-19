@@ -15,7 +15,7 @@ class MatchesController < ApplicationController
                 if upcoming_matches.nil?
                   next_level = 0
                   @tournament.stages.sort_by(&:level).reverse_each do |stage|
-                    if stage.matches.reject { |m| m.state == 'running' }.nil?
+                    if stage.matches.nil?
                       next_level = stage.level - 1
                       break
                     end
