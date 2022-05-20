@@ -30,7 +30,7 @@ gem 'bootsnap', require: false
 
 # Authentication
 gem 'devise'
-gem 'devise_token_auth', :git => 'https://github.com/lynndylanhurley/devise_token_auth.git'
+gem 'devise_token_auth', git: 'https://github.com/Thor77/devise_token_auth', branch: 'fix-api-only-mode'
 
 gem 'rack-cors'
 
