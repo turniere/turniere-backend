@@ -18,9 +18,34 @@ class GroupStageService
     end
 
     def deal_with_spacing_of_teams(matches, team_size)
+      # matches are generated like so (example for a 4 team group stage):
+      # 0: a - b
+      # 1: a - c
+      # 2: a - d
+      # 3: b - c
+      # 4: b - d
+      # 5: c - d
+      #
+      # If you were to play a tournament strictly in that order, team a would play three games in a row.
+      #
+      # To deal with this, we switch game 1 and 5 which results in the following order:
+      #
+      # 0: a - b
+      # 1: c - d
+      # 2: a - d
+      # 3: b - c
+      # 4: b - d
+      # 5: a - c
+      #
+      # This should also be optimal, as the first and second game don't have any team in common, meaning that everyone
+      # gets to play as soon as possible.
+      # Also, there is only two teams that need to play two games back to back (1-2 d, 3-4 b).
+      #
+      # This problem is only fixed for a group size of 4, because we did not come up with a generalized version of this
+      # switcharoo magic and we needed it for groups of 4.
       return unless team_size == 4
 
-      matches[2].position, matches[4].position = matches[4].position, matches[2].position
+      matches[5].position, matches[1].position = matches[1].position, matches[5].position
       matches
     end
 
