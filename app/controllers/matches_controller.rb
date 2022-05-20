@@ -19,10 +19,8 @@ class MatchesController < ApplicationController
                 if upcoming_matches.nil?
                   next_level = 0
                   @tournament.stages.sort_by(&:level).reverse_each do |stage|
-                    # matches in the playoffs are only generated after one of the parent matches are done, so the stages
-                    # which are currently not running are empty, the first empty stage that is found is directly after
-                    # the currently running one, so we subtract 1 and call it a day
-                    if stage.matches.nil?
+                    # the following if equates to true if it finds a stage where all matches are of state `in_progress`
+                    if stage.matches.reject { |m| m.state == 'in_progress' }.nil?
                       next_level = stage.level - 1
                       break
                     end
