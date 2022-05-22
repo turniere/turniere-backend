@@ -10,6 +10,23 @@ class MatchesController < ApplicationController
   def index
     matches = if match_params['state'].nil?
                 @tournament.matches
+
+              # support for upcoming matches for beamer view
+              elsif match_params['state'] == 'upcoming'
+                # for every group within the tournament find the match with the lowest position that is of state 'not_started'
+                upcoming_matches = @tournament.stages.find_by(level: -1)&.groups&.map { |g| g.matches.select { |m| m.state == 'not_started' }.min_by(&:position) }
+                # if there are none, the group stage is over, so we have to look into the playoff stages
+                if upcoming_matches.nil?
+                  next_level = 0
+                  @tournament.stages.sort_by(&:level).reverse_each do |stage|
+                    # the following if equates to true if it finds a stage where all matches are of state `in_progress`
+                    if stage.matches.reject { |m| m.state == 'in_progress' }.nil?
+                      next_level = stage.level - 1
+                      break
+                    end
+                  end
+                  @tournament.stages.find_by(level: next_level).matches
+                end
               else
                 @tournament.matches.select do |m|
                   m.state == match_params['state']
