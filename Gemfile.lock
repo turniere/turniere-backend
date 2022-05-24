@@ -1,6 +1,7 @@
 GIT
-  remote: https://github.com/lynndylanhurley/devise_token_auth.git
-  revision: 798255ee7e3fee5cfa2fdc519fd90e281bd9b6f5
+  remote: https://github.com/Thor77/devise_token_auth
+  revision: 30ba21add5c87b2964b909c6fc5cd18cfeae2191
+  branch: fix-api-only-mode
   specs:
     devise_token_auth (1.2.0)
       bcrypt (~> 3.0)
