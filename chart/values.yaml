@@ -1,0 +1,20 @@
+replicaCount: 1
+
+image:
+  repository: registry.gitlab.com/turniere/turniere-backend/production/commits
+  pullPolicy: IfNotPresent
+  tag: ""
+
+podAnnotations: {}
+
+securityContext: {}
+#  runAsNonRoot: true
+#  runAsUser: 1000
+
+service:
+  port: 8080
+
+ingress:
+  host: ""
+
+resources: {}
