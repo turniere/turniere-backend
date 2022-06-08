@@ -34,13 +34,9 @@ spec:
                 secretKeyRef:
                   name: rails-master-key
                   key: master.key
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
