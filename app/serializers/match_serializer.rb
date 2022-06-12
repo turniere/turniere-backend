@@ -7,10 +7,4 @@ class MatchSerializer < ApplicationSerializer
     ActiveModelSerializers::SerializableResource.new(object.winner).as_json
   end
 
-  # def bets
-  #   ActiveModelSerializers::SerializableResource.new(object.bets, serializer: BetsSerializer).as_json
-  # end
-
   has_many :match_scores
-  # has_many :bets
-end
