@@ -3,74 +3,23 @@ stages:
   - test
   - deploy
 
-kaniko:
-  stage: build
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
-    - |
-      for env in production development test; do
-        /kaniko/executor --context "${CI_PROJECT_DIR}" \
-        --dockerfile "${CI_PROJECT_DIR}/docker/${env}/Dockerfile" \
-        --destination "${CI_REGISTRY_IMAGE}/${env}:latest" \
-        --destination "${CI_REGISTRY_IMAGE}/${env}/commits:${CI_COMMIT_SHA}" \
-        --destination "${CI_REGISTRY_IMAGE}/${env}/refs:${CI_COMMIT_REF_SLUG}" \
-        --build-arg base_commit="$CI_COMMIT_SHA"
-      done
+include:
+  - project: 'turniere/turniere-infra'
+    file: '/ci/pipeline.yaml'
 
 rails spec:
   stage: test
   image: $CI_REGISTRY_IMAGE/test/commits:$CI_COMMIT_SHA
-  only:
-    changes:
-      - '**/*.rb'
-      - 'Gemfile'
-      - 'Gemfile.lock'
-  except:
-    variables:
-      - $SKIP_TEST
+  rules:
+    - if: $SKIP_TEST
+      when: never
+    - if: $CI_PIPELINE_SOURCE != "push"
+      when: never 
+    - changes:
+        - '**/*.rb'
+        - 'Gemfile'
+        - 'Gemfile.lock'
   script:
     - cd /app
     - bundle exec rails db:migrate
     - bundle exec rails spec
-
-kubernetes:
-  tags:
-    - turniere-deploy
-  stage: deploy
-  only:
-    refs:
-      - master
-    variables:
-      - $FORCE_DEPLOY
-  image: ruby
-  variables:
-    KUBERNETES_SERVICE_ACCOUNT_OVERWRITE: gitlab-deploy
-  script:
-    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-    - chmod +x kubectl
-    - mv kubectl /usr/bin/kubectl 
-    - kubectl config set-cluster k8s --server="https://kubernetes.default.svc" --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-    - kubectl config set-credentials sa --token="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
-    - kubectl config set-context local --cluster=k8s --user=sa --namespace=turniere-backend
-    - gem install krane
-    - krane render -f kubernetes --current-sha "$CI_COMMIT_SHA" | krane deploy turniere-backend local -f kubernetes/secrets.ejson -
-
-deploy_watchtower:
-  stage: deploy
-  only:
-    refs:
-      - master
-    variables:
-      - $FORCE_DEPLOY
-  image: docker
-  services:
-    - docker:dind
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker pull $CI_REGISTRY_IMAGE/production/commits:$CI_COMMIT_SHA
-    - docker tag $CI_REGISTRY_IMAGE/production/commits:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE/production:deploy
-    - docker push $CI_REGISTRY_IMAGE/production:deploy
