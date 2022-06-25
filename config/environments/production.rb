@@ -79,7 +79,7 @@ Rails.application.configure do
 
   # Mail
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = { host: 'api01.turnie.re' }
+  config.action_mailer.default_url_options = { host: 'backend.turnie.re' }
   config.action_mailer.delivery_method = :mailgun
   config.action_mailer.mailgun_settings = {
     api_key: Rails.application.credentials.dig(:mailgun, :api_key),
