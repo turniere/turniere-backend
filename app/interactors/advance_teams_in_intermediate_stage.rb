@@ -7,7 +7,15 @@ class AdvanceTeamsInIntermediateStage
     intermediate_stage = context.intermediate_stage
     return if intermediate_stage.nil?
 
-    intermediate_stage.matches.select { |m| m.state == 'single_team' }
+    # shuffle positions of generated matches to spread the instantly advancing teams across the tournament tree
+    matches = intermediate_stage.matches
+    matches.shuffle.each_with_index do |m, i|
+      m.position = i
+      m.save!
+    end
+
+    # populate stage below with the "winners" from single team matches
+    matches.select { |m| m.state == 'single_team' }
                       .each do |match|
                         context.fail! unless PopulateMatchBelowAndSave.call(match: match).success?
                       end
