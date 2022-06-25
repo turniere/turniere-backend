@@ -8,3 +8,4 @@ class MatchSerializer < ApplicationSerializer
   end
 
   has_many :match_scores
+end
