@@ -26,6 +26,8 @@ class MatchesController < ApplicationController
                     end
                   end
                   @tournament.stages.find_by(level: next_level).matches
+                else
+                  upcoming_matches
                 end
               else
                 @tournament.matches.select do |m|
