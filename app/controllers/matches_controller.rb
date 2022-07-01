@@ -52,7 +52,10 @@ class MatchesController < ApplicationController
       if @match.update(match_params)
         handle_match_end if new_state == 'finished'
         if @match.group_match? and new_state == "in_progress"
-          UpdateGroupsGroupScoresAndSave.call(group: @match.group)
+          group = @match.group
+          if UpdateGroupsGroupScoresAndSave.call(group: group).success?
+            Rails.logger.warn "Updating groups group score failed for #{group}"
+          end
         end
 
         render json: @match
@@ -66,7 +69,13 @@ class MatchesController < ApplicationController
   private
 
   def handle_match_end
-    UpdateGroupsGroupScoresAndSave.call(group: @match.group) if @match.group_match?
+    if @match.group_match?
+      group = @match.group
+      unless UpdateGroupsGroupScoresAndSave.call(group: group).success?
+        Rails.logger.warn "Updating groups group score failed for #{group}"
+      end
+    end
+
     return if @match.group_match?
 
     if @match.winner.nil?
