@@ -14,7 +14,7 @@ rails spec:
     - if: $SKIP_TEST
       when: never
     - if: $CI_PIPELINE_SOURCE != "push"
-      when: never 
+      when: never
     - changes:
         - '**/*.rb'
         - 'Gemfile'
@@ -23,3 +23,7 @@ rails spec:
     - cd /app
     - bundle exec rails db:migrate
     - bundle exec rails spec
+  artifacts:
+    paths:
+      - specs_with_runtime.txt
+    expire_in: 30 days
