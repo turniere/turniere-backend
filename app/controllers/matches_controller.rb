@@ -26,6 +26,8 @@ class MatchesController < ApplicationController
                     end
                   end
                   @tournament.stages.find_by(level: next_level).matches
+                else
+                  upcoming_matches
                 end
               else
                 @tournament.matches.select do |m|
@@ -49,6 +51,12 @@ class MatchesController < ApplicationController
     Match.transaction do
       if @match.update(match_params)
         handle_match_end if new_state == 'finished'
+        if @match.group_match? and new_state == "in_progress"
+          group = @match.group
+          unless UpdateGroupsGroupScoresAndSave.call(group: group).success?
+            logger.warn "Updating groups group score failed for #{group}"
+          end
+        end
 
         render json: @match
       else
@@ -61,6 +69,13 @@ class MatchesController < ApplicationController
   private
 
   def handle_match_end
+    if @match.group_match?
+      group = @match.group
+      unless UpdateGroupsGroupScoresAndSave.call(group: group).success?
+        logger.warn "Updating groups group score failed for #{group}"
+      end
+    end
+
     return if @match.group_match?
 
     if @match.winner.nil?
