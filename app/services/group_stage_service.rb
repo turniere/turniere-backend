@@ -104,8 +104,16 @@ class GroupStageService
     def get_advancing_teams(group_stage)
       advancing_teams = []
       group_winners = group_stage.groups.map(&method(:teams_sorted_by_group_scores))
-      (group_stage.tournament.instant_finalists_amount + group_stage.tournament.intermediate_round_participants_amount)
-        .times do |i|
+      advancing_teams_amount = group_stage.tournament.instant_finalists_amount +
+                               group_stage.tournament.intermediate_round_participants_amount
+      advancing_teams_amount.times do |i|
+        # group_winners is a 2D array
+        # [
+        #   [ group_a_first, group_a_second, ... ],
+        #   [ group_b_first, group_b_second, ... ],
+        #     ...
+        # ]
+        # we want to take the first team of the first group, then the first team of the second group, ...
         advancing_teams << group_winners[i % group_stage.groups.size].shift
       end
       advancing_teams
