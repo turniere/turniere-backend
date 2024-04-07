@@ -111,12 +111,9 @@ class GroupStageService
       advancing_teams
     end
 
-    # private
+    private
 
     def recalculate_position_of_group_scores!(group_scores)
-      group_scores.each do |group_score|
-        group_score.position = 0
-      end
       group_scores = group_scores.sort
 
       rank = 1
