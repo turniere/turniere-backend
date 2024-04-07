@@ -119,7 +119,6 @@ class GroupStageService
       end
       group_scores = group_scores.sort
 
-      ranks = []
       rank = 1
       previous = nil
       group_scores.each_with_index do |group_score, i|
@@ -130,21 +129,16 @@ class GroupStageService
                      end
         case comparison
         when 1
-          ranks.append i
+          group_score.position = i
           rank = i
         when 0
-          ranks.append rank
+          group_score.position = rank
         else
           raise # should not happen, list is sorted
         end
         previous = group_score
       end
 
-      # assigning position is split into a second loop to not mess up the ranks by adding the position
-      # (which is used for sorting) too early
-      group_scores.each_with_index do |group_score, i|
-        group_score.position = ranks[i] + 1
-      end
       group_scores
     end
   end
