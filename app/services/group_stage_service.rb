@@ -103,18 +103,32 @@ class GroupStageService
     # @return [Array] the teams advancing from that group stage
     def get_advancing_teams(group_stage)
       advancing_teams = []
-      group_winners = group_stage.groups.map(&method(:teams_sorted_by_group_scores))
+      teams_per_group_ranked = group_stage.groups.map(&method(:teams_sorted_by_group_scores))
+      # teams_per_group_ranked is a 2D array
+      # [
+      #   [ group_a_first, group_a_second, ... ],
+      #   [ group_b_first, group_b_second, ... ],
+      #     ...
+      # ]
       advancing_teams_amount = group_stage.tournament.instant_finalists_amount +
                                group_stage.tournament.intermediate_round_participants_amount
-      advancing_teams_amount.times do |i|
-        # group_winners is a 2D array
-        # [
-        #   [ group_a_first, group_a_second, ... ],
-        #   [ group_b_first, group_b_second, ... ],
-        #     ...
-        # ]
-        # we want to take the first team of the first group, then the first team of the second group, ...
-        advancing_teams << group_winners[i % group_stage.groups.size].shift
+      tournament_teams_amount = group_stage.tournament.teams.size
+
+      # special case for po2 teams in tournament and half of them advancing:
+      # we want to match first of first group with second of second group and so on
+      if Utils.po2?(tournament_teams_amount) and advancing_teams_amount * 2 == tournament_teams_amount
+        teams_per_group_ranked.each_with_index do |_group_teams, i|
+          first = teams_per_group_ranked[i % teams_per_group_ranked.size][0]
+          second = teams_per_group_ranked[(i + 1) % teams_per_group_ranked.size][1]
+          advancing_teams << first
+          advancing_teams << second
+        end
+      # default case
+      else
+        advancing_teams_amount.times do |i|
+          # we want to take the first team of the first group, then the first team of the second group, ...
+          advancing_teams << teams_per_group_ranked[i % group_stage.groups.size].shift
+        end
       end
       advancing_teams
     end
