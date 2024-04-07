@@ -85,7 +85,7 @@ class GroupStageService
         end
         changed_group_scores << group_score
       end
-      changed_group_scores
+      recalculate_position_of_group_scores!(changed_group_scores)
     end
 
     # Returns a list of the teams in the group sorted by their group_points, difference_in_points, scored_points
@@ -109,6 +109,43 @@ class GroupStageService
         advancing_teams << group_winners[i % group_stage.groups.size].shift
       end
       advancing_teams
+    end
+
+    # private
+
+    def recalculate_position_of_group_scores!(group_scores)
+      group_scores.each do |group_score|
+        group_score.position = 0
+      end
+      group_scores = group_scores.sort
+
+      ranks = []
+      rank = 1
+      previous = nil
+      group_scores.each_with_index do |group_score, i|
+        comparison = if i.zero?
+                       1
+                     else
+                       group_score <=> previous
+                     end
+        case comparison
+        when 1
+          ranks.append i
+          rank = i
+        when 0
+          ranks.append rank
+        else
+          raise # should not happen, list is sorted
+        end
+        previous = group_score
+      end
+
+      # assigning position is split into a second loop to not mess up the ranks by adding the position
+      # (which is used for sorting) too early
+      group_scores.each_with_index do |group_score, i|
+        group_score.position = ranks[i] + 1
+      end
+      group_scores
     end
   end
 end

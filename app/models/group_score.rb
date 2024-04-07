@@ -9,8 +9,7 @@ class GroupScore < ApplicationRecord
   end
 
   def <=>(other)
-    point_comparison = [-group_points, -difference_in_points, -scored_points] <=> [-other.group_points, -other.difference_in_points, -other.scored_points]
-    p point_comparison, team.name, other.team.name
+    point_comparison = [-position, -group_points, -difference_in_points, -scored_points] <=> [-other.position, -other.group_points, -other.difference_in_points, -other.scored_points]
     if point_comparison.zero?
       comparison_match = group.matches.find do |match|
         match.match_scores.any? { |match_score| match_score.team == team }
