@@ -119,15 +119,12 @@ class GroupStageService
       rank = 1
       previous = nil
       group_scores.each_with_index do |group_score, i|
-        comparison = if i.zero?
-                       1
-                     else
-                       group_score <=> previous
-                     end
+        comparison = i.zero? ? 1 : group_score <=> previous
+
         case comparison
         when 1
-          group_score.position = i
-          rank = i
+          rank = i + 1
+          group_score.position = rank
         when 0
           group_score.position = rank
         else
