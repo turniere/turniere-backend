@@ -85,4 +85,7 @@ Rails.application.configure do
     api_key: Rails.application.credentials.dig(:mailgun, :api_key),
     domain: Rails.application.credentials.dig(:mailgun, :domain)
   }
+
+  # Logging to STDOUT (running in docker by default)
+  config.logger = Logger.new(STDOUT)
 end

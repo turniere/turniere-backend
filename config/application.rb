@@ -50,8 +50,5 @@ module TurniereBackend
 
     # Active Record
     config.active_record.legacy_connection_handling = false
-
-    # Logging
-    config.logger = Logger.new(STDOUT)
   end
 end
