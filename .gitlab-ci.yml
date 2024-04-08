@@ -22,7 +22,7 @@ rails spec:
   script:
     - cd /app
     - bundle exec rails db:migrate
-    - bundle exec rails spec
+    - bundle exec rspec
   artifacts:
     paths:
       - specs_with_runtime.txt

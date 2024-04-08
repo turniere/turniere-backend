@@ -21,6 +21,12 @@ Development (without mail confirmation and separate database):
 $ RAILS_ENV=development rails server
 ```
 
+## Testing
+Running tests works as follows:
+```bash
+bundle exec rspec
+```
+
 ## Docker
 [Registry](https://gitlab.com/turniere/turniere-backend/container_registry)
 
