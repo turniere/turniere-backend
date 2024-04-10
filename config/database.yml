@@ -21,6 +21,6 @@ test:
   database: db/test.sqlite3
 
 production:
-  url: <%= ENV.fetch("POSTGRES_URL") %>
-  username: <%= ENV.fetch("POSTGRES_USERNAME") %>
-  password: <%= ENV.fetch("POSTGRES_PASSWORD") %>
+  url: <%= ENV.fetch("POSTGRES_URL", nil) %>
+  username: <%= ENV.fetch("POSTGRES_USERNAME", nil) %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", nil) %>
