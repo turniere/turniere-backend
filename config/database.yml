@@ -21,6 +21,6 @@ test:
   database: db/test.sqlite3
 
 production:
-  url: <%= Rails.application.credentials.dig(:postgres, :url) %>
-  username: <%= Rails.application.credentials.dig(:postgres, :username) %>
-  password: <%= Rails.application.credentials.dig(:postgres, :password) %>
+  url: <%= ENV.fetch("POSTGRES_URL") %>
+  username: <%= ENV.fetch("POSTGRES_USERNAME") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD") %>

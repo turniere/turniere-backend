@@ -79,11 +79,11 @@ Rails.application.configure do
 
   # Mail
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = { host: 'backend.turnie.re' }
+  config.action_mailer.default_url_options = { host: 'api.turnie.re' }
   config.action_mailer.delivery_method = :mailgun
   config.action_mailer.mailgun_settings = {
-    api_key: Rails.application.credentials.dig(:mailgun, :api_key),
-    domain: Rails.application.credentials.dig(:mailgun, :domain)
+    api_key: ENV.fetch('MAILGUN_API_KEY'),
+    domain: ENV.fetch('MAILGUN_DOMAIN')
   }
 
   # Logging to STDOUT (running in docker by default)
