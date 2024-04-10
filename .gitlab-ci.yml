@@ -1,27 +1,11 @@
 stages:
   - build
   - test
+  - deploy
 
-build_image:
-  stage: build
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
-    - |
-      [ -z "$DOCKER_IMAGE_ENVS" ] && DOCKER_IMAGE_ENVS="production development test"
-      for env in $DOCKER_IMAGE_ENVS; do
-        /kaniko/executor --context "${CI_PROJECT_DIR}" \
-        --dockerfile "${CI_PROJECT_DIR}/docker/${env}/Dockerfile" \
-        --destination "${CI_REGISTRY_IMAGE}/${env}:latest" \
-        --destination "${CI_REGISTRY_IMAGE}/${env}/commits:${CI_COMMIT_SHA}" \
-        --destination "${CI_REGISTRY_IMAGE}/${env}/refs:${CI_COMMIT_REF_SLUG}" \
-        --build-arg base_commit="$CI_COMMIT_SHA" \
-        --cache=true \
-        --cache-copy-layers=true
-      done
+include:
+  - project: 'turniere/turniere-infra'
+    file: '/ci/pipeline.yaml'
 
 rails spec:
   stage: test
