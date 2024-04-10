@@ -15,6 +15,7 @@ rails spec:
       when: never
     - if: $CI_PIPELINE_SOURCE != "push"
       when: never
+    - when: always
   script:
     - cd /app
     - bundle exec rails db:migrate
