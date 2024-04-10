@@ -15,10 +15,6 @@ rails spec:
       when: never
     - if: $CI_PIPELINE_SOURCE != "push"
       when: never
-    - changes:
-        - '**/*.rb'
-        - 'Gemfile'
-        - 'Gemfile.lock'
   script:
     - cd /app
     - bundle exec rails db:migrate
