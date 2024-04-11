@@ -1,7 +1,7 @@
 ARG base_commit
 FROM ruby:3.1.2-slim
 # RUN apk add --no-cache build-base tzdata sqlite sqlite-dev postgresql-dev git && gem install tzinfo-data
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs && apt-get clean && gem install tzinfo-data
+RUN apt-get update -qq && apt-get install -y git build-essential libpq-dev nodejs && apt-get clean && gem install tzinfo-data
 WORKDIR /app
 COPY Gemfile* /app/
 RUN gem install bundler:2.3.13 && bundle config set deployment 'true' && bundle install
