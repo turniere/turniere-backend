@@ -53,3 +53,22 @@ While developing, if you want to use the development docker container, it should
 ```bash
 $ rails diagram:all_with_engines
 ```
+
+
+## Ideen
+
+- backend könnte "advancing" an ein team mit dranschreiben; das könnte das frontend anzeigen
+- alle funktionen der beamer ansichten müssen per query param gehen; beamer dann headless möglich (raspberry ohne maus/tastatur)
+- feature im frontend für "team merken" damit man automatisch zur eigenen gruppe/aktuellstes game scrollt
+- timer auf dem beamer anzeigen für aktuelle runde
+- filter für "aktuelle runde" für den beamer
+- beamer modus (vollbild ohne cursor)
+- qr codes drucken für ergebnisausgabe und auf allen beamern anzeigen
+- admin frontend automatisch aktualisieren
+- admin frontend anzeigen wie "alt" die daten sind, also wann wurde die seite zuletzt aktualisiert
+- näcshte spiele sollten anzeigen wer da spielt (team a / team b) wenns direkt drunter ist und ansonsten "gewinner achtelfinale 3"
+- erste playoff spiele sollten "1. gruppe 15 vs 2. gruppe 16" anzeigen
+- admin frontend muss tische auch anzeigen
+- WICHTIG UND EZ: gruppenphase in der gleichen gruppe sollten erst finale gegeneinander spielen (dazu nicht aus der nächsten gruppe sondern einmal advancing teams von vorne und einmal von hinten, oder offset von hälfte der weiterkommenden teams)
+- beim eintragen einer runde direkt den nächsten tisch anzeigen
+- spiel um platz 3
