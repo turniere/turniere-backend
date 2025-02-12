@@ -102,40 +102,65 @@ class GroupStageService
     # @param group_stage GroupStage the group stage to get all advancing teams from
     # @return [Array] the teams advancing from that group stage
     def get_advancing_teams(group_stage)
-      advancing_teams = []
       teams_per_group_ranked = group_stage.groups.map(&method(:teams_sorted_by_group_scores))
-      # teams_per_group_ranked is a 2D array
-      # [
-      #   [ group_a_first, group_a_second, ... ],
-      #   [ group_b_first, group_b_second, ... ],
-      #     ...
-      # ]
-      advancing_teams_amount = group_stage.tournament.instant_finalists_amount +
-                               group_stage.tournament.intermediate_round_participants_amount
+      advancing_teams_amount = calculate_advancing_teams_amount(group_stage)
       tournament_teams_amount = group_stage.tournament.teams.size
 
-      # special case for po2 teams in tournament and half of them advancing:
-      # we want to match firsts with seconds, but shift so that we space the teams out correctly so they only
-      # meet again in finale. This is done by taking the first team of the first group,
-      # then the second team of (groups_amount / 2) group and so on.
-      if Utils.po2?(tournament_teams_amount) and advancing_teams_amount * 2 == tournament_teams_amount
-        teams_per_group_ranked.each_with_index do |_group_teams, i|
-          first = teams_per_group_ranked[i % teams_per_group_ranked.size][0]
-          second = teams_per_group_ranked[(i + teams_per_group_ranked.size / 2) % teams_per_group_ranked.size][1]
-          advancing_teams << first
-          advancing_teams << second
-        end
-      # default case
+      if special_case_for_po2?(tournament_teams_amount, advancing_teams_amount)
+        handle_special_case(teams_per_group_ranked)
       else
-        advancing_teams_amount.times do |i|
-          # we want to take the first team of the first group, then the first team of the second group, ...
-          advancing_teams << teams_per_group_ranked[i % group_stage.groups.size].shift
-        end
+        handle_default_case(teams_per_group_ranked, advancing_teams_amount, group_stage.groups.size)
+      end
+    end
+
+    private
+
+    # Calculates the total number of teams advancing to the playoff stage
+    #
+    # @param group_stage GroupStage the group stage to get the advancing teams amount from
+    # @return [Integer] the number of teams advancing from that group stage
+    def calculate_advancing_teams_amount(group_stage)
+      group_stage.tournament.instant_finalists_amount +
+        group_stage.tournament.intermediate_round_participants_amount
+    end
+
+    # Checks if the special case for po2 teams in the tournament applies
+    #
+    # @param tournament_teams_amount [Integer] the total number of teams in the tournament
+    # @param advancing_teams_amount [Integer] the number of teams advancing to the playoff stage
+    # @return [Boolean] true if the special case applies, false otherwise
+    def special_case_for_po2?(tournament_teams_amount, advancing_teams_amount)
+      Utils.po2?(tournament_teams_amount) && advancing_teams_amount * 2 == tournament_teams_amount
+    end
+
+    # Handles the special case for po2 teams in the tournament
+    #
+    # @param teams_per_group_ranked [Array] a 2D array of teams ranked by group scores
+    # @return [Array] the teams advancing from the group stage
+    def handle_special_case(teams_per_group_ranked)
+      advancing_teams = []
+      teams_per_group_ranked.each_with_index do |_group_teams, i|
+        first = teams_per_group_ranked[i % teams_per_group_ranked.size][0]
+        second = teams_per_group_ranked[(i + teams_per_group_ranked.size / 2) % teams_per_group_ranked.size][1]
+        advancing_teams << first
+        advancing_teams << second
       end
       advancing_teams
     end
 
-    private
+    # Handles the default case for advancing teams
+    #
+    # @param teams_per_group_ranked [Array] a 2D array of teams ranked by group scores
+    # @param advancing_teams_amount [Integer] the number of teams advancing to the playoff stage
+    # @param groups_size [Integer] the number of groups in the group stage
+    # @return [Array] the teams advancing from the group stage
+    def handle_default_case(teams_per_group_ranked, advancing_teams_amount, groups_size)
+      advancing_teams = []
+      advancing_teams_amount.times do |i|
+        advancing_teams << teams_per_group_ranked[i % groups_size].shift
+      end
+      advancing_teams
+    end
 
     def recalculate_position_of_group_scores!(group_scores)
       group_scores = group_scores.sort
