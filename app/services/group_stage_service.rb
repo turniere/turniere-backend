@@ -115,11 +115,13 @@ class GroupStageService
       tournament_teams_amount = group_stage.tournament.teams.size
 
       # special case for po2 teams in tournament and half of them advancing:
-      # we want to match first of first group with second of second group and so on
+      # we want to match firsts with seconds, but shift so that we space the teams out correctly so they only
+      # meet again in finale. This is done by taking the first team of the first group,
+      # then the second team of (groups_amount / 2) group and so on.
       if Utils.po2?(tournament_teams_amount) and advancing_teams_amount * 2 == tournament_teams_amount
         teams_per_group_ranked.each_with_index do |_group_teams, i|
           first = teams_per_group_ranked[i % teams_per_group_ranked.size][0]
-          second = teams_per_group_ranked[(i + 1) % teams_per_group_ranked.size][1]
+          second = teams_per_group_ranked[(i + teams_per_group_ranked.size / 2) % teams_per_group_ranked.size][1]
           advancing_teams << first
           advancing_teams << second
         end
