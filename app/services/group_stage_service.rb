@@ -139,12 +139,16 @@ class GroupStageService
     # @return [Array] the teams advancing from the group stage
     def handle_special_case(teams_per_group_ranked)
       # transpose the array to group first and second places together
+      # e.g. [[1, 2, 3], [4, 5, 6]] to [[1, 4], [2, 5], [3, 6]]
       teams_per_group_ranked_transposed = teams_per_group_ranked.transpose
       first_places = teams_per_group_ranked_transposed[0]
       second_places = teams_per_group_ranked_transposed[1]
       # split the second places in half and place the second half at the beginning
+      # e.g. [1, 2, 3, 4, 5, 6] to [4, 5, 6, 1, 2, 3]
       mid = second_places.length / 2
       second_places_new_order = second_places[mid..-1] + second_places[0..mid]
+      # zip the first and second places together
+      # e.g. [1, 2, 3], [a, b, c] to [1, a, 2, b, 3, c]
       first_places.zip(second_places_new_order).flatten
     end
 
