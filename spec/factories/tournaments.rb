@@ -60,22 +60,5 @@ FactoryBot.define do
         tournament.stages.concat create_list(:stage, evaluator.stage_count)
       end
     end
-
-    factory :beerpong_tournament, parent: :tournament do
-      transient do
-        teams_count { 32 }
-        group_count { 8 }
-        match_factory { :group_match }
-      end
-
-      after(:create) do |tournament, evaluator|
-        tournament.stages << create(:group_stage,
-                                    match_factory: evaluator.match_factory,
-                                    group_count: evaluator.group_count)
-        tournament.teams = create_list(:team, evaluator.teams_count, tournament: tournament)
-        tournament.playoff_teams_amount = 16
-        tournament.save!
-      end
-    end
   end
 end
