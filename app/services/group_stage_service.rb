@@ -138,14 +138,14 @@ class GroupStageService
     # @param teams_per_group_ranked [Array] a 2D array of teams ranked by group scores
     # @return [Array] the teams advancing from the group stage
     def handle_special_case(teams_per_group_ranked)
-      advancing_teams = []
-      teams_per_group_ranked.each_with_index do |_group_teams, i|
-        first = teams_per_group_ranked[i % teams_per_group_ranked.size][0]
-        second = teams_per_group_ranked[(i + teams_per_group_ranked.size / 2) % teams_per_group_ranked.size][1]
-        advancing_teams << first
-        advancing_teams << second
-      end
-      advancing_teams
+      # transpose the array to group first and second places together
+      teams_per_group_ranked_transposed = teams_per_group_ranked.transpose
+      first_places = teams_per_group_ranked_transposed[0]
+      second_places = teams_per_group_ranked_transposed[1]
+      # split the second places in half and place the second half at the beginning
+      mid = second_places.length / 2
+      second_places_new_order = second_places[mid..-1] + second_places[0..mid]
+      first_places.zip(second_places_new_order).flatten
     end
 
     # Handles the default case for advancing teams
