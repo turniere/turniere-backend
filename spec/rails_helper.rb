@@ -39,6 +39,7 @@ RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # Run only focused tests
+  # TODO REVERT ME
   config.filter_run_when_matching :focus
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
