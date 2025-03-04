@@ -40,6 +40,6 @@ class Utils
       middle_element = [array.pop]
     end
     mid = array.length / 2
-    array[mid..-1] + middle_element + array[0..mid]
+    array[mid..] + middle_element + array[0..(mid - 1)]
   end
 end
