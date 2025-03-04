@@ -47,4 +47,20 @@ RSpec.describe Utils do
       expect(Utils.po2?(parameters[:test])).to eq(parameters[:result])
     end
   end
+
+  describe '#split_and_rotate' do
+    [
+      { test: [1, 2, 3, 4, 5, 6], result: [4, 5, 6, 1, 2, 3] },
+      { test: [1, 2, 3, 4, 5], result: [3, 4, 5, 1, 2] },
+      { test: [1, 2, 3, 4], result: [3, 4, 1, 2] },
+      { test: [1, 2, 3], result: [2, 3, 1] },
+      { test: [1, 2], result: [2, 1] },
+      { test: [1], result: [1] },
+      { test: [], result: [] }
+    ].each do |parameters|
+      it "splits and rotates #{parameters[:test]} to #{parameters[:result]}" do
+        expect(Utils.new.split_and_rotate(parameters[:test])).to eq(parameters[:result])
+      end
+    end
+  end
 end
