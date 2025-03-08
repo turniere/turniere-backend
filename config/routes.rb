@@ -14,6 +14,10 @@ Rails.application.routes.draw do
   resources :tournaments do
     resources :statistics, only: %i[index]
     resources :matches, only: %i[index]
+    member do
+      get :timer_end
+      patch :set_timer_end
+    end
   end
   resources :match_scores, only: %i[show update]
   resources :groups, only: %i[show]
