@@ -42,7 +42,6 @@ FactoryBot.define do
       factory :group_stage_tournament do
         transient do
           group_count { 2 }
-          match_factory { :group_match }
         end
         after(:create) do |tournament, evaluator|
           tournament.stages << create(:group_stage,
@@ -61,19 +60,16 @@ FactoryBot.define do
       end
     end
 
-    factory :beerpong_tournament, parent: :tournament do
+    factory :bpwstr_tournament do
       transient do
         teams_count { 32 }
         group_count { 8 }
-        match_factory { :group_match }
       end
-
-      after(:create) do |tournament, evaluator|
-        tournament.stages << create(:group_stage,
-                                    match_factory: evaluator.match_factory,
-                                    group_count: evaluator.group_count)
-        tournament.teams = create_list(:team, evaluator.teams_count, tournament: tournament)
-        tournament.playoff_teams_amount = 16
+      playoff_teams_amount { 16 }
+      after(:create) do |tournament|
+        group_stage =
+        tournament.stages << group_stage
+        tournament.teams = stages.first.groups.map(&:teams).flatten
         tournament.save!
       end
     end

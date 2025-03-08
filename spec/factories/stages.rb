@@ -13,6 +13,8 @@ FactoryBot.define do
       end
       after(:create) do |stage, evaluator|
         stage.groups = create_list(:group, evaluator.group_count, match_factory: evaluator.match_factory)
+        stage.tournament.stages << stage
+        stage.save!
       end
     end
 
@@ -28,6 +30,7 @@ FactoryBot.define do
         stage.matches.each_with_index do |match, i|
           match.position = i
         end
+        stage.tournament.stages << stage
         stage.save!
       end
     end
@@ -41,6 +44,8 @@ FactoryBot.define do
       end
       after(:create) do |stage, evaluator|
         stage.groups = create_list(:group, evaluator.group_count, match_factory: evaluator.match_factory)
+        stage.tournament.stages << stage
+        stage.save!
       end
     end
   end

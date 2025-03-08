@@ -56,4 +56,34 @@ RSpec.describe Tournament, type: :model do
       end
     end
   end
+
+  describe 'Factory', focus: true do
+    it 'creates a valid tournament' do
+      tournament = create(:tournament)
+      expect(tournament).to be_valid
+    end
+
+    it 'creates a valid stage tournament' do
+      tournament = create(:stage_tournament)
+      expect(tournament).to be_valid
+    end
+
+    it 'creates a valid group stage tournament' do
+      tournament = create(:group_stage_tournament)
+      expect(tournament).to be_valid
+    end
+    describe 'bpwstr tournament' do
+      it 'creates a valid bpwstr tournament' do
+        tournament = create(:bpwstr_tournament)
+        expect(tournament).to be_valid
+      end
+
+      it 'has the correct teams assigned to it' do
+        tournament = create(:bpwstr_tournament)
+        expect(tournament.teams.count).to eq(32)
+        # also check that the teams in the matches are the same
+        expect(tournament.teams).to match_array(tournament.matches.map(&:teams).flatten)
+      end
+    end
+  end
 end

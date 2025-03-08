@@ -8,7 +8,6 @@ FactoryBot.define do
     end
 
     sequence(:number)
-    stage
 
     after(:create) do |group, evaluator|
       create_list(evaluator.match_factory, evaluator.match_count, group: group)
