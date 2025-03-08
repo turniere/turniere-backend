@@ -194,12 +194,18 @@ RSpec.describe GroupStageService do
   describe '#get_advancing_teams', focus: true do
     context 'when special case for po2 applies' do
       before do
-        # Create some example teams
-        teams1 = [Team.new(name: 'Team 1'), Team.new(name: 'Team 2'), Team.new(name: 'Team 3'), Team.new(name: 'Team 4')]
-        teams2 = [Team.new(name: 'Team 5'), Team.new(name: 'Team 6'), Team.new(name: 'Team 7'), Team.new(name: 'Team 8')]
+        teams = create_list(:team, 32)
 
-        # Group the teams
-        groups = [teams1, teams2]
+        # put the teams in groups of four
+        groups = teams.each_slice(4).to_a
+
+        # iterate over all groups and number the teams in their name
+        groups.each do |group|
+          group.each_with_index do |team, i|
+            team.name = "#{team.name} #{i}"
+            team.save!
+          end
+        end
 
         # Generate the group stage
         @group_stage = GroupStageService.generate_group_stage(groups)
@@ -210,8 +216,9 @@ RSpec.describe GroupStageService do
         @group_stage.groups.each do |group|
           group.matches.each do |match|
             match.match_scores.each do |ms|
-              # give the team the amount of points as in their name
-              ms.points = ms.team.name.split(' ').last.to_i
+              # give the team 10 points minus the number in their name
+              # this results in the team 1 always winning and getting to place 1 in the group etc.
+              ms.points = 10 - ms.team.name.split(' ').last.to_i
               ms.save!
             end
             match.state = 'finished'
