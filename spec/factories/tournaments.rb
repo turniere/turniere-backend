@@ -52,6 +52,15 @@ FactoryBot.define do
       end
     end
 
+    factory :prepared_group_stage_tournament do
+      transient do
+        group_stage { create(:group_stage) }
+      end
+      after(:create) do |tournament, evaluator|
+        tournament.stages << evaluator.group_stage
+      end
+    end
+
     factory :dummy_stage_tournament do
       transient do
         stage_count { 3 }
