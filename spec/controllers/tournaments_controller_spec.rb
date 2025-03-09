@@ -109,6 +109,20 @@ RSpec.describe TournamentsController, type: :controller do
         body = deserialize_response response
         expect(body[:stages]).to be_nil
         expect(body[:teams]).to be_nil
+        expect(body[:advancing_teams]).to be_nil
+      end
+    end
+    context 'on a group stage tournament' do
+      before do
+        @group_stage_tournament = create(:group_stage_tournament)
+      end
+
+      it 'includes advancing teams' do
+        get :show, params: { id: @group_stage_tournament.to_param }
+        body = deserialize_response response
+        advancing_teams = body[:teams_advancing_from_group_stage]
+        expected_advancing_teams = GroupStageService.get_advancing_teams(@group_stage_tournament.group_stage)
+        expect(advancing_teams).to match_array(expected_advancing_teams)
       end
     end
   end
