@@ -234,6 +234,42 @@ RSpec.describe GroupStageService do
           group.group_scores.each(&:reload)
         end
       end
+
+      it 'returns the correct amount of teams' do
+        advancing_teams = GroupStageService.get_advancing_teams(@group_stage)
+        expect(advancing_teams.size).to be(16)
+      end
+
+      it 'returns the correct teams in the correct order' do
+        advancing_teams = GroupStageService.get_advancing_teams(@group_stage)
+        advancing_teams.each_with_index do |team, i|
+          # if index is even, the team should be of a first place; end in a 0
+          # if index is odd, the team should be of a second place; end in a 1
+          team_quality = team.name.split(' ').last.to_i
+          expect(team_quality % 2).to be(i % 2)
+        end
+      end
+
+      it 'spaces groups apart, so you meet your group only in finale' do
+        group_first_matchups_expected = {
+          0 => 4,
+          1 => 5,
+          2 => 6,
+          3 => 7,
+          4 => 0,
+          5 => 1,
+          6 => 2,
+          7 => 3
+        }
+        advancing_teams = GroupStageService.get_advancing_teams(@group_stage)
+        advancing_teams.each_slice(2).to_a.each do |matchup|
+          # this is the team that landed a first place in the group
+          first_place_team = matchup[0].name.split(' ')[1].to_i
+          # this is the team that landed a second place in the group
+          second_place_team = matchup[1].name.split(' ')[1].to_i
+          expect(group_first_matchups_expected[first_place_team]).to eq(second_place_team)
+        end
+      end
     end
   end
 end
