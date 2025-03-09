@@ -221,15 +221,17 @@ RSpec.describe GroupStageService do
           group.matches.each do |match|
             match.match_scores.each do |ms|
               # give the team 10 points minus the number in their name
-              # this results in the team 1 always winning and getting to place 1 in the group etc.
+              # this results in the team 0 always winning and getting to place 1 in the group etc.
               ms.points = 10 - ms.team.name.split(' ').last.to_i
               ms.save!
             end
             match.state = 'finished'
             match.save!
           end
-          gs = GroupStageService.update_group_scores(group)
-          gs.each(&:save!)
+          group_scores = GroupStageService.update_group_scores(group)
+          group_scores.each(&:save!)
+
+          group.group_scores.each(&:reload)
         end
       end
     end
