@@ -100,7 +100,12 @@ RSpec.describe TournamentsController, type: :controller do
 
     it 'returns the requested tournament' do
       get :show, params: { id: @tournament.to_param }
-      expect(deserialize_response(response)[:id].to_i).to eq(@tournament.id)
+      json = deserialize_response(response)
+      expect(json[:id].to_i).to eq(@tournament.id)
+      expect(json[:name]).to eq(@tournament.name)
+      expect(json[:description]).to eq(@tournament.description)
+      expect(json[:public]).to eq(@tournament.public)
+      expect(json[:teams_advancing_from_group_stage]).to eq([])
     end
 
     context 'with simple=true parameter' do
