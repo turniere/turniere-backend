@@ -200,9 +200,9 @@ RSpec.describe GroupStageService do
         groups = teams.each_slice(4).to_a
 
         # iterate over all groups and number the teams in their name
-        groups.each do |group|
-          group.each_with_index do |team, i|
-            team.name = "#{team.name} #{i}"
+        groups.each_with_index do |group, group_index|
+          group.each_with_index do |team, team_index|
+            team.name = "#{team.name} #{group_index} #{team_index}"
             team.save!
           end
         end
@@ -210,8 +210,12 @@ RSpec.describe GroupStageService do
         # Generate the group stage
         @group_stage = GroupStageService.generate_group_stage(groups)
 
-        @tournament = create(:prepared_group_stage_tournament, group_stage: @group_stage)
-
+        @tournament = create(:prepared_group_stage_tournament,
+                             group_stage: @group_stage,
+                             teams: teams,
+                             playoff_teams_amount: 16,
+                             instant_finalists_amount: 16,
+                             intermediate_round_participants_amount: 0)
         # iterate over all groups and update the matches within to all be decided
         @group_stage.groups.each do |group|
           group.matches.each do |match|
