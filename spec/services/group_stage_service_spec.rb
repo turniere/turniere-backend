@@ -191,7 +191,7 @@ RSpec.describe GroupStageService do
     end
   end
 
-  describe '#get_advancing_teams', focus: true do
+  describe '#get_advancing_teams' do
     context 'when special case for po2 applies' do
       before do
         teams = create_list(:team, 32)
