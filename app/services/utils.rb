@@ -32,7 +32,7 @@ class Utils
 
   # split the array in half and place the second half at the beginning
   # e.g. [1, 2, 3, 4, 5, 6] to [4, 5, 6, 1, 2, 3]
-  def split_and_rotate(array)
+  def self.split_and_rotate(array)
     # handle the case where the array has an odd number of elements
     middle_element = []
     if array.length.odd?

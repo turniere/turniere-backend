@@ -144,7 +144,7 @@ class GroupStageService
       first_places = teams_per_group_ranked_transposed[0]
       second_places = teams_per_group_ranked_transposed[1]
 
-      second_places_new_order = split_and_rotate(second_places)
+      second_places_new_order = Utils.split_and_rotate(second_places)
 
       # zip the first and second places together
       # e.g. [1, 2, 3], [a, b, c] to [1, a, 2, b, 3, c]
