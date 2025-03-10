@@ -190,11 +190,15 @@ def validate_set_timer_end_params
 
   if timer_end_seconds.present?
     begin
-      parsed_time = Time.zone.now + timer_end_seconds.to_i
-      params[:timer_end] = parsed_time
+      timer_end_seconds = Integer(timer_end_seconds)
     rescue ArgumentError
       return render json: { error: 'Invalid seconds format' }, status: :unprocessable_entity
     end
+
+    return render json: { error: 'Timer end must be in the future' }, status: :unprocessable_entity if timer_end_seconds <= 0
+
+    parsed_time = Time.zone.now + timer_end_seconds
+    params[:timer_end] = parsed_time
   elsif timer_end.present?
     begin
       parsed_time = Time.zone.parse(timer_end)
