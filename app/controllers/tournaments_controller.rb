@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[show update destroy set_timer_end, timer_end]
+  before_action :set_tournament, only: %i[show update destroy set_timer_end timer_end]
   before_action :authenticate_user!, only: %i[create update destroy set_timer_end]
   before_action -> { require_owner! @tournament.owner }, only: %i[update destroy set_timer_end]
   before_action :validate_create_params, only: %i[create]
