@@ -483,37 +483,66 @@ RSpec.describe TournamentsController, type: :controller do
       apply_authentication_headers_for @tournament.owner
       @request.env['HTTP_ACCEPT'] = 'application/json'
     end
+    context 'timer_end' do
+      context 'when timer_end is missing' do
+        it 'returns unprocessable entity' do
+          patch :set_timer_end, params: { id: @tournament.id }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)).to include('error' => 'Timer end is required')
+        end
+      end
 
-    context 'when timer_end is missing' do
-      it 'returns unprocessable entity' do
-        patch :set_timer_end, params: { id: @tournament.id }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to include('error' => 'Timer end is required')
+      context 'when timer_end is invalid datetime' do
+        it 'returns unprocessable entity' do
+          patch :set_timer_end, params: { id: @tournament.id, timer_end: 'invalid' }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)).to include('error' => 'Invalid datetime format')
+        end
+      end
+
+      context 'when timer_end is in the past' do
+        it 'returns unprocessable entity' do
+          patch :set_timer_end, params: { id: @tournament.id, timer_end: 1.day.ago }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)).to include('error' => 'Timer end must be in the future')
+        end
+      end
+
+      context 'when timer_end is valid' do
+        it 'updates the timer_end' do
+          valid_timer_end = 1.day.from_now.change(usec: 0)
+          patch :set_timer_end, params: { id: @tournament.id, timer_end: valid_timer_end }
+          expect(response).to have_http_status(:ok)
+          expect(@tournament.reload.timer_end).to eq(valid_timer_end)
+        end
       end
     end
-
-    context 'when timer_end is invalid datetime' do
-      it 'returns unprocessable entity' do
-        patch :set_timer_end, params: { id: @tournament.id, timer_end: 'invalid' }
+    context 'when timer_end_seconds is provided' do
+      it 'returns unprocessable entity for invalid seconds format' do
+        patch :set_timer_end, params: { id: @tournament.id, timer_end_seconds: 'invalid' }
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to include('error' => 'Invalid datetime format')
+        expect(JSON.parse(response.body)).to include('error' => 'Invalid seconds format')
       end
-    end
 
-    context 'when timer_end is in the past' do
-      it 'returns unprocessable entity' do
-        patch :set_timer_end, params: { id: @tournament.id, timer_end: 1.day.ago }
+      it 'returns unprocessable entity for negative seconds' do
+        patch :set_timer_end, params: { id: @tournament.id, timer_end_seconds: -3600 }
         expect(response).to have_http_status(:unprocessable_entity)
         expect(JSON.parse(response.body)).to include('error' => 'Timer end must be in the future')
       end
-    end
 
-    context 'when timer_end is valid' do
-      it 'updates the timer_end' do
-        valid_timer_end = 1.day.from_now.change(usec: 0)
-        patch :set_timer_end, params: { id: @tournament.id, timer_end: valid_timer_end }
+      it 'updates the timer_end with valid seconds' do
+        valid_timer_end_seconds = 3600
+        expected_timer_end = (Time.zone.now + valid_timer_end_seconds).change(usec: 0)
+        patch :set_timer_end, params: { id: @tournament.id, timer_end_seconds: valid_timer_end_seconds }
         expect(response).to have_http_status(:ok)
-        expect(@tournament.reload.timer_end).to eq(valid_timer_end)
+        expect(@tournament.reload.timer_end.change(usec: 0)).to eq(expected_timer_end)
+      end
+    end
+    context 'when both timer_end and timer_end_seconds are provided' do
+      it 'returns unprocessable entity' do
+        patch :set_timer_end, params: { id: @tournament.id, timer_end: 1.day.from_now, timer_end_seconds: 3600 }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to include('error' => 'Only one of timer_end or timer_end_seconds is allowed')
       end
     end
   end
