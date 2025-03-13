@@ -123,10 +123,18 @@ RSpec.describe TournamentsController, type: :controller do
       end
 
       it 'includes advancing teams' do
+        # mock GroupStageService.get_advancing_teams(@group_stage_tournament.group_stage) to include 4 teams
+        expected_advancing_teams = create_list(:team, 4)
+        allow(GroupStageService).to receive(:get_advancing_teams).and_return(expected_advancing_teams)
+
         get :show, params: { id: @group_stage_tournament.to_param }
         body = deserialize_response response
         advancing_teams = body[:teams_advancing_from_group_stage]
-        expected_advancing_teams = GroupStageService.get_advancing_teams(@group_stage_tournament.group_stage)
+        # check array is not empty
+        expect(advancing_teams).not_to be_empty
+
+        # cast json to teams and compare
+        advancing_teams = advancing_teams.map { |team| Team.find(team[:id]) }
         expect(advancing_teams).to match_array(expected_advancing_teams)
       end
     end

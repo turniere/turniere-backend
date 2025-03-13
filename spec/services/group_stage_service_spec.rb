@@ -52,6 +52,8 @@ RSpec.describe GroupStageService do
     end
   end
 
+  # TODO test get_advancing_teams when test data for running group stage is ready
+
   describe '#get_group_object_from' do
     it 'returns a group' do
       group = GroupStageService.get_group_object_from(@teams1)
