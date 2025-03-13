@@ -59,7 +59,7 @@ RSpec.describe Utils do
       { test: [], result: [] }
     ].each do |parameters|
       it "splits and rotates #{parameters[:test]} to #{parameters[:result]}" do
-        expect(Utils.new.split_and_rotate(parameters[:test])).to eq(parameters[:result])
+        expect(Utils.split_and_rotate(parameters[:test])).to eq(parameters[:result])
       end
     end
   end
