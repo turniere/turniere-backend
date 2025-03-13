@@ -15,6 +15,8 @@ class MatchesController < ApplicationController
               elsif match_params['state'] == 'upcoming'
                 # for every group within the tournament find the match with the lowest position that is of state 'not_started'
                 upcoming_matches = @tournament.stages.find_by(level: -1)&.groups&.map { |g| g.matches.select { |m| m.state == 'not_started' }.min_by(&:position) }
+                # filter out nil values (this may happen if one of the groups already has no upcoming matches)
+                upcoming_matches = upcoming_matches.reject(&:nil?)
                 # if there are none, the group stage is over, so we have to look into the playoff stages
                 if upcoming_matches.nil?
                   next_level = 0
