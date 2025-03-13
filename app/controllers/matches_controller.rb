@@ -36,14 +36,12 @@ class MatchesController < ApplicationController
                   m.state == match_params['state']
                 end
               end
-    render json: matches, each_serializer: ExtendedMatchSerializer, include: [
-      'match_scores.team', 'bets', 'stage', 'group'
-    ]
+    render json: matches, each_serializer: ExtendedMatchSerializer, include: %w[match_scores.team bets stage group]
   end
 
   # GET /matches/1
   def show
-    render json: @match, include: ['match_scores.points', 'match_scores.team', 'bets']
+    render json: @match, include: %w[match_scores.points match_scores.team bets]
   end
 
   # PATCH/PUT /matches/1
