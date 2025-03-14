@@ -190,4 +190,86 @@ RSpec.describe GroupStageService do
       end
     end
   end
+
+  describe '#get_advancing_teams' do
+    context 'when special case for po2 applies' do
+      before do
+        teams = create_list(:team, 32)
+
+        # put the teams in groups of four
+        groups = teams.each_slice(4).to_a
+
+        # iterate over all groups and number the teams in their name
+        groups.each_with_index do |group, group_index|
+          group.each_with_index do |team, team_index|
+            team.name = "#{team.name} #{group_index} #{team_index}"
+            team.save!
+          end
+        end
+
+        # Generate the group stage
+        @group_stage = GroupStageService.generate_group_stage(groups)
+
+        @tournament = create(:prepared_group_stage_tournament,
+                             group_stage: @group_stage,
+                             teams: teams,
+                             playoff_teams_amount: 16,
+                             instant_finalists_amount: 16,
+                             intermediate_round_participants_amount: 0)
+        # iterate over all groups and update the matches within to all be decided
+        @group_stage.groups.each do |group|
+          group.matches.each do |match|
+            match.match_scores.each do |ms|
+              # give the team 10 points minus the number in their name
+              # this results in the team 0 always winning and getting to place 1 in the group etc.
+              ms.points = 10 - ms.team.name.split(' ').last.to_i
+              ms.save!
+            end
+            match.state = 'finished'
+            match.save!
+          end
+          group_scores = GroupStageService.update_group_scores(group)
+          group_scores.each(&:save!)
+
+          group.group_scores.each(&:reload)
+        end
+      end
+
+      it 'returns the correct amount of teams' do
+        advancing_teams = GroupStageService.get_advancing_teams(@group_stage)
+        expect(advancing_teams.size).to be(16)
+      end
+
+      it 'returns the correct teams in the correct order' do
+        advancing_teams = GroupStageService.get_advancing_teams(@group_stage)
+        advancing_teams.each_with_index do |team, i|
+          # if index is even, the team should be of a first place; end in a 0
+          # if index is odd, the team should be of a second place; end in a 1
+          team_quality = team.name.split(' ').last.to_i
+          expect(team_quality % 2).to be(i % 2)
+        end
+      end
+
+      it 'spaces groups apart, so you meet your group only in finale' do
+        group_first_matchups_expected = {
+          0 => 4,
+          1 => 5,
+          2 => 6,
+          3 => 7,
+          4 => 0,
+          5 => 1,
+          6 => 2,
+          7 => 3
+        }
+        advancing_teams = GroupStageService.get_advancing_teams(@group_stage)
+        advancing_teams.each_slice(2).to_a.each do |matchup|
+          # this is the team that landed a first place in the group
+          first_place_team = matchup[0].name.split(' ')[1].to_i
+          # this is the team that landed a second place in the group
+          second_place_team = matchup[1].name.split(' ')[1].to_i
+          expect(group_first_matchups_expected[first_place_team]).to eq(second_place_team)
+        end
+      end
+    end
+  end
 end

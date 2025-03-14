@@ -116,7 +116,7 @@ class TournamentsController < ApplicationController
   end
 
   def organize_teams_in_groups(teams)
-    # each team gets put into a array of teams depending on the group specified in team[:group]
+    # each team gets put into an array of teams depending on the group specified in team[:group]
     teams.group_by { |team| team['group'] }.values.map do |group|
       group.map do |team|
         find_or_create_team(team)

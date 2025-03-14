@@ -7,13 +7,23 @@ FactoryBot.define do
     user
     transient do
       teams_count { 8 }
+      teams { nil }
+      playoff_teams_amount { 4 }
+      instant_finalists_amount { 4 }
+      intermediate_round_participants_amount { 0 }
     end
     after(:create) do |tournament, evaluator|
-      tournament.teams = create_list(:team, evaluator.teams_count, tournament: tournament)
-      tournament.playoff_teams_amount = (tournament.teams.size / 2)
-      tournament.instant_finalists_amount = (tournament.playoff_teams_amount / 2)
-      tournament.intermediate_round_participants_amount = ((tournament.playoff_teams_amount -
-                                                            tournament.instant_finalists_amount) * 2)
+      if evaluator.teams.present?
+        tournament.teams = evaluator.teams
+      else
+        tournament.teams = create_list(:team, evaluator.teams_count, tournament: tournament)
+      end
+      tournament.playoff_teams_amount = evaluator.playoff_teams_amount
+      tournament.instant_finalists_amount = evaluator.instant_finalists_amount
+      tournament.intermediate_round_participants_amount = evaluator.intermediate_round_participants_amount
+      if tournament.playoff_teams_amount != tournament.instant_finalists_amount + tournament.intermediate_round_participants_amount / 2
+        raise 'playoff_teams_amount must be equal to instant_finalists_amount + intermediate_round_participants_amount / 2'
+      end
       tournament.save!
     end
 
@@ -49,6 +59,15 @@ FactoryBot.define do
                                       match_factory: evaluator.match_factory,
                                       group_count: evaluator.group_count)
         end
+      end
+    end
+
+    factory :prepared_group_stage_tournament do
+      transient do
+        group_stage { create(:group_stage) }
+      end
+      after(:create) do |tournament, evaluator|
+        tournament.stages << evaluator.group_stage
       end
     end
 

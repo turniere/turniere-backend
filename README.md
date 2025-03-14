@@ -72,3 +72,4 @@ $ rails diagram:all_with_engines
 - WICHTIG UND EZ: gruppenphase in der gleichen gruppe sollten erst finale gegeneinander spielen (dazu nicht aus der nächsten gruppe sondern einmal advancing teams von vorne und einmal von hinten, oder offset von hälfte der weiterkommenden teams)
 - beim eintragen einer runde direkt den nächsten tisch anzeigen
 - spiel um platz 3
+- edgecase wenn mehr als die hälfte der teams weiterkommen bedenken bzw zumindest abfangen
