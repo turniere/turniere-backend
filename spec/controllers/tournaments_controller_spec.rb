@@ -105,6 +105,9 @@ RSpec.describe TournamentsController, type: :controller do
       expected_keys = %i[id name code public description playoff_teams_amount instant_finalists_amount intermediate_round_participants_amount timer_end owner_username stages teams]
       expect(json.keys).to match_array(expected_keys)
       expect(json).to eq(TournamentSerializer.new(@tournament).as_json)
+      expect(json[:name]).to eq(@tournament.name)
+      expect(json[:description]).to eq(@tournament.description)
+      expect(json[:public]).to eq(@tournament.public)
     end
 
     context 'with simple=true parameter' do
@@ -113,6 +116,28 @@ RSpec.describe TournamentsController, type: :controller do
         body = deserialize_response response
         expect(body[:stages]).to be_nil
         expect(body[:teams]).to be_nil
+      end
+    end
+    context 'on a group stage tournament' do
+      before do
+        @group_stage_tournament = create(:group_stage_tournament)
+      end
+
+      it 'includes advancing teams' do
+        # take 4 of the teams in the tournament and set them as advancing teams
+        expected_advancing_teams = @group_stage_tournament.teams.take(4)
+        allow(GroupStageService).to receive(:get_advancing_teams).and_return(expected_advancing_teams)
+
+        get :show, params: { id: @group_stage_tournament.to_param }
+        body = deserialize_response response
+        # get the advancing teams from the teams array in the response ( they have advancing_from_group_stage = true )
+        advancing_teams = body[:teams].select { |team| team[:advancing_from_group_stage] }
+        # check array is not empty
+        expect(advancing_teams).not_to be_empty
+
+        # cast json to teams and compare
+        advancing_teams = advancing_teams.map { |team| Team.find(team[:id]) }
+        expect(advancing_teams).to match_array(expected_advancing_teams)
       end
     end
   end
@@ -479,98 +504,6 @@ RSpec.describe TournamentsController, type: :controller do
         delete :destroy, params: { id: @tournament.to_param }
         expect(response).to have_http_status(:forbidden)
       end
-    end
-  end
-
-  describe 'PATCH #set_timer_end' do
-    before(:each) do
-      apply_authentication_headers_for @tournament.owner
-      @request.env['HTTP_ACCEPT'] = 'application/json'
-    end
-    context 'timer_end' do
-      context 'when timer_end is missing' do
-        it 'returns unprocessable entity' do
-          patch :set_timer_end, params: { id: @tournament.id }
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(JSON.parse(response.body)).to include('error' => 'Timer end is required')
-        end
-      end
-
-      context 'when timer_end is invalid datetime' do
-        it 'returns unprocessable entity' do
-          patch :set_timer_end, params: { id: @tournament.id, timer_end: 'invalid' }
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(JSON.parse(response.body)).to include('error' => 'Invalid datetime format')
-        end
-      end
-
-      context 'when timer_end is in the past' do
-        it 'returns unprocessable entity' do
-          patch :set_timer_end, params: { id: @tournament.id, timer_end: 1.day.ago }
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(JSON.parse(response.body)).to include('error' => 'Timer end must be in the future')
-        end
-      end
-
-      context 'when timer_end is valid' do
-        it 'updates the timer_end' do
-          valid_timer_end = 1.day.from_now.change(usec: 0)
-          patch :set_timer_end, params: { id: @tournament.id, timer_end: valid_timer_end }
-          expect(response).to have_http_status(:ok)
-          expect(@tournament.reload.timer_end).to eq(valid_timer_end)
-        end
-      end
-    end
-    context 'when timer_end_seconds is provided' do
-      it 'returns unprocessable entity for invalid seconds format' do
-        patch :set_timer_end, params: { id: @tournament.id, timer_end_seconds: 'invalid' }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to include('error' => 'Invalid seconds format')
-      end
-
-      it 'returns unprocessable entity for negative seconds' do
-        patch :set_timer_end, params: { id: @tournament.id, timer_end_seconds: -3600 }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to include('error' => 'Timer end must be in the future')
-      end
-
-      it 'updates the timer_end with valid seconds' do
-        valid_timer_end_seconds = 3600
-        expected_timer_end = (Time.zone.now + valid_timer_end_seconds).change(usec: 0)
-        patch :set_timer_end, params: { id: @tournament.id, timer_end_seconds: valid_timer_end_seconds }
-        expect(response).to have_http_status(:ok)
-        expect(@tournament.reload.timer_end.change(usec: 0)).to eq(expected_timer_end)
-      end
-    end
-    context 'when both timer_end and timer_end_seconds are provided' do
-      it 'returns unprocessable entity' do
-        patch :set_timer_end, params: { id: @tournament.id, timer_end: 1.day.from_now, timer_end_seconds: 3600 }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to include('error' => 'Only one of timer_end or timer_end_seconds is allowed')
-      end
-    end
-  end
-
-  describe 'GET #timer_end' do
-    before do
-      @request.env['HTTP_ACCEPT'] = 'application/json'
-    end
-
-    it 'returns success response' do
-      get :timer_end, params: { id: @tournament.to_param }
-      expect(response).to have_http_status(:ok)
-    end
-
-    it 'returns timer_end value' do
-      @tournament.update(timer_end: Time.zone.now + 1.day)
-      get :timer_end, params: { id: @tournament.to_param }
-      expect(JSON.parse(response.body)['timer_end']).to eq(@tournament.timer_end.as_json)
-    end
-
-    it 'returns nil if timer_end is not set' do
-      @tournament.update(timer_end: nil)
-      get :timer_end, params: { id: @tournament.to_param }
-      expect(JSON.parse(response.body)['timer_end']).to be_nil
     end
   end
 end

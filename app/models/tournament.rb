@@ -20,6 +20,18 @@ class Tournament < ApplicationRecord
     [stages.map(&:matches), stages.map { |s| s.groups.map(&:matches) }].flatten
   end
 
+  def teams_advancing_from_group_stage
+    group_stage = self.group_stage
+    return [] if group_stage.nil?
+
+    GroupStageService.get_advancing_teams(group_stage)
+  end
+
+  def group_stage
+    # get the stage with level -1 (group stage)
+    stages.find_by(level: -1)
+  end
+
   private
 
   def generate_code
