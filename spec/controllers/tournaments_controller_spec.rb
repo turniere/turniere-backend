@@ -108,7 +108,6 @@ RSpec.describe TournamentsController, type: :controller do
       expect(json[:name]).to eq(@tournament.name)
       expect(json[:description]).to eq(@tournament.description)
       expect(json[:public]).to eq(@tournament.public)
-      expect(json[:teams_advancing_from_group_stage]).to eq([])
     end
 
     context 'with simple=true parameter' do
@@ -117,7 +116,6 @@ RSpec.describe TournamentsController, type: :controller do
         body = deserialize_response response
         expect(body[:stages]).to be_nil
         expect(body[:teams]).to be_nil
-        expect(body[:advancing_teams]).to be_nil
       end
     end
     context 'on a group stage tournament' do
@@ -126,13 +124,14 @@ RSpec.describe TournamentsController, type: :controller do
       end
 
       it 'includes advancing teams' do
-        # mock GroupStageService.get_advancing_teams(@group_stage_tournament.group_stage) to include 4 teams
-        expected_advancing_teams = create_list(:team, 4)
+        # take 4 of the teams in the tournament and set them as advancing teams
+        expected_advancing_teams = @group_stage_tournament.teams.take(4)
         allow(GroupStageService).to receive(:get_advancing_teams).and_return(expected_advancing_teams)
 
         get :show, params: { id: @group_stage_tournament.to_param }
         body = deserialize_response response
-        advancing_teams = body[:teams_advancing_from_group_stage]
+        # get the advancing teams from the teams array in the response ( they have advancing_from_group_stage = true )
+        advancing_teams = body[:teams].select { |team| team[:advancing_from_group_stage] }
         # check array is not empty
         expect(advancing_teams).not_to be_empty
 
