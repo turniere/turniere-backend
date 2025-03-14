@@ -102,6 +102,9 @@ RSpec.describe TournamentsController, type: :controller do
       get :show, params: { id: @tournament.to_param }
       json = deserialize_response(response)
       expect(json[:id].to_i).to eq(@tournament.id)
+      expected_keys = %i[id name code public description playoff_teams_amount instant_finalists_amount intermediate_round_participants_amount timer_end owner_username stages teams]
+      expect(json.keys).to match_array(expected_keys)
+      expect(json).to eq(TournamentSerializer.new(@tournament).as_json)
       expect(json[:name]).to eq(@tournament.name)
       expect(json[:description]).to eq(@tournament.description)
       expect(json[:public]).to eq(@tournament.public)

@@ -43,6 +43,7 @@ RSpec.describe MatchesController, type: :controller do
         expect(body.empty?).to be true
       end
     end
+    # TODO add test for upcoming once there is test data for a "valid" group stage
   end
 
   describe 'GET #show' do

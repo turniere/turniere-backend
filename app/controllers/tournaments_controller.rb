@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: %i[show update destroy]
-  before_action :authenticate_user!, only: %i[create update destroy]
-  before_action -> { require_owner! @tournament.owner }, only: %i[update destroy]
+  before_action :set_tournament, only: %i[show update destroy set_timer_end timer_end]
+  before_action :authenticate_user!, only: %i[create update destroy set_timer_end]
+  before_action -> { require_owner! @tournament.owner }, only: %i[update destroy set_timer_end]
   before_action :validate_create_params, only: %i[create]
   before_action :validate_update_params, only: %i[update]
+  before_action :validate_set_timer_end_params, only: %i[set_timer_end]
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_error
 
   # GET /tournaments
@@ -93,7 +94,26 @@ class TournamentsController < ApplicationController
     @tournament.destroy
   end
 
+  # GET /tournaments/:id/timer_end
+  def timer_end
+    render json: { timer_end: @tournament.timer_end }
+  end
+
+  # PATCH /tournaments/:id/set_timer_end
+  def set_timer_end
+    if @tournament.update(timer_end_params)
+      render json: @tournament
+    else
+      render json: @tournament.errors, status: :unprocessable_entity
+    end
+  end
+
+
   private
+
+  def timer_end_params
+    { timer_end: params[:timer_end] }
+  end
 
   def organize_teams_in_groups(teams)
     # each team gets put into a array of teams depending on the group specified in team[:group]
@@ -156,5 +176,41 @@ class TournamentsController < ApplicationController
     render json: {
       error: 'playoff_teams_amount, instant_finalists_amount and intermediate_round_participants_amount don\'t match'
     }, status: :unprocessable_entity
+  end
+end
+
+def validate_set_timer_end_params
+  timer_end = params[:timer_end]
+  timer_end_seconds = params[:timer_end_seconds]
+
+  # throw error if both timer_end and timer_end_seconds are present
+  if timer_end.present? && timer_end_seconds.present?
+    return render json: { error: 'Only one of timer_end or timer_end_seconds is allowed' }, status: :unprocessable_entity
+  end
+
+  if timer_end_seconds.present?
+    begin
+      timer_end_seconds = Integer(timer_end_seconds)
+    rescue ArgumentError
+      return render json: { error: 'Invalid seconds format' }, status: :unprocessable_entity
+    end
+
+    return render json: { error: 'Timer end must be in the future' }, status: :unprocessable_entity if timer_end_seconds <= 0
+
+    parsed_time = Time.zone.now + timer_end_seconds
+    params[:timer_end] = parsed_time
+  elsif timer_end.present?
+    begin
+      parsed_time = Time.zone.parse(timer_end)
+      if parsed_time.nil?
+        return render json: { error: 'Invalid datetime format' }, status: :unprocessable_entity
+      elsif !parsed_time.future?
+        return render json: { error: 'Timer end must be in the future' }, status: :unprocessable_entity
+      end
+    rescue ArgumentError
+      return render json: { error: 'Invalid datetime format' }, status: :unprocessable_entity
+    end
+  else
+    return render json: { error: 'Timer end is required' }, status: :unprocessable_entity
   end
 end
