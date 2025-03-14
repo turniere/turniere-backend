@@ -29,7 +29,7 @@ class TournamentsController < ApplicationController
     if show_params.fetch(:simple, 'false') == 'true'
       render json: @tournament, serializer: SimpleTournamentSerializer
     else
-      render json: @tournament.as_json(methods: :teams_advancing_from_group_stage)
+      render json: @tournament, include: '**'
     end
   end
 
