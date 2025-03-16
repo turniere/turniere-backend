@@ -100,6 +100,6 @@ RSpec.configure do |config|
 
   config.example_status_persistence_file_path = 'specs_with_runtime.txt'
 
-  # Run ruby-prof
-  Dir[File.expand_path('support/**/*.rb', __dir__)].each { |f| require f }
+  # Run ruby-prof for profiling
+  # Dir[File.expand_path('support/**/*.rb', __dir__)].each { |f| require f }
 end
