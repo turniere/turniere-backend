@@ -384,6 +384,7 @@ RSpec.describe TournamentsController, type: :controller do
           end
 
           it 'succeeds when all three are changed correctly' do
+            allow(GroupStageService).to receive(:get_advancing_teams).and_return(@filled_tournament.teams.take(4))
             put :update, params: { id: @filled_tournament.to_param }.merge(intermediate_round_participants_amount: 2,
                                                                            instant_finalists_amount: 1,
                                                                            playoff_teams_amount: 2)
