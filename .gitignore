@@ -31,3 +31,5 @@ db/schema.rb
 
 #Ignore Coverage
 coverage/**
+
+/config/credentials/beta.key
