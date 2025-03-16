@@ -47,6 +47,7 @@ group :test, optional: true do
   gem 'faker'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
+  gem 'ruby-prof'
 end
 
 group :development, optional: true do

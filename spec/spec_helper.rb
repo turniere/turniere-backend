@@ -99,4 +99,7 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.example_status_persistence_file_path = 'specs_with_runtime.txt'
+
+  # Run ruby-prof
+  Dir[File.expand_path('support/**/*.rb', __dir__)].each { |f| require f }
 end
