@@ -20,8 +20,12 @@ test:
   <<: *default
   database: db/test.sqlite3
 
-production:
+production: &production
   url: <%= ENV.fetch("POSTGRES_URL", nil) %>
   username: <%= ENV.fetch("POSTGRES_USERNAME", nil) %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD", nil) %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+beta:
+  # just use the production settings
+  <<: *production
