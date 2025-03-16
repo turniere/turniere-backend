@@ -1,0 +1,368 @@
+example_id                                                                              | status  | run_time             |
+--------------------------------------------------------------------------------------- | ------- | -------------------- |
+./spec/controllers/groups_controller_spec.rb[1:1:1]                                     | passed  | 0.47112 seconds      |
+./spec/controllers/groups_controller_spec.rb[1:1:2]                                     | passed  | 0.26926 seconds      |
+./spec/controllers/match_scores_controller_spec.rb[1:1:1]                               | passed  | 0.25725 seconds      |
+./spec/controllers/match_scores_controller_spec.rb[1:1:2]                               | passed  | 0.25442 seconds      |
+./spec/controllers/match_scores_controller_spec.rb[1:2:1:1:1:1]                         | passed  | 0.38568 seconds      |
+./spec/controllers/match_scores_controller_spec.rb[1:2:1:1:1:2]                         | passed  | 0.38176 seconds      |
+./spec/controllers/match_scores_controller_spec.rb[1:2:1:1:2:1]                         | passed  | 0.39405 seconds      |
+./spec/controllers/match_scores_controller_spec.rb[1:2:1:2:1]                           | passed  | 0.61474 seconds      |
+./spec/controllers/match_scores_controller_spec.rb[1:3:1:1:1:1]                         | passed  | 5.67 seconds         |
+./spec/controllers/match_scores_controller_spec.rb[1:3:1:2:1:1]                         | passed  | 5.91 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:1:1:1]                                  | passed  | 13.35 seconds        |
+./spec/controllers/matches_controller_spec.rb[1:1:1:2]                                  | passed  | 12.86 seconds        |
+./spec/controllers/matches_controller_spec.rb[1:1:1:3]                                  | passed  | 12.94 seconds        |
+./spec/controllers/matches_controller_spec.rb[1:2:1]                                    | passed  | 5.8 seconds          |
+./spec/controllers/matches_controller_spec.rb[1:2:2]                                    | passed  | 5.82 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:1]                              | passed  | 5.89 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:2]                              | passed  | 5.91 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:1:1:1]                        | passed  | 5.97 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:1:1:2:1]                      | passed  | 5.96 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:1:1:2:2]                      | passed  | 6.12 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:1:2:1]                        | passed  | 6.18 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:1:2:2]                        | passed  | 6.08 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:1:2:3:1]                      | passed  | 5.98 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:1:2:3:2]                      | passed  | 6.39 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:2:1]                          | passed  | 5.96 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:3:1:1]                        | passed  | 6.06 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:4:1]                          | passed  | 5.91 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:1:3:4:2]                          | passed  | 8.02 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:2:1]                              | passed  | 5.92 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:1:1:3:1]                              | passed  | 6 seconds            |
+./spec/controllers/matches_controller_spec.rb[1:3:1:2:1:1]                              | passed  | 6.09 seconds         |
+./spec/controllers/matches_controller_spec.rb[1:3:2:1:1:1]                              | passed  | 5.89 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:1:1]                                     | passed  | 3.24 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:1:2]                                     | passed  | 3.25 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:2:1:1]                                   | passed  | 9.47 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:2:1:2:1]                                 | passed  | 9.86 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:2:1:2:2]                                 | passed  | 10.03 seconds        |
+./spec/controllers/stages_controller_spec.rb[1:2:1:2:3]                                 | passed  | 9.91 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:2:1:2:4]                                 | passed  | 9.66 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:2:1:3:1]                                 | passed  | 3.66 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:2:2:1]                                   | passed  | 1.4 seconds          |
+./spec/controllers/stages_controller_spec.rb[1:2:2:2]                                   | passed  | 1.39 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:2:3:1]                                   | passed  | 9.5 seconds          |
+./spec/controllers/stages_controller_spec.rb[1:2:3:2]                                   | passed  | 9.46 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:2:4:1]                                   | passed  | 1.38 seconds         |
+./spec/controllers/stages_controller_spec.rb[1:2:4:2]                                   | passed  | 1.39 seconds         |
+./spec/controllers/statistics_controller_spec.rb[1:1:1:1]                               | passed  | 0.25065 seconds      |
+./spec/controllers/statistics_controller_spec.rb[1:1:2:1]                               | passed  | 1.54 seconds         |
+./spec/controllers/statistics_controller_spec.rb[1:1:2:2]                               | passed  | 1.55 seconds         |
+./spec/controllers/statistics_controller_spec.rb[1:1:2:3]                               | passed  | 1.64 seconds         |
+./spec/controllers/statistics_controller_spec.rb[1:1:2:4]                               | passed  | 1.58 seconds         |
+./spec/controllers/teams_controller_spec.rb[1:1:1]                                      | passed  | 0.28977 seconds      |
+./spec/controllers/teams_controller_spec.rb[1:1:2]                                      | passed  | 0.26861 seconds      |
+./spec/controllers/teams_controller_spec.rb[1:2:1:1]                                    | passed  | 0.38921 seconds      |
+./spec/controllers/teams_controller_spec.rb[1:2:1:2]                                    | passed  | 0.39294 seconds      |
+./spec/controllers/teams_controller_spec.rb[1:2:2:1]                                    | passed  | 0.63049 seconds      |
+./spec/controllers/tournaments_controller_spec.rb[1:1:1:1]                              | passed  | 1.51 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:1:1:2]                              | passed  | 1.53 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:1:2:1]                              | passed  | 1.65 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:1:2:2]                              | passed  | 1.54 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:1:2:3]                              | passed  | 1.64 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:1:2:4]                              | passed  | 1.62 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:1:3:1]                              | passed  | 1.55 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:1:3:2]                              | passed  | 1.63 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:1:4:1]                              | passed  | 1.53 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:2:1]                                | passed  | 1.87 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:2:2]                                | passed  | 1.7 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:2:3:1]                              | passed  | 1.59 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:2:4:1]                              | passed  | 6 minutes 57 seconds |
+./spec/controllers/tournaments_controller_spec.rb[1:3:1:1]                              | passed  | 1.54 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:1]                            | passed  | 1.66 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:2]                            | passed  | 1.68 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:3]                            | passed  | 1.65 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:4]                            | passed  | 1.66 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:5]                            | passed  | 1.66 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:6:1]                          | passed  | 1.7 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:6:2]                          | passed  | 1.69 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:6:3]                          | passed  | 1.79 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:6:4]                          | passed  | 1.69 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:6:5:1:1:1]                    | passed  | 1.7 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:6:5:1:1:2]                    | passed  | 1.72 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:6:5:2:1:1]                    | passed  | 1.69 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:6:5:2:1:2]                    | passed  | 1.8 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:6:5:3:1:1]                    | passed  | 1.73 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:6:5:3:1:2]                    | passed  | 1.7 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:1:7]                            | passed  | 1.64 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:2:1]                            | passed  | 1.65 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:3:1]                            | passed  | 1.64 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:4:1]                            | passed  | 1.66 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:5:1]                            | passed  | 1.65 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:3:2:6:1]                            | passed  | 1.67 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:1:1]                            | passed  | 1.5 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:1]                            | passed  | 1.96 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:2]                            | passed  | 1.64 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:1]                          | passed  | 4.46 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:2]                          | passed  | 4.5 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:3]                          | passed  | 4.57 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:4]                          | passed  | 4.49 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:5:1]                        | passed  | 4.45 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:5:2]                        | passed  | 4.43 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:5:3]                        | passed  | 4.54 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:5:4]                        | passed  | 4.45 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:6:1]                        | passed  | 4.5 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:6:2]                        | passed  | 4.48 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:6:3]                        | passed  | 4.5 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:6:4]                        | passed  | 4.46 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:2:3:7]                          | passed  | 4.5 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:4:1:3:1]                            | passed  | 1.89 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:5:1:1]                              | passed  | 1.52 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:5:2:1]                              | passed  | 1.84 seconds         |
+./spec/controllers/tournaments_controller_spec.rb[1:5:2:2]                              | passed  | 1.7 seconds          |
+./spec/controllers/tournaments_controller_spec.rb[1:5:3:1]                              | passed  | 1.89 seconds         |
+./spec/factorybot_lint_spec.rb[1:1]                                                     | passed  | 40.88 seconds        |
+./spec/interactors/add_group_stage_to_tournament_interactor_spec.rb[1:1:1:1]            | unknown |                      |
+./spec/interactors/add_group_stage_to_tournament_interactor_spec.rb[1:1:1:2]            | unknown |                      |
+./spec/interactors/add_group_stage_to_tournament_interactor_spec.rb[1:1:1:3]            | unknown |                      |
+./spec/interactors/add_group_stage_to_tournament_interactor_spec.rb[1:1:1:4]            | unknown |                      |
+./spec/interactors/add_group_stage_to_tournament_interactor_spec.rb[1:2:1]              | unknown |                      |
+./spec/interactors/add_group_stage_to_tournament_interactor_spec.rb[1:3:1]              | unknown |                      |
+./spec/interactors/add_group_stage_to_tournament_interactor_spec.rb[1:4:1]              | unknown |                      |
+./spec/interactors/add_playoffs_to_tournament_interactor_spec.rb[1:1:1:1]               | unknown |                      |
+./spec/interactors/add_playoffs_to_tournament_interactor_spec.rb[1:1:1:2]               | unknown |                      |
+./spec/interactors/add_playoffs_to_tournament_interactor_spec.rb[1:1:2:1]               | unknown |                      |
+./spec/interactors/add_playoffs_to_tournament_interactor_spec.rb[1:1:2:2]               | unknown |                      |
+./spec/interactors/add_playoffs_to_tournament_interactor_spec.rb[1:2:1]                 | unknown |                      |
+./spec/interactors/add_playoffs_to_tournament_interactor_spec.rb[1:3:1]                 | unknown |                      |
+./spec/interactors/advance_teams_in_intermediate_stage_interactor_spec.rb[1:1:1:1]      | unknown |                      |
+./spec/interactors/advance_teams_in_intermediate_stage_interactor_spec.rb[1:1:2]        | unknown |                      |
+./spec/interactors/advance_teams_in_intermediate_stage_interactor_spec.rb[1:2:1:1:1]    | unknown |                      |
+./spec/interactors/advance_teams_in_intermediate_stage_interactor_spec.rb[1:2:2:1:1]    | unknown |                      |
+./spec/interactors/populate_match_below_interactor_spec.rb[1:1:1]                       | unknown |                      |
+./spec/interactors/populate_match_below_interactor_spec.rb[1:1:2]                       | unknown |                      |
+./spec/interactors/populate_match_below_interactor_spec.rb[1:2:1]                       | unknown |                      |
+./spec/interactors/save_application_record_object_to_database_interactor_spec.rb[1:1:1] | unknown |                      |
+./spec/interactors/save_application_record_object_to_database_interactor_spec.rb[1:1:2] | unknown |                      |
+./spec/interactors/save_application_record_object_to_database_interactor_spec.rb[1:2:1] | unknown |                      |
+./spec/interactors/update_groups_group_scores_interactor_spec.rb[1:1:1]                 | unknown |                      |
+./spec/interactors/update_groups_group_scores_interactor_spec.rb[1:1:2]                 | unknown |                      |
+./spec/interactors/update_groups_group_scores_interactor_spec.rb[1:2:1]                 | unknown |                      |
+./spec/models/group_score_spec.rb[1:1:1]                                                | unknown |                      |
+./spec/models/group_score_spec.rb[1:1:2]                                                | unknown |                      |
+./spec/models/group_spec.rb[1:1:1]                                                      | unknown |                      |
+./spec/models/group_spec.rb[1:1:2]                                                      | unknown |                      |
+./spec/models/group_spec.rb[1:1:3]                                                      | unknown |                      |
+./spec/models/group_spec.rb[1:2:1]                                                      | unknown |                      |
+./spec/models/match_score_spec.rb[1:1:1]                                                | unknown |                      |
+./spec/models/match_score_spec.rb[1:1:2]                                                | unknown |                      |
+./spec/models/match_score_spec.rb[1:2:1]                                                | unknown |                      |
+./spec/models/match_score_spec.rb[1:2:2]                                                | unknown |                      |
+./spec/models/match_spec.rb[1:1:1]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:1:2]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:1:3]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:1:4]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:2:1]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:2:2]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:2:3]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:3:1]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:3:2]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:4:1]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:4:2]                                                      | unknown |                      |
+./spec/models/match_spec.rb[1:5:1:1]                                                    | unknown |                      |
+./spec/models/match_spec.rb[1:5:2:1]                                                    | unknown |                      |
+./spec/models/match_spec.rb[1:6:1:1]                                                    | unknown |                      |
+./spec/models/match_spec.rb[1:6:1:2]                                                    | unknown |                      |
+./spec/models/match_spec.rb[1:6:1:3]                                                    | unknown |                      |
+./spec/models/match_spec.rb[1:6:2:1]                                                    | unknown |                      |
+./spec/models/match_spec.rb[1:6:2:2]                                                    | unknown |                      |
+./spec/models/match_spec.rb[1:6:2:3]                                                    | unknown |                      |
+./spec/models/match_spec.rb[1:6:3:1]                                                    | unknown |                      |
+./spec/models/match_spec.rb[1:6:3:2]                                                    | unknown |                      |
+./spec/models/match_spec.rb[1:6:3:3]                                                    | unknown |                      |
+./spec/models/stage_spec.rb[1:1:1]                                                      | unknown |                      |
+./spec/models/stage_spec.rb[1:1:2]                                                      | unknown |                      |
+./spec/models/stage_spec.rb[1:1:3]                                                      | unknown |                      |
+./spec/models/stage_spec.rb[1:2:1:1]                                                    | unknown |                      |
+./spec/models/stage_spec.rb[1:2:2:1]                                                    | unknown |                      |
+./spec/models/stage_spec.rb[1:2:3:1]                                                    | unknown |                      |
+./spec/models/stage_spec.rb[1:3:1:1:1]                                                  | unknown |                      |
+./spec/models/stage_spec.rb[1:3:1:2:1]                                                  | unknown |                      |
+./spec/models/stage_spec.rb[1:3:2:1:1]                                                  | unknown |                      |
+./spec/models/stage_spec.rb[1:3:2:2:1]                                                  | unknown |                      |
+./spec/models/stage_spec.rb[1:3:3:1]                                                    | unknown |                      |
+./spec/models/team_spec.rb[1:1:1]                                                       | unknown |                      |
+./spec/models/team_spec.rb[1:2:1]                                                       | unknown |                      |
+./spec/models/team_spec.rb[1:2:2]                                                       | unknown |                      |
+./spec/models/team_spec.rb[1:2:3]                                                       | unknown |                      |
+./spec/models/team_spec.rb[1:2:4]                                                       | unknown |                      |
+./spec/models/tournament_spec.rb[1:1:1]                                                 | unknown |                      |
+./spec/models/tournament_spec.rb[1:1:2]                                                 | unknown |                      |
+./spec/models/tournament_spec.rb[1:1:3]                                                 | unknown |                      |
+./spec/models/tournament_spec.rb[1:1:4]                                                 | unknown |                      |
+./spec/models/tournament_spec.rb[1:1:5]                                                 | unknown |                      |
+./spec/models/tournament_spec.rb[1:2:1]                                                 | unknown |                      |
+./spec/models/tournament_spec.rb[1:2:2]                                                 | unknown |                      |
+./spec/models/tournament_spec.rb[1:3:1]                                                 | unknown |                      |
+./spec/models/tournament_spec.rb[1:3:2]                                                 | unknown |                      |
+./spec/models/tournament_spec.rb[1:3:3]                                                 | unknown |                      |
+./spec/models/tournament_spec.rb[1:4:1:1]                                               | unknown |                      |
+./spec/models/tournament_spec.rb[1:4:2:1]                                               | unknown |                      |
+./spec/models/user_spec.rb[1:1:1]                                                       | unknown |                      |
+./spec/models/user_spec.rb[1:1:2]                                                       | unknown |                      |
+./spec/models/user_spec.rb[1:2:1]                                                       | unknown |                      |
+./spec/models/user_spec.rb[1:2:2]                                                       | unknown |                      |
+./spec/routing/match_scores_routing_spec.rb[1:1:1]                                      | unknown |                      |
+./spec/routing/match_scores_routing_spec.rb[1:1:2]                                      | unknown |                      |
+./spec/routing/match_scores_routing_spec.rb[1:1:3]                                      | unknown |                      |
+./spec/routing/matches_routing_spec.rb[1:1:1]                                           | unknown |                      |
+./spec/routing/statistics_routing_spec.rb[1:1:1]                                        | unknown |                      |
+./spec/routing/teams_routing_spec.rb[1:1:1]                                             | unknown |                      |
+./spec/routing/teams_routing_spec.rb[1:1:2]                                             | unknown |                      |
+./spec/routing/teams_routing_spec.rb[1:1:3]                                             | unknown |                      |
+./spec/routing/tournaments_routing_spec.rb[1:1:1]                                       | unknown |                      |
+./spec/routing/tournaments_routing_spec.rb[1:1:2]                                       | unknown |                      |
+./spec/routing/tournaments_routing_spec.rb[1:1:3]                                       | unknown |                      |
+./spec/routing/tournaments_routing_spec.rb[1:1:4]                                       | unknown |                      |
+./spec/routing/tournaments_routing_spec.rb[1:1:5]                                       | unknown |                      |
+./spec/routing/tournaments_routing_spec.rb[1:1:6]                                       | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:1:1]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:1:2]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:1:3]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:1:4]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:1:5]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:1:6]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:1:7]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:1:8]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:2:1]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:3:1]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:3:2]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:3:3]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:3:4]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:4:1:1]                                    | passed  | 2.53 seconds         |
+./spec/services/group_stage_service_spec.rb[1:4:1:2]                                    | passed  | 2.27 seconds         |
+./spec/services/group_stage_service_spec.rb[1:4:1:3]                                    | passed  | 2.3 seconds          |
+./spec/services/group_stage_service_spec.rb[1:4:1:4:1]                                  | passed  | 2.3 seconds          |
+./spec/services/group_stage_service_spec.rb[1:4:2:1]                                    | passed  | 2.31 seconds         |
+./spec/services/group_stage_service_spec.rb[1:4:2:2:1]                                  | passed  | 2.36 seconds         |
+./spec/services/group_stage_service_spec.rb[1:5:1]                                      | unknown |                      |
+./spec/services/group_stage_service_spec.rb[1:5:2]                                      | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:1]                                            | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:2]                                            | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:3]                                            | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:4]                                            | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:5]                                            | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:6]                                            | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:7]                                            | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:8]                                            | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:9]                                            | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:10]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:11]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:12]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:13]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:14]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:15]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:16]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:17]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:18]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:19]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:20]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:21]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:22]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:23]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:24]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:25]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:26]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:27]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:28]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:29]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:30]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:31]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:32]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:33]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:34]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:35]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:36]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:37]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:38]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:39]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:40]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:41]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:42]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:43]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:44]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:45]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:46]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:47]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:48]                                           | unknown |                      |
+./spec/services/match_service_spec.rb[1:1:49]                                           | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:1:1]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:1:2]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:1:3]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:1:4]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:1:5]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:1:6]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:1:7]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:1:8]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:2:1]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:2:2]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:2:3]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:2:4]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:2:5]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:2:6]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:2:7]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:2:8]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:2:9]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:2:10]                                   | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:1]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:2]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:3]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:4]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:5]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:6]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:7]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:8]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:9]                                    | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:10:1]                                 | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:10:2]                                 | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:3:11:1]                                 | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:4:1:1]                                  | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:4:1:2]                                  | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:4:2:1]                                  | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:4:2:2]                                  | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:4:3:1]                                  | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:4:3:2]                                  | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:4:4:1]                                  | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:4:4:2]                                  | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:4:5:1]                                  | unknown |                      |
+./spec/services/playoff_stage_service_spec.rb[1:4:5:2]                                  | unknown |                      |
+./spec/services/statistics_service_spec.rb[1:1:1:1]                                     | unknown |                      |
+./spec/services/statistics_service_spec.rb[1:1:2:1]                                     | unknown |                      |
+./spec/services/statistics_service_spec.rb[1:2:1]                                       | unknown |                      |
+./spec/services/statistics_service_spec.rb[1:3:1]                                       | unknown |                      |
+./spec/services/statistics_service_spec.rb[1:4:1]                                       | unknown |                      |
+./spec/services/tournament_service_spec.rb[1:1:1]                                       | unknown |                      |
+./spec/services/tournament_service_spec.rb[1:1:2]                                       | unknown |                      |
+./spec/services/user_service_spec.rb[1:1:1:1]                                           | unknown |                      |
+./spec/services/user_service_spec.rb[1:1:2:1]                                           | unknown |                      |
+./spec/services/user_service_spec.rb[1:1:3:1]                                           | unknown |                      |
+./spec/services/user_service_spec.rb[1:1:3:2]                                           | unknown |                      |
+./spec/services/user_service_spec.rb[1:1:3:3]                                           | unknown |                      |
+./spec/services/user_service_spec.rb[1:1:3:4:1]                                         | unknown |                      |
+./spec/services/user_service_spec.rb[1:1:4:1:1]                                         | unknown |                      |
+./spec/services/user_service_spec.rb[1:1:4:2:1]                                         | unknown |                      |
+./spec/services/utils_spec.rb[1:1]                                                      | unknown |                      |
+./spec/services/utils_spec.rb[1:2]                                                      | unknown |                      |
+./spec/services/utils_spec.rb[1:3]                                                      | unknown |                      |
+./spec/services/utils_spec.rb[1:4]                                                      | unknown |                      |
+./spec/services/utils_spec.rb[1:5]                                                      | unknown |                      |
+./spec/services/utils_spec.rb[1:6]                                                      | unknown |                      |
+./spec/services/utils_spec.rb[1:7]                                                      | unknown |                      |
+./spec/services/utils_spec.rb[1:8]                                                      | unknown |                      |
+./spec/services/utils_spec.rb[1:9]                                                      | unknown |                      |
+./spec/services/utils_spec.rb[1:10]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:11]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:12]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:13]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:14]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:15]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:16]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:17]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:18]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:19]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:20]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:21]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:22]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:23]                                                     | unknown |                      |
+./spec/services/utils_spec.rb[1:24]                                                     | unknown |                      |
