@@ -51,7 +51,7 @@ class MatchesController < ApplicationController
     Match.transaction do
       if @match.update(match_params)
         handle_match_end if new_state == 'finished'
-        if @match.group_match? and new_state == "in_progress"
+        if @match.group_match? && new_state == 'in_progress'
           group = @match.group
           unless UpdateGroupsGroupScoresAndSave.call(group: group).success?
             logger.warn "Updating groups group score failed for #{group}"
