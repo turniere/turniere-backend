@@ -203,6 +203,9 @@ RSpec.describe MatchesController, type: :controller do
                 let(:context) { double(:context, success?: false) }
 
                 it 'returns unprocessable entity' do
+                  # mock match.winner to be the first team of the match to skip winner check here
+                  allow(@running_playoff_match).to receive(:winner).and_return(@running_playoff_match.match_scores.first.team)
+
                   put :update, params: { id: @running_playoff_match.to_param }.merge(finished)
                   expect(response).to have_http_status(:unprocessable_entity)
                 end
