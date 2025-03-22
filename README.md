@@ -74,3 +74,4 @@ $ rails diagram:all_with_engines
 - spiel um platz 3
 - edgecase wenn mehr als die hälfte der teams weiterkommen bedenken bzw zumindest abfangen (hier ist gemeint dass es aktuell spezialcode für po2 turniere gibt bei denen immer die hälfte weiterkommt, es sollte aber auch _irgendwie_ für alle turniere funktionieren, ist nur out of scope für bpwstr)
 - Timer groß werden lassen als splashscreen wenn er ausläuft
+- Flaschenhalter für die Techniktische
