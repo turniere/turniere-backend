@@ -76,3 +76,5 @@ $ rails diagram:all_with_engines
 - Timer groß werden lassen als splashscreen wenn er ausläuft
 - Flaschenhalter für die Techniktische
 - timer end im admin frontend hübsch machen (aktuell hardcoded startwert)
+- turniere-match on focus suche markieren
+- vollbildansicht anpassen, dass sie auch abstände oben hat (die navbar oben is ja weg)
