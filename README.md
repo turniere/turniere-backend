@@ -80,9 +80,7 @@ $ rails diagram:all_with_engines
 - vollbildansicht anpassen, dass sie auch abstände oben hat (die navbar oben is ja weg)
 - damit klarkommen wenn matches aus der reihe gespielt werden (ein match stoppen, anderes match starten, neue matches starten muss entsprechend auch noch funktionieren)
 - tabellen im admin fe anzeigen, leute fragen beim ergebnis abgeben nach
-<<<<<<< HEAD
 - "Live" in "Läuft noch" umgenennen
-=======
 - funktion timer unset
 - alternativer timer der hochzählt, statt runter für viertelfinale etc.
 - auf fullscreen matches ansicht die stage anzeigen (8tel, 4tel, etc.)
@@ -90,5 +88,3 @@ $ rails diagram:all_with_engines
 - bei gleichstand für stechen einen punkt vergeben (oder sonstwie, absprechen mit bpwstr)
 - bug: refresh war kaputt in viertelfinale, halbfinale, finale
 - sieger setzen können; letztes spiel beenden können
-
->>>>>>> b2fea76 (Add todo)
