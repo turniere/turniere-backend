@@ -79,3 +79,4 @@ $ rails diagram:all_with_engines
 - turniere-match on focus suche markieren
 - vollbildansicht anpassen, dass sie auch abstände oben hat (die navbar oben is ja weg)
 - damit klarkommen wenn matches aus der reihe gespielt werden (ein match stoppen, anderes match starten, neue matches starten muss entsprechend auch noch funktionieren)
+- tabellen im admin fe anzeigen, leute fragen beim ergebnis abgeben nach
