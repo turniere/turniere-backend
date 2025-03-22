@@ -78,3 +78,4 @@ $ rails diagram:all_with_engines
 - timer end im admin frontend hübsch machen (aktuell hardcoded startwert)
 - turniere-match on focus suche markieren
 - vollbildansicht anpassen, dass sie auch abstände oben hat (die navbar oben is ja weg)
+- damit klarkommen wenn matches aus der reihe gespielt werden (ein match stoppen, anderes match starten, neue matches starten muss entsprechend auch noch funktionieren)
